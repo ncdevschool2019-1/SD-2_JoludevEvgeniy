@@ -1,0 +1,25 @@
+.card-title{
+
+  background-color: #5c5c5c;
+}
+.card{
+  color: white;
+  background-color: #5c5c5c;
+}
+.card:hover .img-fluid{
+  opacity: 0.2;
+}
+.card:hover .card-text{
+  opacity: 1;
+}
+.card-text, .btn-hide{
+  opacity: 0;
+}
+.card:hover .btn-hide{
+  opacity: 1;
+}
+.already-subscribe{
+  color: #f2e849
+}
+
+

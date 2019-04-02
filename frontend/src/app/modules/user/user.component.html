@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="justify-content-center">
+    <table class="table text-center">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">ЛОГИН</th>
+        <th scope="col">ПОЧТА</th>
+        <th scope="col">БИЛЛИНГ АККАУНТЫ</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody class="table-light">
+      <tr *ngFor="let user of users">
+        <td scope="row">{{users.indexOf(user) + 1}}</td>
+        <td>{{user.login}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.billingAccounts.length}}<a class="btn text-primary"
+                                              (click)="openModal(usersBillingAccount, user)">
+          (Показать)</a></td>
+        <td>
+          <button type="button" class="btn btn-primary" (click)="deleteUser(user.id)">
+            Удалить
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #usersBillingAccount>
+  <app-users-billing-accounts></app-users-billing-accounts>
+</ng-template>
+

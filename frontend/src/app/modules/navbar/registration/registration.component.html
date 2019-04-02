@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Регистрация</h4>
+  <button type="button" class="close pull-right"
+          aria-label="Close" (click)="modalService.closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <input class="form-control" name="login" type="text" [(ngModel)]="inputLogin" #login="ngModel"
+           placeholder="Логин" required pattern="[a-zA-Z0-9_]{3,30}"/>
+    <div [hidden]="login.untouched || login.valid" class="alert alert-danger">
+      Вы ввели неверный логин
+    </div>
+  </div>
+  <div class="form-group">
+    <input class="form-control" name="password" type="password" [(ngModel)]="inputPassword"
+           #password="ngModel" placeholder="Пароль" required pattern="[a-zA-Z0-9_]{3,30}"/>
+    <div [hidden]="password.untouched || password.valid" class="alert alert-danger">
+      Вы ввели неверный пароль
+    </div>
+  </div>
+  <div class="form-group">
+    <input class="form-control" name="email" type="email" [(ngModel)]="inputEmail"
+           #email="ngModel" placeholder="Email" required pattern="[a-zA-Z0-9_.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,4}"/>
+    <div [hidden]="email.untouched || email.valid" class="alert alert-danger">
+      Вы ввели неверный email
+    </div>
+  </div>
+</div>
+<div class="modal-footer justify-content-center">
+  <button class="btn btn-primary w-50" [disabled]="login.invalid || password.invalid || email.invalid">
+    Зарегистрироваться
+  </button>
+</div>

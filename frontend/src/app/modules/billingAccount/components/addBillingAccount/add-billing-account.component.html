@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Добавить новый аккаунт</h4>
+  <button type="button" class="close pull-right"
+          aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group justify-content-center">
+    <label for="form1" class="mt-1">Название подписки:</label>
+    <input type="text" id="form1" class="form-control mt-1" name="name" [(ngModel)]="billingAccountService.selectedBillingAccount.name"
+           #name="ngModel" required>
+    <div [hidden]="name.untouched || name.valid" class="alert alert-danger">
+      Вы ввели неверное название
+    </div>
+    <button class="btn btn-primary mt-3" [disabled]="name.invalid"
+            (click)="addBillingAccount(billingAccountService.selectedBillingAccount)">
+      Добавить
+    </button>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+.table-dark tr:hover{
+  background-color: #212121;
+}
+.table-dark tr{
+  background-color: rgba(88,85,87,1);
+}

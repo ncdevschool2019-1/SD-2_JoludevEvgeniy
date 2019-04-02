@@ -1,0 +1,39 @@
+<div class="container w-75">
+  <div class="text-center">
+    <div class="card mt-3 position-relative justify-content-center align-content-center"
+         *ngFor="let subscript of subscripts">
+      <div class="card-title">
+        <h5>{{subscript.name}}</h5>
+      </div>
+
+      <img src="https://незабываемая.москва/uploads/posts/ekskursiya_na_smotrovuyu_ploshchadku_panorama_360_2.jpg"
+           class="img-fluid" alt="Responsive image">
+      <div class="card-body position-absolute w-100">
+
+        <p class="card-text">{{subscript.description}}</p>
+
+        <button *ngIf="authService.authorizedUser.role == 'User' && !authService.checkSubscript(subscript)"
+                (click)="openModalSubscript(toSubscript, subscript)"
+                class="btn btn-primary btn-hide">Подписаться
+        </button>
+        <p class="card-text already-subscribe"
+           *ngIf="authService.authorizedUser.role == 'User' && authService.checkSubscript(subscript)">Вы уже подписаны
+          на этот ресурс!</p>
+        <button *ngIf="authService.authorizedUser.role == 'Admin'"
+                (click)="openModalSubscript(editSubscript, subscript)" class="btn btn-primary btn-hide">Редактировать
+        </button>
+        <p class="card-text mt-1">{{subscript.price}} RUB / {{subscript.period}} д.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #toSubscript>
+  <app-to-subscript></app-to-subscript>
+</ng-template>
+
+<ng-template #editSubscript>
+  <app-edit-subscript (onChanged)="onChanged()"></app-edit-subscript>
+</ng-template>
+
+

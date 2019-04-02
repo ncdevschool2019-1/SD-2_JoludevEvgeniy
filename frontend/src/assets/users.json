@@ -1,0 +1,78 @@
+[
+  {
+    "id": 10,
+    "login": "dhfhf",
+    "password": "jdhvnv",
+    "email": "vdbnkrdkj",
+    "role": "User",
+    "billingAccounts": [
+      {
+        "id": 5,
+        "name": "dbjkvdrl",
+        "balance": 100,
+        "subscripts": [{
+          "id":1,
+          "name":"Подписка",
+          "description":"Описание",
+          "pricePerDay":20
+        },{
+          "id":1,
+          "name":"Подписка",
+          "description":"Описание",
+          "pricePerDay":20
+        },{
+          "id":1,
+          "name":"Подписка",
+          "description":"Описание",
+          "pricePerDay":20
+        }],
+        "active": false
+      },
+      {
+        "id": 5,
+        "name": "ikjhmng",
+        "balance": 100,
+        "subscripts": [],
+        "active": true
+      },
+      {
+        "id": 5,
+        "name": "asdcvdbfngm",
+        "balance": 100,
+        "subscripts": [],
+        "active": true
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "login": "dhfhf",
+    "password": "jdhvnv",
+    "email": "vdbnkrdkj",
+    "role": "Admin",
+    "billingAccounts": [
+      {
+        "id": 5,
+        "name": "dbjkvdrl",
+        "balance": 100,
+        "subscripts": [
+        ],
+        "active": true
+      },
+      {
+        "id": 5,
+        "name": "ikjhmng",
+        "balance": 100,
+        "subscripts": [],
+        "active": true
+      },
+      {
+        "id": 5,
+        "name": "asdcvdbfngm",
+        "balance": 100,
+        "subscripts": [],
+        "active": true
+      }
+    ]
+  }
+]

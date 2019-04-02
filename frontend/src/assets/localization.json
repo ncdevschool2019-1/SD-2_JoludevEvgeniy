@@ -1,0 +1,26 @@
+[
+  {
+    "language": "rus",
+    "title": "Сервис",
+    "navbarMain": "Главная",
+    "navbarSubscripts": "Подписки",
+    "navbarBillingAccounts": "Биллинг аккаунты",
+    "navbarUsers": "Пользователи",
+    "navbarProfile": "Профиль",
+    "navbarAbout": "О нас",
+    "signIn": "Войти",
+    "registration": "Регистрация"
+  },
+  {
+    "language": "eng",
+    "title": "ChargingService",
+    "navbarMain": "Main",
+    "navbarSubscripts": "Subscripts",
+    "navbarBillingAccounts": "Billing accounts",
+    "navbarUsers": "Users",
+    "navbarProfile": "Profile",
+    "navbarAbout": "About",
+    "signIn": "SignIn",
+    "registration": "Registration"
+  }
+]

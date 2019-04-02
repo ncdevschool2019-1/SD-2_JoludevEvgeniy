@@ -1,0 +1,7 @@
+.navbar-dark, .navbar-dark .navbar-nav .nav-link{
+  color: #f8f9fa;
+  font-size: large;
+}
+.navbar-dark .navbar-nav a:hover{
+  background-color: rgba(54,51,53,1);
+}

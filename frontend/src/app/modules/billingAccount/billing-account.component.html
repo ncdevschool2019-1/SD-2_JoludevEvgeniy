@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="justify-content-center">
+    <table class="table text-center">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">НАЗВАНИЕ</th>
+        <th scope="col">БАЛАНС</th>
+        <th scope="col">КОЛ-ВО ПОДПИСОК</th>
+        <th scope="col">СТАТУС</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody class="table-dark">
+      <tr *ngFor="let billingAccount of authService.authorizedUser.billingAccounts"
+      >
+        <td scope="row">{{billingAccount.name}}</td>
+        <td>{{billingAccount.balance}} RUB</td>
+        <td>{{billingAccount.activeSubscripts.length}}<a class="btn text-primary"
+                                                         (click)="openModal(subscriptsTable, billingAccount)">
+          (Показать)</a></td>
+        <td>{{billingAccountService.getBAStatus(billingAccount)}}</td>
+        <td>
+          <button type="button" class="btn btn-primary" [disabled]="!billingAccount.active"
+                  (click)="deleteBillingAccount(billingAccount.id)">
+            Удалить
+          </button>
+          <button type="button" class="btn btn-primary ml-3" (click)="openModal(replenishBalance, billingAccount)">
+            Пополнить баланс
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <button type="button" class="btn btn-primary" (click)="modalService.openModal(addBillingAccount)">Добавить аккаунт
+  </button>
+</div>
+
+<ng-template #subscriptsTable>
+  <app-subscripts-table></app-subscripts-table>
+</ng-template>
+
+<ng-template #replenishBalance>
+  <app-replenish-balance></app-replenish-balance>
+</ng-template>
+
+<ng-template #addBillingAccount>
+  <app-add-billing-account></app-add-billing-account>
+</ng-template>

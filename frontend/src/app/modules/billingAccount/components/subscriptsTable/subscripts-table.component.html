@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Подписки выбранного аккаунта</h4>
+  <button type="button" class="close pull-right"
+          aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="container justify-content-center">
+    <table class="table table-hover border-bottom text-center">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">ПОДПИСКА</th>
+        <th scope="col">ОПИСАНИЕ</th>
+        <th scope="col">ЦЕНА</th>
+        <th scope="col">ПЕРИОД</th>
+        <th scope="col">ПОСЛЕДНЯЯ ПЛАТА</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let activeSubscript of billingAccountService.selectedBillingAccount.activeSubscripts">
+        <td scope="row">{{activeSubscript.subscript.name}}</td>
+        <td>{{activeSubscript.subscript.description}}</td>
+        <td>{{activeSubscript.subscript.price}} RUB</td>
+        <td>{{activeSubscript.subscript.period}} д.</td>
+        <td>{{activeSubscript.lastWriteOff | date:'medium'}}</td>
+        <td>
+          <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2"
+                  [disabled]="!billingAccountService.selectedBillingAccount.active"
+                  (click)="deleteActiveSubscript(activeSubscript.id)">Отписаться
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

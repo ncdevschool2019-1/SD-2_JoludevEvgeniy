@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Добавить новую подписку</h4>
+  <button type="button" class="close pull-right"
+          aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group justify-content-center">
+    <label for="exampleFormControlSelect1">Выберите billing account, на который хотите добавить подписку:</label>
+    <select class="form-control w-25" id="exampleFormControlSelect1"
+            [(ngModel)]="billingAccountService.selectedBillingAccount">
+      <option *ngFor="let billingAccount of authService.authorizedUser.billingAccounts"
+              [ngValue]="billingAccount">{{billingAccount.name}}</option>
+    </select>
+  </div>
+  <h6>Имя аккаунта: {{billingAccountService.selectedBillingAccount.name}}</h6>
+  <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
+  <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
+  <h6>Всего подписок на аккаунте: {{billingAccountService.getSelectedBASubscriptsLength()}}</h6>
+
+  <p></p>
+
+  <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2 mb-3"
+          [disabled]="billingAccountService.isSelectedBAIdUndefined() ||
+           !billingAccountService.selectedBillingAccount.active ||
+            !billingAccountService.isBalanceMoreThanSubscribePrice(subscriptService.selectedSubscript)"
+          (click)="saveActiveSubscript(subscriptService.selectedSubscript, billingAccountService.selectedBillingAccount.id)">
+    Добавить подписку в выбранный
+    аккаунт
+  </button>
+</div>

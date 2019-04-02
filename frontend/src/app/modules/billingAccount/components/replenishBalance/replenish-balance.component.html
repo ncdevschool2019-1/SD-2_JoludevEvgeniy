@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Пополнить баланс на выбранном аккаунте</h4>
+  <button type="button" class="close pull-right"
+          aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group justify-content-center">
+    <h6>Имя аккаунта: {{billingAccountService.selectedBillingAccount.name}}</h6>
+    <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
+    <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
+    <p></p>
+    <div class="form-group">
+      <label for="exampleForm2">Введите сумму:</label>
+      <input type="number" id="exampleForm2" name="sum" [(ngModel)]="inputSum" #sum="ngModel"
+             class="form-control w-50" required pattern="[1-9]{1}[0-9]{0,6}">
+      <div [hidden]="sum.untouched || sum.valid" class="alert alert-danger w-50">
+        Вы ввели неверное число или вовсе не число
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2" [disabled]="sum.invalid"
+    (click)="replenishBalance(billingAccountService.selectedBillingAccount)">Пополнить
+    </button>
+  </div>
+</div>

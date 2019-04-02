@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="collapse navbar-collapse" id="responsive-menu">
+    <ul class="navbar-nav mr-auto w-100 justify-content-center align-content-center text-center">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="jumbotron"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarMain}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="subscripts"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarSubscripts}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.authorizedUser.role == 'User'" routerLink="billing-accounts"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarBillingAccounts}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isRole()" routerLink="profile"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarProfile}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.authorizedUser.role == 'Admin'" routerLink="users"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarUsers}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="about"
+           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarAbout}}</a>
+      </li>
+      <li class="nav-item">
+        <select class="mr-3" id="exampleFormControlSelect1"
+                [(ngModel)]="localizationService.currentLocalization">
+          <option *ngFor="let localization of localizationService.localizations"
+                  [ngValue]="localization">{{localization.language}}</option>
+        </select>
+      </li>
+    </ul>
+    <ul class="navbar-nav" *ngIf="!authService.isRole()">
+      <li class="nav-item">
+        <button class="btn btn-outline-primary"
+                (click)="modalService.openModal(auth_template)">{{localizationService.currentLocalization.signIn}}
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-outline-secondary ml-3"
+                (click)="modalService.openModal(reg_template)">{{localizationService.currentLocalization.registration}}
+        </button>
+      </li>
+    </ul>
+    <ul class="navbar-nav" *ngIf="authService.isRole()">
+      <li class="nav-item mr-3">
+        <h6 class="nav-link">{{authService.authorizedUser.login}}</h6>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" routerLink="profile">
+          <img src="http://placehold.it/35x35" class="rounded-circle">
+        </a>
+      </li>
+    </ul>
+
+
+  </div>
+</nav>
+
+<ng-template #auth_template>
+  <app-authorization></app-authorization>
+</ng-template>
+
+<ng-template #reg_template>
+  <app-registration></app-registration>
+</ng-template>
