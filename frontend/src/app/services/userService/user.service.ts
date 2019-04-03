@@ -39,6 +39,22 @@ export class UserService {
     return this.http.post<User>(this.path, user);
   }
 
+  public updateUsersLogin(user: User): Observable<User>{
+    return this.http.put<User>(this.path + '/login', user);
+  }
+
+  public updateUsersPassword(user: User): Observable<User>{
+    return this.http.put<User>(this.path + '/password', user);
+  }
+
+  public updateUsersEmail(user: User): Observable<User>{
+    return this.http.put<User>(this.path + '/email', user);
+  }
+
+  public getLoginUser(login: string, password: string): Observable<User>{
+    return this.http.get<User>(this.path + '/' + login + '/' + password);
+  }
+
   public clearSelectedUser(): void {
     this.selectedUser = new User();
   }

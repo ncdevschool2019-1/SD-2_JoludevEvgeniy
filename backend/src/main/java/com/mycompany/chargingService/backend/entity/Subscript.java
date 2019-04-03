@@ -9,14 +9,14 @@ public class Subscript {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String description;
     private int price;
     private int period;
     private String imagePath;
 
-    public Subscript(long id, String name, String description, int price, int period, String imagePath) {
+    public Subscript(Long id, String name, String description, int price, int period, String imagePath) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -28,11 +28,11 @@ public class Subscript {
     public Subscript() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

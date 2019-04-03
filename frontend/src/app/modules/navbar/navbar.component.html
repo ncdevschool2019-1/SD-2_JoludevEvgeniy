@@ -3,45 +3,38 @@
     <ul class="navbar-nav mr-auto w-100 justify-content-center align-content-center text-center">
       <li class="nav-item">
         <a class="nav-link" routerLink="jumbotron"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarMain}}</a>
+           routerLinkActive="myActive">Главная</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="subscripts"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarSubscripts}}</a>
+           routerLinkActive="myActive">Подписки</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.authorizedUser.role == 'User'" routerLink="billing-accounts"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarBillingAccounts}}</a>
+           routerLinkActive="myActive">Биллинг аккаунты</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.isRole()" routerLink="profile"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarProfile}}</a>
+           routerLinkActive="myActive">Профиль</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.authorizedUser.role == 'Admin'" routerLink="users"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarUsers}}</a>
+           routerLinkActive="myActive">Пользователи</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="about"
-           routerLinkActive="myActive">{{localizationService.currentLocalization.navbarAbout}}</a>
-      </li>
-      <li class="nav-item">
-        <select class="mr-3" id="exampleFormControlSelect1"
-                [(ngModel)]="localizationService.currentLocalization">
-          <option *ngFor="let localization of localizationService.localizations"
-                  [ngValue]="localization">{{localization.language}}</option>
-        </select>
+           routerLinkActive="myActive">О нас</a>
       </li>
     </ul>
     <ul class="navbar-nav" *ngIf="!authService.isRole()">
       <li class="nav-item">
         <button class="btn btn-outline-primary"
-                (click)="modalService.openModal(auth_template)">{{localizationService.currentLocalization.signIn}}
+                (click)="modalService.openModal(auth_template)">Войти
         </button>
       </li>
       <li class="nav-item">
         <button class="btn btn-outline-secondary ml-3"
-                (click)="modalService.openModal(reg_template)">{{localizationService.currentLocalization.registration}}
+                (click)="modalService.openModal(reg_template)">Регистрация
         </button>
       </li>
     </ul>
@@ -54,6 +47,10 @@
         <a class="nav-link" routerLink="profile">
           <img src="http://placehold.it/35x35" class="rounded-circle">
         </a>
+      </li>
+
+      <li class="nav-item">
+        <button class="btn btn-outline-primary nav-link" (click)="outFromAccount()" routerLink="subscripts">Выйти</button>
       </li>
     </ul>
 

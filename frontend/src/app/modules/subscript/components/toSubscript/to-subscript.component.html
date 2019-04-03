@@ -18,7 +18,9 @@
   <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
   <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
   <h6>Всего подписок на аккаунте: {{billingAccountService.getSelectedBASubscriptsLength()}}</h6>
-
+  <h6>Подписка: {{subscriptService.selectedSubscript.name}}</h6>
+  <h6>Стоимость подписки: {{subscriptService.selectedSubscript.price}}
+    /{{subscriptService.selectedSubscript.period}}</h6>
   <p></p>
 
   <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2 mb-3"

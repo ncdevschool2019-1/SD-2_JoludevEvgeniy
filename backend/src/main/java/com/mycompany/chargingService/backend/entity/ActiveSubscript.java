@@ -10,14 +10,14 @@ public class ActiveSubscript {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private long billingAccountId;
+    private Long id;
+    private Long billingAccountId;
     @ManyToOne()
     private Subscript subscript;
     @Column(name = "last_write_off", insertable=false)
     private Timestamp lastWriteOff;
 
-    public ActiveSubscript(long billingAccountId, Subscript subscript, Timestamp lastWriteOff) {
+    public ActiveSubscript(Long billingAccountId, Subscript subscript, Timestamp lastWriteOff) {
         this.billingAccountId = billingAccountId;
         this.subscript = subscript;
         this.lastWriteOff = lastWriteOff;
@@ -34,11 +34,11 @@ public class ActiveSubscript {
         this.subscript = subscript;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,11 +46,11 @@ public class ActiveSubscript {
         return lastWriteOff;
     }
 
-    public long getBillingAccountId() {
+    public Long getBillingAccountId() {
         return billingAccountId;
     }
 
-    public void setBillingAccountId(long billingAccountId) {
+    public void setBillingAccountId(Long billingAccountId) {
         this.billingAccountId = billingAccountId;
     }
 

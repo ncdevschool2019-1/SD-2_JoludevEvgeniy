@@ -15,35 +15,39 @@ export class AuthorizationService {
   set authorizedUser(value: User) {
     this._authorizedUser = value;
   }
-  users: User[];
+
   private _authorizedUser: User = new User();
 
   constructor(private userService: UserService) {
-    this.authorization();
   }
 
-  private authorization(): void {
-    this.userService.getUsers().subscribe(data => {
-      this.users = data;
-      this.authorizedUser = this.users[0];
-    })
+  public authorization(login: string, password: string): void {
+    this.userService.getLoginUser(login, password).subscribe(data => {
+      this.authorizedUser = data;
+    });
   }
 
   public updateAuthorization(): void {
-    this.authorization();
+    this.userService.getUserById(this.authorizedUser.id).subscribe(data => {
+      this.authorizedUser = data;
+    })
+  }
+
+  public outFromAccount(){
+    this.authorizedUser = new User;
   }
 
   public isRole(): boolean {
-    if(typeof this.authorizedUser.role === 'undefined'){
+    if (typeof this.authorizedUser.role === 'undefined') {
       return false;
     }
     return true;
   }
 
   public checkSubscript(subscript: Subscript): boolean {
-    for(let billingAccount of this.authorizedUser.billingAccounts){
-      for(let activeSubscript of billingAccount.activeSubscripts){
-        if(activeSubscript.subscript.id == subscript.id){
+    for (let billingAccount of this.authorizedUser.billingAccounts) {
+      for (let activeSubscript of billingAccount.activeSubscripts) {
+        if (activeSubscript.subscript.id == subscript.id) {
           return true;
         }
       }

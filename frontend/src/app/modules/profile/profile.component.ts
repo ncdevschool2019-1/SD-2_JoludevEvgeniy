@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthorizationService} from "../../services/authorizationService/authorization.service";
+import {AuthorizationService} from '../../services/authorizationService/authorization.service';
 
-import {ModalService} from "../../services/modalService/modal.service";
+import {ModalService} from '../../services/modalService/modal.service';
 import {User} from '../models/user';
 import {UserService} from '../../services/userService/user.service';
 
@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   public newEmail: string;
   public oldPassword: string;
   public newPassword: string;
-
+  updatebleUser: User = User.cloneUser(this.authService.authorizedUser);
 
 
   constructor(private authService: AuthorizationService, private modalService: ModalService,
@@ -27,27 +27,28 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
 
-  changeLogin(){
-    let user = User.cloneUser(this.authService.authorizedUser);
-    user.login = this.newLogin;
-    this.userService.saveUser(user).subscribe(data => {
+  changeLogin() {
+    this.updatebleUser.login = this.newLogin;
+    this.userService.updateUsersLogin(this.updatebleUser).subscribe(data => {
       this.authService.updateAuthorization();
+      this.newLogin = '';
     });
   }
 
-  changePassword(){
-    let user = User.cloneUser(this.authService.authorizedUser);
-    user.password = this.newPassword;
-    this.userService.saveUser(user).subscribe(data => {
+  changePassword() {
+    this.updatebleUser.password = this.newPassword;
+    this.userService.updateUsersPassword(this.updatebleUser).subscribe(data => {
       this.authService.updateAuthorization();
+      this.newPassword = '';
+      this.oldPassword = '';
     });
   }
 
-  changeEmail(){
-    let user = User.cloneUser(this.authService.authorizedUser);
-    user.email = this.newEmail;
-    this.userService.saveUser(user).subscribe(data => {
+  changeEmail() {
+    this.updatebleUser.email = this.newEmail;
+    this.userService.updateUsersEmail(this.updatebleUser).subscribe(data => {
       this.authService.updateAuthorization();
+      this.newEmail = '';
     });
   }
 

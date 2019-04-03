@@ -10,5 +10,9 @@ public interface UserService {
     Optional<User> getUserById(Long id);
     Iterable<User> getAllUsers();
     void deleteUser(Long id);
+    Optional<User> updateUsersLogin(Long id, String login);
+    Optional<User> updateUsersPassword(Long id, String password);
+    Optional<User> updateUsersEmail(Long id, String email);
+    User getLoginUser(String login, String password);
 
 }

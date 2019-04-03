@@ -11,12 +11,15 @@ import {LocalizationService} from "../../services/localizationService/localizati
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private modalService: ModalService, private authService: AuthorizationService,
-              private localizationService: LocalizationService) {
+  constructor(private modalService: ModalService, private authService: AuthorizationService) {
   }
 
 
   ngOnInit() {
+  }
+
+  outFromAccount(){
+    this.authService.outFromAccount();
   }
 
 }
