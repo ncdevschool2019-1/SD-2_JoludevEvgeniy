@@ -3,6 +3,7 @@ import {ModalService} from '../../../../services/modalService/modal.service';
 import {BillingAccountService} from '../../../../services/billingAccountService/billingAccount.service';
 import {BillingAccount} from '../../../models/billing-account';
 import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-billing-account',
@@ -12,7 +13,7 @@ import {AuthorizationService} from '../../../../services/authorizationService/au
 export class AddBillingAccountComponent implements OnInit {
 
   constructor(private modalService: ModalService, private billingAccountService: BillingAccountService,
-              private authService: AuthorizationService) {
+              private authService: AuthorizationService, private toastr: ToastrService) {
 
   }
 
@@ -27,10 +28,12 @@ export class AddBillingAccountComponent implements OnInit {
 
   addBillingAccount(billingAccount: BillingAccount) {
     billingAccount.userId = this.authService.authorizedUser.id;
-    billingAccount.active = true;
     this.billingAccountService.saveBillingAccount(billingAccount).subscribe(data => {
       this.authService.updateAuthorization();
       this.closeModal();
+      this.toastr.success('Вам удалось создать биллинг аккаунт!', billingAccount.name);
+    }, error => {
+      this.toastr.error('Создание биллинг аккаунта не удалось', 'Ошибка');
     });
   }
 

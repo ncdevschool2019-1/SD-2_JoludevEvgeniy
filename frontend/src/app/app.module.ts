@@ -30,6 +30,8 @@ import {SubscriptsTableComponent} from './modules/billingAccount/components/subs
 import {ReplenishBalanceComponent} from './modules/billingAccount/components/replenishBalance/replenish-balance.component';
 import {UsersBillingAccountsComponent} from './modules/user/components/usersBillingAccounts/users-billing-accounts.component';
 import {AddBillingAccountComponent} from './modules/billingAccount/components/addBillingAccount/add-billing-account.component';
+import {ToastrModule} from 'ngx-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const routes: Routes = [
   {path: '', redirectTo: 'jumbotron', pathMatch: 'full'},
@@ -71,12 +73,17 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     RouterModule.forRoot(routes),
     TabsModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 4000,
+      positionClass: 'toast-top-left'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ import {SubscriptService} from '../../services/subscriptService/subscript.servic
 import {ModalService} from "../../services/modalService/modal.service";
 import {AuthorizationService} from "../../services/authorizationService/authorization.service";
 import {BillingAccountService} from "../../services/billingAccountService/billingAccount.service";
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-subscript',
@@ -14,7 +15,8 @@ export class SubscriptComponent implements OnInit {
   public subscripts: Subscript[];
 
   constructor(private subscriptService: SubscriptService, public modalService: ModalService,
-              public authService: AuthorizationService, public billingAccountService: BillingAccountService) {
+              public authService: AuthorizationService, public billingAccountService: BillingAccountService,
+              private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -27,6 +29,8 @@ export class SubscriptComponent implements OnInit {
   private loadSubscripts(): void {
     this.subscriptService.getSubscripts().subscribe(data => {
       this.subscripts = data;
+    }, error => {
+      this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
     });
   }
 

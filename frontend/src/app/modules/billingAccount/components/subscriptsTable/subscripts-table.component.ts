@@ -3,6 +3,7 @@ import {BillingAccountService} from '../../../../services/billingAccountService/
 import {ModalService} from '../../../../services/modalService/modal.service';
 import {ActiveSubscriptService} from '../../../../services/activeSubscriptService/active-subscript.service';
 import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -12,7 +13,8 @@ import {AuthorizationService} from '../../../../services/authorizationService/au
 export class SubscriptsTableComponent implements OnInit {
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
-              private activeSubscriptService: ActiveSubscriptService, private authService: AuthorizationService) {
+              private activeSubscriptService: ActiveSubscriptService, private authService: AuthorizationService,
+              private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -27,6 +29,9 @@ export class SubscriptsTableComponent implements OnInit {
     this.activeSubscriptService.deleteActiveSubscript(activeSubscriptId).subscribe(data => {
       this.authService.updateAuthorization();
       this.closeModal();
+      this.toastr.success('Вы успешно отписались!', 'Операция удалась');
+    }, error => {
+      this.toastr.error('Отписаться не удалось', 'Ошибка');
     });
 
   }

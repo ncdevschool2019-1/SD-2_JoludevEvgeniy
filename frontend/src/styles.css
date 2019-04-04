@@ -1,5 +1,6 @@
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~ngx-toastr/toastr.css';
 
 body{
   margin-top: 80px;

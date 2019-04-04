@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Subscript} from "../../models/subscript";
 import {ModalService} from "../../../services/modalService/modal.service";
 import {SubscriptService} from "../../../services/subscriptService/subscript.service";
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-subscript',
@@ -9,7 +10,8 @@ import {SubscriptService} from "../../../services/subscriptService/subscript.ser
 })
 export class AddSubscriptComponent implements OnInit {
 
-  constructor(public modalService: ModalService, public subscriptService: SubscriptService) { }
+  constructor(public modalService: ModalService, public subscriptService: SubscriptService,
+              private toastr: ToastrService) { }
 
   ngOnInit() {
   }
@@ -22,6 +24,9 @@ export class AddSubscriptComponent implements OnInit {
   createSubscript(subscript: Subscript){
     this.subscriptService.saveSubscript(subscript).subscribe(data => {
       this.closeModal();
+      this.toastr.success('Подписка успешно создана!', data.name);
+    }, error => {
+      this.toastr.error('Создать подписку не удалось', 'Ошибка');
     })
   }
 

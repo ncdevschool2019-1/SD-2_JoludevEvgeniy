@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ModalService} from "../../../../services/modalService/modal.service";
 import {SubscriptService} from "../../../../services/subscriptService/subscript.service";
 import {Subscript} from '../../../models/subscript';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-subscript',
@@ -12,7 +13,8 @@ export class EditSubscriptComponent implements OnInit {
 
   @Output() onChanged = new EventEmitter();
 
-  constructor(private subscriptService: SubscriptService, private modalService: ModalService) {
+  constructor(private subscriptService: SubscriptService, private modalService: ModalService,
+              private toastr: ToastrService) {
 
   }
 
@@ -28,6 +30,9 @@ export class EditSubscriptComponent implements OnInit {
     this.subscriptService.saveSubscript(subscript).subscribe(data => {
       this.onChanged.emit();
       this.closeModal();
+      this.toastr.success('Вы успешно изменили подписку!', subscript.name);
+    }, error => {
+      this.toastr.error('К сожалению, подписку изменить не удалось', 'Ошибка');
     })
   }
 }

@@ -3,6 +3,7 @@ import {AuthorizationService} from "../../services/authorizationService/authoriz
 import {BillingAccount} from "../models/billing-account";
 import {BillingAccountService} from "../../services/billingAccountService/billingAccount.service";
 import {ModalService} from "../../services/modalService/modal.service";
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-billing-account',
@@ -13,7 +14,7 @@ export class BillingAccountComponent implements OnInit {
 
 
   constructor(public authService: AuthorizationService, public billingAccountService: BillingAccountService,
-              public modalService: ModalService) { }
+              public modalService: ModalService, private toastr: ToastrService) { }
 
   ngOnInit() {
   }
@@ -26,6 +27,9 @@ export class BillingAccountComponent implements OnInit {
   deleteBillingAccount(billingAccountId: number){
     this.billingAccountService.deleteBillingAccount(billingAccountId).subscribe(data => {
       this.authService.updateAuthorization();
+      this.toastr.success('Ваш биллинг аккаунт успешно удален!', 'Успех');
+    }, error => {
+      this.toastr.error('Удалить биллинг аккаунт не удалось', 'Ошибка');
     })
   }
 

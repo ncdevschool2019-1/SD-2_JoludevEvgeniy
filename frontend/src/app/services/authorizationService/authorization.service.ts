@@ -21,12 +21,6 @@ export class AuthorizationService {
   constructor(private userService: UserService) {
   }
 
-  public authorization(login: string, password: string): void {
-    this.userService.getLoginUser(login, password).subscribe(data => {
-      this.authorizedUser = data;
-    });
-  }
-
   public updateAuthorization(): void {
     this.userService.getUserById(this.authorizedUser.id).subscribe(data => {
       this.authorizedUser = data;

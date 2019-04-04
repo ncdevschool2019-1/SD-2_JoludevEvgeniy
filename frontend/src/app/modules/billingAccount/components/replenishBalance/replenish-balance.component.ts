@@ -3,6 +3,7 @@ import {BillingAccountService} from '../../../../services/billingAccountService/
 import {ModalService} from '../../../../services/modalService/modal.service';
 import {BillingAccount} from '../../../models/billing-account';
 import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class ReplenishBalanceComponent implements OnInit {
   public inputSum: number;
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
-              private authService: AuthorizationService) {
+              private authService: AuthorizationService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -32,6 +33,9 @@ export class ReplenishBalanceComponent implements OnInit {
     this.billingAccountService.saveBillingAccount(updatableBillingAccount).subscribe(data => {
       this.authService.updateAuthorization();
       this.closeModal();
+      this.toastr.success('Баланс вашего биллинг аккаунта успешно пополнен!', billingAccount.name);
+    }, error => {
+      this.toastr.error('Пополнить баланс не удалось', 'Операция не удалась');
     });
   }
 }
