@@ -16,7 +16,7 @@ export class LocalizationService {
       this.currentLocalization = this.localizations[0];
     });
 
-  }
+  }localization
 
   public getLocalizations(): Observable<any[]> {
     return this.http.get<any[]>('../../../assets/localization.json');

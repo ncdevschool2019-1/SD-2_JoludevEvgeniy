@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {User} from '../../modules/models/user';
-import {UserService} from '../userService/user.service';
 import {Subscript} from '../../modules/models/subscript';
 
 @Injectable({
@@ -18,34 +17,20 @@ export class AuthorizationService {
 
   private _authorizedUser: User = new User();
 
-  constructor(private userService: UserService) {
-  }
 
-  public updateAuthorization(): void {
-    this.userService.getUserById(this.authorizedUser.id).subscribe(data => {
-      this.authorizedUser = data;
-    })
-  }
-
-  public outFromAccount(){
-    this.authorizedUser = new User;
+  public outFromAccount() {
+    this.authorizedUser = new User();
   }
 
   public isRole(): boolean {
-    if (typeof this.authorizedUser.role === 'undefined') {
+    if(typeof this.authorizedUser.role === 'undefined'){
       return false;
     }
     return true;
   }
 
   public checkSubscript(subscript: Subscript): boolean {
-    for (let billingAccount of this.authorizedUser.billingAccounts) {
-      for (let activeSubscript of billingAccount.activeSubscripts) {
-        if (activeSubscript.subscript.id == subscript.id) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return this.authorizedUser.billingAccounts.some((billingAccount) =>
+      billingAccount.activeSubscripts.some((activeSubscript) => activeSubscript.subscript.id == subscript.id));
   }
 }

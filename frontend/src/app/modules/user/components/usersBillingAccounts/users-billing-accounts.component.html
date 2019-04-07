@@ -9,21 +9,22 @@
   <div class="form-group justify-content-center">
     <label for="exampleFormControlSelect1">Выберите billing account, на который хотите добавить подписку:</label>
     <select class="form-control w-25" id="exampleFormControlSelect1"
-            [(ngModel)]="billingAccountService.selectedBillingAccount">
-      <option *ngFor="let billingAccount of userService.selectedUser.billingAccounts"
+            [(ngModel)]="selectedBillingAccount">
+      <option *ngFor="let billingAccount of selectedUser.billingAccounts"
               [ngValue]="billingAccount">{{billingAccount.name}}</option>
     </select>
   </div>
-  <h6>Имя аккаунта: {{billingAccountService.selectedBillingAccount.name}}</h6>
-  <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
-  <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
-  <h6>Всего подписок на аккаунте: {{billingAccountService.getSelectedBASubscriptsLength()}}</h6>
-
+  <div *ngIf="selectedBillingAccount.id">
+    <h6>Имя аккаунта: {{selectedBillingAccount.name}}</h6>
+    <h6>Баланс: {{selectedBillingAccount.balance}}</h6>
+    <h6>Статус: {{selectedBillingAccount.active ? "Активно" : "Заблокировано"}}</h6>
+    <h6>Всего подписок на аккаунте: {{getSelectedBASubscriptsLength()}}</h6>
+  </div>
   <p></p>
 
   <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2 mb-3"
-          [disabled]="billingAccountService.isSelectedBAIdUndefined()"
-          (click)="changeStatus(billingAccountService.selectedBillingAccount)">
-    {{billingAccountService.selectedBillingAccount.active ? "Блокировать" : "Активировать"}}
+          [disabled]="isSelectedBAIdUndefined()"
+          (click)="changeStatus()">
+    {{selectedBillingAccount.active ? "Блокировать" : "Активировать"}}
   </button>
 </div>

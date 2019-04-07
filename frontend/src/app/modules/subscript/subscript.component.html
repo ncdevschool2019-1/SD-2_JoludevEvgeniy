@@ -6,20 +6,20 @@
         <h5>{{subscript.name}}</h5>
       </div>
 
-      <img src="https://незабываемая.москва/uploads/posts/ekskursiya_na_smotrovuyu_ploshchadku_panorama_360_2.jpg"
+      <img src="http://незабываемая.москва/uploads/posts/ekskursiya_na_smotrovuyu_ploshchadku_panorama_360_2.jpg"
            class="img-fluid" alt="Responsive image">
       <div class="card-body position-absolute w-100">
 
         <p class="card-text">{{subscript.description}}</p>
 
-        <button *ngIf="authService.authorizedUser.role == 'User' && !authService.checkSubscript(subscript)"
+        <button *ngIf="authorizedUser.role == 'User' && !checkSubscript(subscript)"
                 (click)="openModalSubscript(toSubscript, subscript)"
                 class="btn btn-primary btn-hide">Подписаться
         </button>
         <p class="card-text already-subscribe"
-           *ngIf="authService.authorizedUser.role == 'User' && authService.checkSubscript(subscript)">Вы уже подписаны
+           *ngIf="authorizedUser.role == 'User' && checkSubscript(subscript)">Вы уже подписаны
           на этот ресурс!</p>
-        <button *ngIf="authService.authorizedUser.role == 'Admin'"
+        <button *ngIf="authorizedUser.role == 'Admin'"
                 (click)="openModalSubscript(editSubscript, subscript)" class="btn btn-primary btn-hide">Редактировать
         </button>
         <p class="card-text mt-1">{{subscript.price}} RUB / {{subscript.period}} д.</p>
@@ -29,11 +29,11 @@
 </div>
 
 <ng-template #toSubscript>
-  <app-to-subscript></app-to-subscript>
+  <app-to-subscript [authorizedUser]="authorizedUser" [selectedSubscript]="selectedSubscript"></app-to-subscript>
 </ng-template>
 
 <ng-template #editSubscript>
-  <app-edit-subscript (onChanged)="onChanged()"></app-edit-subscript>
+  <app-edit-subscript (onChanged)="onChanged()" [selectedSubscript]="selectedSubscript"></app-edit-subscript>
 </ng-template>
 
 

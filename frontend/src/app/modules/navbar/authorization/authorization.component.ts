@@ -1,18 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {ModalService} from "../../../services/modalService/modal.service";
 import {AuthorizationService} from '../../../services/authorizationService/authorization.service';
 import {UserService} from '../../../services/userService/user.service';
 import {ToastrService} from 'ngx-toastr';
+import {User} from '../../models/user';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-authorization',
   templateUrl: './authorization.component.html',
   styleUrls: ['./authorization.component.css']
 })
-export class AuthorizationComponent implements OnInit {
+export class AuthorizationComponent implements OnInit, OnDestroy {
 
-  public inputLogin : string;
-  public inputPassword : string;
+
+  inputUser: User = new User();
+  private subscriptions: Subscription[] = [];
+  @Output() onChanged = new EventEmitter();
 
   constructor(private modalService: ModalService, private authService: AuthorizationService,
               private userService: UserService, private toastr: ToastrService) {
@@ -21,21 +25,25 @@ export class AuthorizationComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(value => value.unsubscribe());
+  }
+
   authorization(){
-    this.userService.getLoginUser(this.inputLogin, this.inputPassword).subscribe(data => {
+    this.subscriptions.push(this.userService.getLoginUser(this.inputUser).subscribe(data => {
       this.authService.authorizedUser = data;
+      this.onChanged.emit();
       this.closeModal();
       this.toastr.success('Вы успешно вошли!', data.login);
     }, error => {
       this.toastr.error('Войти не удалось', 'Ошибка')
-    });
+    }));
 
   }
 
   closeModal(){
     this.modalService.closeModal();
-    this.inputLogin = "";
-    this.inputPassword = "";
+    this.inputUser = new User();
   }
 
 }

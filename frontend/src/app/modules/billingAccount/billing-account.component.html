@@ -11,17 +11,17 @@
       </tr>
       </thead>
       <tbody class="table-dark">
-      <tr *ngFor="let billingAccount of authService.authorizedUser.billingAccounts"
+      <tr *ngFor="let billingAccount of authorizedUser.billingAccounts"
       >
         <td scope="row">{{billingAccount.name}}</td>
         <td>{{billingAccount.balance}} RUB</td>
-        <td>{{billingAccount.activeSubscripts.length}}<a class="btn text-primary"
+        <td>{{getSelectedBASubscriptsLength(billingAccount)}}<a class="btn text-primary"
                                                          (click)="openModal(subscriptsTable, billingAccount)">
           (Показать)</a></td>
-        <td>{{billingAccountService.getBAStatus(billingAccount)}}</td>
+        <td>{{billingAccount.active ? "Активно" : "Заблокировано"}}</td>
         <td>
           <button type="button" class="btn btn-primary" [disabled]="!billingAccount.active"
-                  (click)="deleteBillingAccount(billingAccount.id)">
+                  (click)="deleteBillingAccount(billingAccount)">
             Удалить
           </button>
           <button type="button" class="btn btn-primary ml-3" (click)="openModal(replenishBalance, billingAccount)">
@@ -38,13 +38,13 @@
 </div>
 
 <ng-template #subscriptsTable>
-  <app-subscripts-table></app-subscripts-table>
+  <app-subscripts-table [selectedBillingAccount]="selectedBillingAccount"></app-subscripts-table>
 </ng-template>
 
 <ng-template #replenishBalance>
-  <app-replenish-balance></app-replenish-balance>
+  <app-replenish-balance [selectedBillingAccount]="selectedBillingAccount"></app-replenish-balance>
 </ng-template>
 
 <ng-template #addBillingAccount>
-  <app-add-billing-account></app-add-billing-account>
+  <app-add-billing-account (onChanged)="onChanged()"></app-add-billing-account>
 </ng-template>

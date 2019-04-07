@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ModalService} from "../../services/modalService/modal.service";
-import {AuthorizationService} from "../../services/authorizationService/authorization.service";
-import {LocalizationService} from "../../services/localizationService/localization.service";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ModalService} from '../../services/modalService/modal.service';
+import {AuthorizationService} from '../../services/authorizationService/authorization.service';
+import {User} from '../models/user';
 
 
 @Component({
@@ -11,15 +11,30 @@ import {LocalizationService} from "../../services/localizationService/localizati
 })
 export class NavbarComponent implements OnInit {
 
+  authorizedUser: User = new User();
+
   constructor(private modalService: ModalService, private authService: AuthorizationService) {
   }
 
-
-  ngOnInit() {
+  getAuthUser() {
+    this.authorizedUser = this.authService.authorizedUser;
   }
 
-  outFromAccount(){
+  onChanged(){
+    this.getAuthUser();
+  }
+
+  ngOnInit() {
+    this.getAuthUser();
+  }
+
+  outFromAccount() {
     this.authService.outFromAccount();
+    this.getAuthUser();
+  }
+
+  isRole(): boolean {
+    return this.authService.isRole();
   }
 
 }

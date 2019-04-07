@@ -20,8 +20,13 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<User> getAllUsers() {
-        return this.userService.getAllUsers();
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        Iterable<User> users = this.userService.getAllUsers();
+        if (users.iterator().hasNext()) {
+            return ResponseEntity.ok(users);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -35,13 +40,21 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public User saveUser(@RequestBody User user) {
-        return this.userService.saveUser(user);
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        Long id = this.userService.saveUser(user).getId();
+        Optional<User> savedUser = this.userService.getUserById(id);
+        if (savedUser.isPresent()) {
+            return ResponseEntity.ok(savedUser.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUserById(@PathVariable(name = "id") Long id) {
         this.userService.deleteUser(id);
+
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.PUT)
@@ -54,7 +67,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/password",method = RequestMethod.PUT)
+    @RequestMapping(value = "/password", method = RequestMethod.PUT)
     public ResponseEntity<User> updateUsersPassword(@RequestBody User user) {
         Optional<User> updatableUser = this.userService.updateUsersPassword(user.getId(), user.getPassword());
         if (updatableUser.isPresent()) {
@@ -64,7 +77,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/email",method = RequestMethod.PUT)
+    @RequestMapping(value = "/email", method = RequestMethod.PUT)
     public ResponseEntity<User> updateUsersEmail(@RequestBody User user) {
         Optional<User> updatableUser = this.userService.updateUsersEmail(user.getId(), user.getEmail());
         if (updatableUser.isPresent()) {
@@ -74,9 +87,14 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/{login}/{password}", method = RequestMethod.GET)
-    public User getUserById(@PathVariable(name = "login") String login,
-                                            @PathVariable(name = "password") String password) {
-        return this.userService.getLoginUser(login, password);
+    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
+    public ResponseEntity<User> getUserById(@RequestBody User user) {
+        User authUser = this.userService.getLoginUser(user.getLogin(), user.getPassword());
+        if(authUser != null){
+            return ResponseEntity.ok(authUser);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -8,27 +8,14 @@ import {User} from '../../modules/models/user';
 })
 export class UserService {
 
-  private _selectedUser: User;
   private path: string = '/api/users';
 
-
-  get selectedUser(): User {
-    return this._selectedUser;
-  }
-
-  set selectedUser(value: User) {
-    this._selectedUser = value;
-  }
 
   constructor(private http: HttpClient) {
   }
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.path);
-  }
-
-  public getUserById(userId: number): Observable<User>{
-    return this.http.get<User>(this.path + '/' + userId);
   }
 
   public deleteUser(userId: number): Observable<void>{
@@ -51,11 +38,8 @@ export class UserService {
     return this.http.put<User>(this.path + '/email', user);
   }
 
-  public getLoginUser(login: string, password: string): Observable<User>{
-    return this.http.get<User>(this.path + '/' + login + '/' + password);
+  public getLoginUser(user: User): Observable<User>{
+    return this.http.post<User>(this.path + '/authorization', user);
   }
 
-  public clearSelectedUser(): void {
-    this.selectedUser = new User();
-  }
 }

@@ -19,7 +19,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let activeSubscript of billingAccountService.selectedBillingAccount.activeSubscripts">
+      <tr *ngFor="let activeSubscript of selectedBillingAccount.activeSubscripts">
         <td scope="row">{{activeSubscript.subscript.name}}</td>
         <td>{{activeSubscript.subscript.description}}</td>
         <td>{{activeSubscript.subscript.price}} RUB</td>
@@ -27,8 +27,8 @@
         <td>{{activeSubscript.lastWriteOff | date:'medium'}}</td>
         <td>
           <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2"
-                  [disabled]="!billingAccountService.selectedBillingAccount.active"
-                  (click)="deleteActiveSubscript(activeSubscript.id)">Отписаться
+                  [disabled]="!selectedBillingAccount.active"
+                  (click)="deleteActiveSubscript(activeSubscript)">Отписаться
           </button>
         </td>
       </tr>

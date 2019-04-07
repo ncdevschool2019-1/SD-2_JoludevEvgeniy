@@ -8,16 +8,8 @@ import {Subscript} from '../../modules/models/subscript';
 })
 export class SubscriptService {
 
-  private _selectedSubscript: Subscript = new Subscript();
   private path: string = '/api/subscripts';
 
-  get selectedSubscript(): Subscript {
-    return this._selectedSubscript;
-  }
-
-  set selectedSubscript(value: Subscript) {
-    this._selectedSubscript = value;
-  }
 
   constructor(private http: HttpClient) {
   }
@@ -26,7 +18,7 @@ export class SubscriptService {
     return this.http.get<Subscript[]>(this.path);
   }
 
-  public saveSubscript(subscript: Subscript): Observable<Subscript>{
+  public saveSubscript(subscript: Subscript): Observable<Subscript> {
     return this.http.post<Subscript>(this.path, subscript);
   }
 
@@ -34,7 +26,11 @@ export class SubscriptService {
     return this.http.delete<void>(this.path + '/' + subscriptId);
   }
 
-  public clearSelectedSubscript(): void {
-    this.selectedSubscript = new Subscript();
+  public saveSubscriptsImage(image: File, subscriptId: number): Observable<void> {
+    const formData = new FormData();
+    formData.append('subscriptImage', image, image.name);
+    return this.http.post<void>(this.path + '/image/' + subscriptId, formData);
   }
+
+
 }

@@ -14,11 +14,11 @@
                 </div>
               </div>
               <div class="ml-3">
-                <h4>Логин: {{authService.authorizedUser.login}}</h4>
-                <h5>Email: {{authService.authorizedUser.email}}</h5>
+                <h4>Логин: {{authorizedUser.login}}</h4>
+                <h5>Email: {{authorizedUser.email}}</h5>
               </div>
               <div class="float-right">
-                <button *ngIf="authService.authorizedUser.role == 'Admin'" class="btn btn-primary"
+                <button *ngIf="authorizedUser.role == 'Admin'" class="btn btn-primary"
                         (click)="modalService.openModal(addSubscript)">Добавить подписку
                 </button>
               </div>
@@ -34,7 +34,7 @@
                     <div [hidden]="login.untouched || login.valid" class="alert alert-danger w-25">
                       Вы ввели неверный логин
                     </div>
-                    <div [hidden]="newLogin != authService.authorizedUser.login" class="alert alert-danger w-25">
+                    <div [hidden]="newLogin != authorizedUser.login" class="alert alert-danger w-25">
                       Вы ввели нынешний логин
                     </div>
                     <button class="btn btn-primary mt-3" [disabled]="login.invalid" (click)="changeLogin()">Сменить
@@ -74,7 +74,7 @@
                     <div [hidden]="email.untouched || email.valid" class="alert alert-danger w-25">
                       Вы ввели неверный email
                     </div>
-                    <div [hidden]="newEmail != authService.authorizedUser.email" class="alert alert-danger w-25">
+                    <div [hidden]="newEmail != authorizedUser.email" class="alert alert-danger w-25">
                       Вы ввели нынешний email
                     </div>
                     <button class="btn btn-primary mt-3" [disabled]="email.invalid" (click)="changeEmail()">Сменить

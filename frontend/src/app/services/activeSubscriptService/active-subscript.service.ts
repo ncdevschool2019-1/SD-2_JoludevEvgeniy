@@ -17,6 +17,6 @@ export class ActiveSubscriptService{
   }
 
   public deleteActiveSubscript(activeSubscriptId: number): Observable<void> {
-    return this.http.delete<void>('/api/active-subscripts/' + activeSubscriptId.toString());
+    return this.http.delete<void>('/api/active-subscripts/' + activeSubscriptId);
   }
 }

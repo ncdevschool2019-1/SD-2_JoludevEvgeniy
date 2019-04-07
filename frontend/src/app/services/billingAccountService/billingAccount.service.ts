@@ -8,19 +8,10 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class BillingAccountService {
-  private _selectedBillingAccount: BillingAccount = new BillingAccount();
   private path: string = '/api/billing-accounts';
 
   constructor(private http: HttpClient){
 
-  }
-
-  get selectedBillingAccount(): BillingAccount {
-    return this._selectedBillingAccount;
-  }
-
-  set selectedBillingAccount(value: BillingAccount) {
-    this._selectedBillingAccount = value;
   }
 
   public saveBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount>{
@@ -35,30 +26,23 @@ export class BillingAccountService {
     return this.http.delete<void>(this.path + '/' + billingAccountId);
   }
 
-  public clearSelectedBillingAccount(): void {
-    this.selectedBillingAccount = new BillingAccount();
+  public isSelectedBAIdUndefined(billingAccount: BillingAccount): boolean {
+    return typeof billingAccount.id === 'undefined';
   }
 
-  public isSelectedBAIdUndefined(): boolean {
-    return typeof this.selectedBillingAccount.id === 'undefined';
-  }
-
-  public getSelectedBASubscriptsLength(): string {
-    if (typeof this.selectedBillingAccount.activeSubscripts === 'undefined') {
-      return "";
+  public getSelectedBASubscriptsLength(billingAccount: BillingAccount): string {
+    if (!billingAccount.activeSubscripts) {
+      return "0";
     } else {
-      return this.selectedBillingAccount.activeSubscripts.length.toString();
+      return billingAccount.activeSubscripts.length.toString();
     }
   }
 
-  public getBAStatus(billingAccount: BillingAccount): string {
-    return billingAccount.active ? "Активно" : "Заблокировано"
-  }
-
-  public isBalanceMoreThanSubscribePrice(subscript: Subscript): boolean{
-    if (subscript.price > this.selectedBillingAccount.balance){
+  public isBalanceMoreThanSubscribePrice(subscript: Subscript, billingAccount: BillingAccount): boolean{
+    if (subscript.price > billingAccount.balance){
       return false;
     }
     return true;
   }
+
 }

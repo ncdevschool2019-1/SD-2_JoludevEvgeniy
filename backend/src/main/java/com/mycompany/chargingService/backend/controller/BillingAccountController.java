@@ -22,26 +22,36 @@ public class BillingAccountController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<BillingAccount> getBillingAccountById(@PathVariable(name = "id") Long id) {
         Optional<BillingAccount> billingAccount = this.billingAccountService.getBillingAccountById(id);
-        if(billingAccount.isPresent()){
+        if (billingAccount.isPresent()) {
             return ResponseEntity.ok(billingAccount.get());
-        }
-        else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public BillingAccount saveBillingAccount(@RequestBody BillingAccount billingAccount){
-        return this.billingAccountService.saveBillingAccount(billingAccount);
+    public ResponseEntity<BillingAccount> saveBillingAccount(@RequestBody BillingAccount billingAccount) {
+        Long id = this.billingAccountService.saveBillingAccount(billingAccount).getId();
+        Optional<BillingAccount> savedBillingAccount = this.billingAccountService.getBillingAccountById(id);
+        if (savedBillingAccount.isPresent()) {
+            return ResponseEntity.ok(savedBillingAccount.get());
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<BillingAccount> getAllBillingAccounts(){
-        return this.billingAccountService.getAllBillingAccounts();
+    public ResponseEntity<Iterable<BillingAccount>> getAllBillingAccounts() {
+        Iterable<BillingAccount> billingAccount = this.billingAccountService.getAllBillingAccounts();
+        if (billingAccount.iterator().hasNext()) {
+            return ResponseEntity.ok(billingAccount);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteBillingAccount(@PathVariable(name = "id") Long id){
+    public void deleteBillingAccount(@PathVariable(name = "id") Long id) {
         this.billingAccountService.deleteBillingAccount(id);
     }
 

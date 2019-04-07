@@ -7,9 +7,9 @@
 </div>
 <div class="modal-body">
   <div class="form-group justify-content-center">
-    <h6>Имя аккаунта: {{billingAccountService.selectedBillingAccount.name}}</h6>
-    <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
-    <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
+    <h6>Имя аккаунта: {{selectedBillingAccount.name}}</h6>
+    <h6>Баланс: {{selectedBillingAccount.balance}}</h6>
+    <h6>Статус: {{selectedBillingAccount.active ? "Активно" : "Заблокировано"}}</h6>
     <p></p>
     <div class="form-group">
       <label for="exampleForm2">Введите сумму:</label>
@@ -21,7 +21,7 @@
     </div>
 
     <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2" [disabled]="sum.invalid"
-    (click)="replenishBalance(billingAccountService.selectedBillingAccount)">Пополнить
+    (click)="replenishBalance(selectedBillingAccount)">Пополнить
     </button>
   </div>
 </div>

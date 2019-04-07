@@ -6,6 +6,8 @@ import com.mycompany.chargingService.backend.service.ActiveSubscriptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
 
@@ -24,5 +26,10 @@ public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
     @Override
     public void deleteActiveSubscript(Long id) {
         this.repository.deleteById(id);
+    }
+
+    @Override
+    public Optional<ActiveSubscript> getActiveSubscriptById(Long id) {
+        return this.repository.findById(id);
     }
 }

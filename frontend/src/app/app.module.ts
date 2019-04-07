@@ -32,6 +32,7 @@ import {UsersBillingAccountsComponent} from './modules/user/components/usersBill
 import {AddBillingAccountComponent} from './modules/billingAccount/components/addBillingAccount/add-billing-account.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthorizationService} from './services/authorizationService/authorization.service';
 
 const routes: Routes = [
   {path: '', redirectTo: 'jumbotron', pathMatch: 'full'},

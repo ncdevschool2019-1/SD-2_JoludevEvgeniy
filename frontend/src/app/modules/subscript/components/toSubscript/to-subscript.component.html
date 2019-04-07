@@ -9,25 +9,27 @@
   <div class="form-group justify-content-center">
     <label for="exampleFormControlSelect1">Выберите billing account, на который хотите добавить подписку:</label>
     <select class="form-control w-25" id="exampleFormControlSelect1"
-            [(ngModel)]="billingAccountService.selectedBillingAccount">
-      <option *ngFor="let billingAccount of authService.authorizedUser.billingAccounts"
+            [(ngModel)]="selectedBillingAccount">
+      <option *ngFor="let billingAccount of authorizedUser.billingAccounts"
               [ngValue]="billingAccount">{{billingAccount.name}}</option>
     </select>
   </div>
-  <h6>Имя аккаунта: {{billingAccountService.selectedBillingAccount.name}}</h6>
-  <h6>Баланс: {{billingAccountService.selectedBillingAccount.balance}}</h6>
-  <h6>Статус: {{billingAccountService.getBAStatus(billingAccountService.selectedBillingAccount)}}</h6>
-  <h6>Всего подписок на аккаунте: {{billingAccountService.getSelectedBASubscriptsLength()}}</h6>
-  <h6>Подписка: {{subscriptService.selectedSubscript.name}}</h6>
-  <h6>Стоимость подписки: {{subscriptService.selectedSubscript.price}}
-    /{{subscriptService.selectedSubscript.period}}</h6>
+  <div *ngIf="selectedBillingAccount.id">
+    <h6>Имя аккаунта: {{selectedBillingAccount.name}}</h6>
+    <h6>Баланс: {{selectedBillingAccount.balance}}</h6>
+    <h6>Статус: {{selectedBillingAccount.active ? "Активировано" : "Заблокировано"}}</h6>
+    <h6>Всего подписок на аккаунте: {{getSelectedBASubscriptsLength(selectedBillingAccount)}}</h6>
+  </div>
+  <h6>Подписка: {{selectedSubscript.name}}</h6>
+  <h6>Стоимость подписки: {{selectedSubscript.price}} RUB
+    /{{selectedSubscript.period}} д.</h6>
   <p></p>
 
   <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2 mb-3"
-          [disabled]="billingAccountService.isSelectedBAIdUndefined() ||
-           !billingAccountService.selectedBillingAccount.active ||
-            !billingAccountService.isBalanceMoreThanSubscribePrice(subscriptService.selectedSubscript)"
-          (click)="saveActiveSubscript(subscriptService.selectedSubscript, billingAccountService.selectedBillingAccount.id)">
+          [disabled]="isSelectedBAIdUndefined(selectedBillingAccount) ||
+           !selectedBillingAccount.active ||
+            !isBalanceMoreThanSubscribePrice(selectedSubscript, selectedBillingAccount)"
+          (click)="saveActiveSubscript(selectedSubscript, selectedBillingAccount)">
     Добавить подписку в выбранный
     аккаунт
   </button>

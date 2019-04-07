@@ -10,15 +10,15 @@
            routerLinkActive="myActive">Подписки</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="authService.authorizedUser.role == 'User'" routerLink="billing-accounts"
+        <a class="nav-link" *ngIf="authorizedUser.role == 'User'" routerLink="billing-accounts"
            routerLinkActive="myActive">Биллинг аккаунты</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="authService.isRole()" routerLink="profile"
+        <a class="nav-link" *ngIf="isRole()" routerLink="profile"
            routerLinkActive="myActive">Профиль</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="authService.authorizedUser.role == 'Admin'" routerLink="users"
+        <a class="nav-link" *ngIf="authorizedUser.role == 'Admin'" routerLink="users"
            routerLinkActive="myActive">Пользователи</a>
       </li>
       <li class="nav-item">
@@ -26,7 +26,7 @@
            routerLinkActive="myActive">О нас</a>
       </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="!authService.isRole()">
+    <ul class="navbar-nav" *ngIf="!isRole()">
       <li class="nav-item">
         <button class="btn btn-outline-primary"
                 (click)="modalService.openModal(auth_template)">Войти
@@ -38,9 +38,9 @@
         </button>
       </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="authService.isRole()">
+    <ul class="navbar-nav" *ngIf="isRole()">
       <li class="nav-item mr-3">
-        <h6 class="nav-link">{{authService.authorizedUser.login}}</h6>
+        <h6 class="nav-link">{{authorizedUser.login}}</h6>
       </li>
 
       <li class="nav-item">
@@ -59,9 +59,9 @@
 </nav>
 
 <ng-template #auth_template>
-  <app-authorization></app-authorization>
+  <app-authorization (onChanged)="onChanged()"></app-authorization>
 </ng-template>
 
 <ng-template #reg_template>
-  <app-registration></app-registration>
+  <app-registration (onChanged)="onChanged()"></app-registration>
 </ng-template>

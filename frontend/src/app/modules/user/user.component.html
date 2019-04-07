@@ -30,6 +30,6 @@
 </div>
 
 <ng-template #usersBillingAccount>
-  <app-users-billing-accounts></app-users-billing-accounts>
+  <app-users-billing-accounts [selectedUser]="selectedUser" (onChanged)="onChanged()"></app-users-billing-accounts>
 </ng-template>
 
