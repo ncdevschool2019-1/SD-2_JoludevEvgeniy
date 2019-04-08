@@ -11,31 +11,31 @@ import java.util.Optional;
 @Service
 public class BillingAccountServiceImplement implements BillingAccountService {
 
-    private BillingAccountRepository repository;
+    private BillingAccountRepository billingAccountRepository;
 
     @Autowired
-    public BillingAccountServiceImplement(BillingAccountRepository repository) {
-        this.repository = repository;
+    public BillingAccountServiceImplement(BillingAccountRepository billingAccountRepository) {
+        this.billingAccountRepository = billingAccountRepository;
     }
 
     @Override
     public BillingAccount saveBillingAccount(BillingAccount billingAccount) {
         billingAccount.setActive(true);
-        return this.repository.save(billingAccount);
+        return this.billingAccountRepository.save(billingAccount);
     }
 
     @Override
     public Optional<BillingAccount> getBillingAccountById(Long id) {
-        return this.repository.findById(id);
+        return this.billingAccountRepository.findById(id);
     }
 
     @Override
     public Iterable<BillingAccount> getAllBillingAccounts() {
-        return this.repository.findAll();
+        return this.billingAccountRepository.findAll();
     }
 
     @Override
     public void deleteBillingAccount(Long id) {
-        this.repository.deleteById(id);
+        this.billingAccountRepository.deleteById(id);
     }
 }

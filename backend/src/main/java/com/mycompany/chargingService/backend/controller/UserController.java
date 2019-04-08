@@ -3,9 +3,13 @@ package com.mycompany.chargingService.backend.controller;
 import com.mycompany.chargingService.backend.entity.User;
 import com.mycompany.chargingService.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 @RestController
@@ -53,8 +57,10 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUserById(@PathVariable(name = "id") Long id) {
-        this.userService.deleteUser(id);
-
+        if (this.userService.getUserById(id).isPresent()) {
+            this.userService.deleteImage(this.userService.getUserById(id).get().getImagePath());
+            this.userService.deleteUser(id);
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.PUT)
@@ -90,11 +96,36 @@ public class UserController {
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
     public ResponseEntity<User> getUserById(@RequestBody User user) {
         User authUser = this.userService.getLoginUser(user.getLogin(), user.getPassword());
-        if(authUser != null){
+        if (authUser != null) {
             return ResponseEntity.ok(authUser);
-        }
-        else {
+        } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
+    public ResponseEntity<User> uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
+
+        Iterator<String> itr = request.getFileNames();
+        if (this.userService.uploadUsersImage(request.getFile(itr.next()), id) &&
+                this.userService.getUserById(id).isPresent()) {
+            return ResponseEntity.ok(this.userService.getUserById(id).get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        try {
+            Resource image = this.userService.getImage(imageName);
+            if (image.exists() || image.isReadable()) {
+                return ResponseEntity.ok(image);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

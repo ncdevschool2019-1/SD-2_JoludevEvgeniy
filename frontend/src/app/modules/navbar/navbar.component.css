@@ -5,3 +5,7 @@
 .navbar-dark .navbar-nav a:hover{
   background-color: rgba(54,51,53,1);
 }
+img{
+  width: 35px;
+  height: 35px;
+}

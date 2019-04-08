@@ -45,7 +45,7 @@
 
       <li class="nav-item">
         <a class="nav-link" routerLink="profile">
-          <img src="http://placehold.it/35x35" class="rounded-circle">
+          <img [src]="authorizedUser.imagePath ? 'http://localhost:4200/api/users/image/' + authorizedUser.imagePath :'http://placehold.it/35x35'" class="rounded-circle">
         </a>
       </li>
 

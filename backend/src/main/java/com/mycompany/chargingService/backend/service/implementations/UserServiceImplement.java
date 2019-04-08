@@ -1,68 +1,119 @@
 package com.mycompany.chargingService.backend.service.implementations;
 
+import com.mycompany.chargingService.backend.entity.Subscript;
 import com.mycompany.chargingService.backend.entity.User;
 import com.mycompany.chargingService.backend.repository.RoleRepository;
 import com.mycompany.chargingService.backend.repository.UserRepository;
 import com.mycompany.chargingService.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
 public class UserServiceImplement implements UserService {
 
-    private UserRepository repository;
+    private UserRepository userRepository;
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImplement(UserRepository repository, RoleRepository roleRepository) {
-        this.repository = repository;
+    public UserServiceImplement(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
     @Override
     public User saveUser(User user) {
         user.setRole(this.roleRepository.findById(1l).get());
-        return this.repository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Override
     public Optional<User> getUserById(Long id) {
-        return this.repository.findById(id);
+        return this.userRepository.findById(id);
     }
 
     @Override
     public Iterable<User> getAllUsers() {
-        return this.repository.findAll();
+        return this.userRepository.findAll();
     }
 
     @Override
     public void deleteUser(Long id) {
-        this.repository.deleteById(id);
+        this.userRepository.deleteById(id);
     }
 
     @Override
     public Optional<User> updateUsersLogin(Long id, String login) {
-        this.repository.updateUsersLogin(id, login);
-        return this.repository.findById(id);
+        this.userRepository.updateUsersLogin(id, login);
+        return this.userRepository.findById(id);
     }
 
     @Override
     public Optional<User> updateUsersPassword(Long id, String password) {
-        this.repository.updateUsersPassword(id, password);
-        return this.repository.findById(id);
+        this.userRepository.updateUsersPassword(id, password);
+        return this.userRepository.findById(id);
     }
 
     @Override
     public Optional<User> updateUsersEmail(Long id, String email) {
-        this.repository.updateUsersEmail(id, email);
-        return this.repository.findById(id);
+        this.userRepository.updateUsersEmail(id, email);
+        return this.userRepository.findById(id);
     }
 
     @Override
     public User getLoginUser(String login, String password) {
-        return this.repository.getLoginUser(login, password);
+        return this.userRepository.getLoginUser(login, password);
+    }
+
+    @Override
+    public boolean uploadUsersImage(MultipartFile image, Long id) throws IOException {
+        String imageName = image.getOriginalFilename();
+        if (this.userRepository.findById(id).isPresent()) {
+            User user = this.userRepository.findById(id).get();
+            String imageNewName = user.getId().toString() + "_" + user.getLogin() +
+                    imageName.substring(imageName.lastIndexOf('.'));
+            File serverFile = new File("backend/src/images/usersImages/", imageNewName);
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+            stream.write(image.getBytes());
+            stream.close();
+            user.setImagePath(imageNewName);
+            this.userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Resource getImage(String imageName) {
+        try {
+            Path file = Paths.get("backend/src/images/usersImages/" + imageName);
+            return new UrlResource(file.toUri());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteImage(String imageName) {
+        File image = new File("backend/src/images/usersImages/" + imageName);
+        try{
+            image.delete();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

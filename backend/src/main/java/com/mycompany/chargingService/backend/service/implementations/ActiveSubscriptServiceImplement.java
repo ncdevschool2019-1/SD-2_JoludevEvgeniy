@@ -11,25 +11,25 @@ import java.util.Optional;
 @Service
 public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
 
-    private ActiveSubscriptRepository repository;
+    private ActiveSubscriptRepository activeSubscriptRepository;
 
     @Autowired
-    public ActiveSubscriptServiceImplement(ActiveSubscriptRepository repository) {
-        this.repository = repository;
+    public ActiveSubscriptServiceImplement(ActiveSubscriptRepository activeSubscriptRepository) {
+        this.activeSubscriptRepository = activeSubscriptRepository;
     }
 
     @Override
     public ActiveSubscript saveActiveSubscript(ActiveSubscript activeSubscript) {
-        return this.repository.save(activeSubscript);
+        return this.activeSubscriptRepository.save(activeSubscript);
     }
 
     @Override
     public void deleteActiveSubscript(Long id) {
-        this.repository.deleteById(id);
+        this.activeSubscriptRepository.deleteById(id);
     }
 
     @Override
     public Optional<ActiveSubscript> getActiveSubscriptById(Long id) {
-        return this.repository.findById(id);
+        return this.activeSubscriptRepository.findById(id);
     }
 }

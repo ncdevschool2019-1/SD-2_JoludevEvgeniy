@@ -26,3 +26,10 @@
 .image-container {
   position: relative;
 }
+.img-input{
+  display: none;
+}
+img{
+  width: 150px;
+  height: 150px;
+}

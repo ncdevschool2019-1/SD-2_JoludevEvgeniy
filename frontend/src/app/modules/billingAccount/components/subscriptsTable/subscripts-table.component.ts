@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BillingAccountService} from '../../../../services/billingAccountService/billingAccount.service';
-import {ModalService} from '../../../../services/modalService/modal.service';
-import {ActiveSubscriptService} from '../../../../services/activeSubscriptService/active-subscript.service';
-import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
+import {BillingAccountService} from '../../../../services/billingAccount.service';
+import {ModalService} from '../../../../services/modal.service';
+import {ActiveSubscriptService} from '../../../../services/active-subscript.service';
+import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {BillingAccount} from '../../../models/billing-account';
 import {ActiveSubscript} from '../../../models/active-subscript';

@@ -32,7 +32,10 @@ import {UsersBillingAccountsComponent} from './modules/user/components/usersBill
 import {AddBillingAccountComponent} from './modules/billingAccount/components/addBillingAccount/add-billing-account.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthorizationService} from './services/authorizationService/authorization.service';
+import {AuthorizationService} from './services/authorization.service';
+import {FooterComponent} from './modules/footer/footer.component';
+import {AboutComponent} from './modules/about/about.component';
+import {AboutPageComponent} from './modules/layout/components/aboutPage/about-page.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'jumbotron', pathMatch: 'full'},
@@ -40,7 +43,8 @@ const routes: Routes = [
   {path: 'subscripts', component: SubscriptPageComponent},
   {path: 'users', component: UserPageComponent},
   {path: 'profile', component: ProfilePageComponent},
-  {path: 'billing-accounts', component: BillingAccountPageComponent}
+  {path: 'billing-accounts', component: BillingAccountPageComponent},
+  {path: 'about', component: AboutPageComponent}
 ];
 
 @NgModule({
@@ -60,12 +64,15 @@ const routes: Routes = [
     BillingAccountPageComponent,
     UserPageComponent,
     ProfilePageComponent,
+    AboutPageComponent,
     ToSubscriptComponent,
     EditSubscriptComponent,
     SubscriptsTableComponent,
     ReplenishBalanceComponent,
     UsersBillingAccountsComponent,
-    AddBillingAccountComponent
+    AddBillingAccountComponent,
+    FooterComponent,
+    AboutComponent
   ],
 
   exports: [RouterModule],

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {ModalService} from '../../services/modalService/modal.service';
-import {AuthorizationService} from '../../services/authorizationService/authorization.service';
+import {ModalService} from '../../services/modal.service';
+import {AuthorizationService} from '../../services/authorization.service';
 import {User} from '../models/user';
 
 

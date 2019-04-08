@@ -1,6 +1,7 @@
 package com.mycompany.chargingService.backend.service;
 
 import com.mycompany.chargingService.backend.entity.Subscript;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,6 +12,8 @@ public interface SubscriptService {
     Optional<Subscript> getSubscriptById(Long id);
     Iterable<Subscript> getAllSubscripts();
     void deleteSubscript(Long id);
-    String uploadSubscriptsImage(MultipartFile image, Long id) throws IOException;
+    boolean uploadSubscriptsImage(MultipartFile image, Long id) throws IOException;
+    Resource getImage(String imageName);
+    void deleteImage(String imageName);
 
 }

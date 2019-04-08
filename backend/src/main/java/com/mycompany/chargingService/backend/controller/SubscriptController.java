@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +50,10 @@ public class SubscriptController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteSubscript(@PathVariable(name = "id") Long id) {
-        this.subscriptService.deleteSubscript(id);
+        if(this.subscriptService.getSubscriptById(id).isPresent()){
+            this.subscriptService.deleteImage(this.subscriptService.getSubscriptById(id).get().getImagePath());
+            this.subscriptService.deleteSubscript(id);
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -64,9 +68,28 @@ public class SubscriptController {
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
-    public void uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
+    public ResponseEntity<Subscript> uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
 
         Iterator<String> itr = request.getFileNames();
-        this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id);
+        if (this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id) &&
+                this.subscriptService.getSubscriptById(id).isPresent()) {
+            return ResponseEntity.ok(this.subscriptService.getSubscriptById(id).get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        try {
+            Resource image = this.subscriptService.getImage(imageName);
+            if (image.exists() || image.isReadable()) {
+                return ResponseEntity.ok(image);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

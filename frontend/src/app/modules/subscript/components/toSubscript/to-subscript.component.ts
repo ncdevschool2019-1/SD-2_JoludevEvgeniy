@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BillingAccountService} from '../../../../services/billingAccountService/billingAccount.service';
-import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
-import {ModalService} from '../../../../services/modalService/modal.service';
-import {SubscriptService} from '../../../../services/subscriptService/subscript.service';
+import {BillingAccountService} from '../../../../services/billingAccount.service';
+import {AuthorizationService} from '../../../../services/authorization.service';
+import {ModalService} from '../../../../services/modal.service';
+import {SubscriptService} from '../../../../services/subscript.service';
 import {Subscript} from '../../../models/subscript';
 import {ActiveSubscript} from '../../../models/active-subscript';
-import {ActiveSubscriptService} from '../../../../services/activeSubscriptService/active-subscript.service';
+import {ActiveSubscriptService} from '../../../../services/active-subscript.service';
 import {ToastrService} from 'ngx-toastr';
 import {BillingAccount} from '../../../models/billing-account';
 import {User} from '../../../models/user';

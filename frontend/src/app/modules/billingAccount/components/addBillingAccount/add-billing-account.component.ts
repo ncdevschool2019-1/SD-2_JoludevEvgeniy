@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {ModalService} from '../../../../services/modalService/modal.service';
-import {BillingAccountService} from '../../../../services/billingAccountService/billingAccount.service';
+import {ModalService} from '../../../../services/modal.service';
+import {BillingAccountService} from '../../../../services/billingAccount.service';
 import {BillingAccount} from '../../../models/billing-account';
-import {AuthorizationService} from '../../../../services/authorizationService/authorization.service';
+import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
 

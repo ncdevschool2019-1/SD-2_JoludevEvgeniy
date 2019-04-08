@@ -6,7 +6,7 @@
         <h5>{{subscript.name}}</h5>
       </div>
 
-      <img src="http://незабываемая.москва/uploads/posts/ekskursiya_na_smotrovuyu_ploshchadku_panorama_360_2.jpg"
+      <img [src]="subscript.imagePath ? 'http://localhost:4200/api/subscripts/image/' + subscript.imagePath : 'http://placehold.it/780x450?text=Здесь+могло+быть+ваше+изображение'"
            class="img-fluid" alt="Responsive image">
       <div class="card-body position-absolute w-100">
 
@@ -21,6 +21,9 @@
           на этот ресурс!</p>
         <button *ngIf="authorizedUser.role == 'Admin'"
                 (click)="openModalSubscript(editSubscript, subscript)" class="btn btn-primary btn-hide">Редактировать
+        </button>
+        <button *ngIf="authorizedUser.role == 'Admin'"
+                (click)="deleteSubscript(subscript)" class="btn btn-danger btn-hide">Удалить
         </button>
         <p class="card-text mt-1">{{subscript.price}} RUB / {{subscript.period}} д.</p>
       </div>

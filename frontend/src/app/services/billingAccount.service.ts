@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {BillingAccount} from "../../modules/models/billing-account";
-import {Subscript} from '../../modules/models/subscript';
+import {BillingAccount} from "../modules/models/billing-account";
+import {Subscript} from '../modules/models/subscript';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 

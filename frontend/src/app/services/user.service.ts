@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {User} from '../../modules/models/user';
+import {User} from '../modules/models/user';
+import {Subscript} from '../modules/models/subscript';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,12 @@ export class UserService {
 
   public getLoginUser(user: User): Observable<User>{
     return this.http.post<User>(this.path + '/authorization', user);
+  }
+
+  public saveUsersImage(image: File, userId: number): Observable<User> {
+    const formData = new FormData();
+    formData.append('userImage', image, image.name);
+    return this.http.post<User>(this.path + '/image/' + userId, formData);
   }
 
 }

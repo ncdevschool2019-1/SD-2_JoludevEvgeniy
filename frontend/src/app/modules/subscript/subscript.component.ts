@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Subscript} from '../models/subscript';
-import {SubscriptService} from '../../services/subscriptService/subscript.service';
-import {ModalService} from "../../services/modalService/modal.service";
-import {AuthorizationService} from "../../services/authorizationService/authorization.service";
-import {BillingAccountService} from "../../services/billingAccountService/billingAccount.service";
+import {SubscriptService} from '../../services/subscript.service';
+import {ModalService} from "../../services/modal.service";
+import {AuthorizationService} from "../../services/authorization.service";
+import {BillingAccountService} from "../../services/billingAccount.service";
 import {ToastrService} from 'ngx-toastr';
 import {User} from '../models/user';
 import {Subscription} from 'rxjs';
@@ -34,6 +34,15 @@ export class SubscriptComponent implements OnInit, OnDestroy {
 
   onChanged(){
     this.loadSubscripts();
+  }
+
+  deleteSubscript(subscript: Subscript){
+    this.subscriptions.push(this.subscriptService.deleteSubscript(subscript.id).subscribe(value => {
+      this.loadSubscripts();
+      this.toastr.success('Подписка успешно удалена!','Успех!');
+    }, error => {
+      this.toastr.error('Удалить подписку не удалось', 'Ошибка!');
+    }))
   }
 
   private loadSubscripts(): void {

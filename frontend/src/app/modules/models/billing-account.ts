@@ -1,4 +1,3 @@
-import {Subscript} from './subscript';
 import {ActiveSubscript} from './active-subscript';
 
 export class BillingAccount {

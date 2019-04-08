@@ -35,7 +35,7 @@
       Вы ввели неверное число или вовсе не число
     </div>
     <label for="form5" class="mt-1">Изображение</label>
-    <input type="file" id="form5" name="file" class="form-control mt-1"/>
+    <input type="file" id="form5" name="file" class="form-control mt-1" (change)="uploadImages($event)"/>
     <button class="btn btn-primary mt-3" [disabled]="name.invalid || description.invalid || price.invalid || period.invalid"
     (click)="createSubscript(selectedSubscript)">
       Добавить

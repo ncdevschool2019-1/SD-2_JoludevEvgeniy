@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ActiveSubscript} from '../../modules/models/active-subscript';
+import {ActiveSubscript} from '../modules/models/active-subscript';
 import {Observable} from 'rxjs';
 
 @Injectable({

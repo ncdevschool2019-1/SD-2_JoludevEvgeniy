@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ModalService} from '../../../../services/modalService/modal.service';
-import {SubscriptService} from '../../../../services/subscriptService/subscript.service';
+import {ModalService} from '../../../../services/modal.service';
+import {SubscriptService} from '../../../../services/subscript.service';
 import {Subscript} from '../../../models/subscript';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
@@ -42,19 +42,21 @@ export class EditSubscriptComponent implements OnInit, OnDestroy {
 
   updateSubscript(subscript: Subscript): void {
     this.subscriptions.push(this.subscriptService.saveSubscript(subscript).subscribe(data => {
-      this.onChanged.emit();
-      this.closeModal();
       this.toastr.success('Вы успешно изменили подписку!', subscript.name);
     }, error => {
       this.toastr.error('К сожалению, подписку изменить не удалось', 'Ошибка');
     }));
-    if (this.fileList.length > 0) {
+    if (this.fileList && this.fileList.length > 0) {
       this.subscriptions.push(this.subscriptService.saveSubscriptsImage(this.fileList[0], subscript.id).subscribe(data => {
         this.toastr.success('Изображение успешно изменено', subscript.name);
       }, error => {
         this.toastr.error('Изображение изменить не удалось', 'Ошибка');
+      }, () => {
+        this.fileList = undefined;
+        this.onChanged.emit();
+        this.closeModal();
       }));
-      this.fileList = undefined;
     }
+
   }
 }

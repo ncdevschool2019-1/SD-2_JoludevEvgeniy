@@ -7,8 +7,7 @@ export class User {
   password: string;
   email: string;
   role: string;
-  roleId: number;
-  billingAccounts: BillingAccount[];
   imagePath: string;
+  billingAccounts: BillingAccount[];
 
 }

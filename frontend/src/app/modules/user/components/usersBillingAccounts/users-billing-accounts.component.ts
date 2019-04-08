@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ModalService} from '../../../../services/modalService/modal.service';
-import {BillingAccountService} from '../../../../services/billingAccountService/billingAccount.service';
-import {UserService} from '../../../../services/userService/user.service';
+import {ModalService} from '../../../../services/modal.service';
+import {BillingAccountService} from '../../../../services/billingAccount.service';
+import {UserService} from '../../../../services/user.service';
 import {BillingAccount} from '../../../models/billing-account';
 import {User} from '../../../models/user';
 import {Subscription} from 'rxjs';

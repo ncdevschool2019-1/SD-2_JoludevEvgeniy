@@ -7,10 +7,13 @@
           <div class="card-title mb-4">
             <div class="d-flex justify-content-start">
               <div class="image-container">
-                <img src="http://placehold.it/150x150" id="imgProfile" class="img-thumbnail"/>
+                <img
+                  [src]="authorizedUser.imagePath ? 'http://localhost:4200/api/users/image/' + authorizedUser.imagePath :'http://placehold.it/150x150'"
+                  id="imgProfile" class="img-thumbnail"/>
                 <div class="middle">
-                  <input type="button" class="btn btn-secondary" id="btnChangePicture" value="Change"/>
-                  <input type="file" style="display: none;" id="profilePicture" name="file"/>
+                  <label class="btn btn-primary">
+                    Фото<input type="file" class="img-input" (change)="uploadImage($event)"/>
+                  </label>
                 </div>
               </div>
               <div class="ml-3">
