@@ -6,8 +6,10 @@ import java.util.Optional;
 
 public interface ActiveSubscriptService {
 
+    Iterable<ActiveSubscript> getAllActiveSubscripts();
+    ActiveSubscript getActiveSubscriptById(Long id);
     ActiveSubscript saveActiveSubscript(ActiveSubscript activeSubscript);
     void deleteActiveSubscript (Long id);
-    Optional<ActiveSubscript> getActiveSubscriptById(Long id);
+
 
 }

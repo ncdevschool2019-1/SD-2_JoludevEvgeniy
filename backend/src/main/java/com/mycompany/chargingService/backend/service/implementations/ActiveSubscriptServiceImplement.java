@@ -29,7 +29,13 @@ public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
     }
 
     @Override
-    public Optional<ActiveSubscript> getActiveSubscriptById(Long id) {
-        return this.activeSubscriptRepository.findById(id);
+    public Iterable<ActiveSubscript> getAllActiveSubscripts() {
+        return this.activeSubscriptRepository.findAll();
+    }
+
+    @Override
+    public ActiveSubscript getActiveSubscriptById(Long id) {
+        return this.activeSubscriptRepository.findById(id).isPresent() ?
+                this.activeSubscriptRepository.findById(id).get() : null;
     }
 }

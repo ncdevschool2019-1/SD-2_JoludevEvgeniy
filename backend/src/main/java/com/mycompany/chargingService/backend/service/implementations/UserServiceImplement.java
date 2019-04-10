@@ -1,6 +1,5 @@
 package com.mycompany.chargingService.backend.service.implementations;
 
-import com.mycompany.chargingService.backend.entity.Subscript;
 import com.mycompany.chargingService.backend.entity.User;
 import com.mycompany.chargingService.backend.repository.RoleRepository;
 import com.mycompany.chargingService.backend.repository.UserRepository;
@@ -38,8 +37,9 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return this.userRepository.findById(id);
+    public User getUserById(Long id) {
+        return this.userRepository.findById(id).isPresent() ?
+                this.userRepository.findById(id).get() : null;
     }
 
     @Override
@@ -53,21 +53,24 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public Optional<User> updateUsersLogin(Long id, String login) {
+    public User updateUsersLogin(Long id, String login) {
         this.userRepository.updateUsersLogin(id, login);
-        return this.userRepository.findById(id);
+        return this.userRepository.findById(id).isPresent() ?
+                this.userRepository.findById(id).get() : null;
     }
 
     @Override
-    public Optional<User> updateUsersPassword(Long id, String password) {
+    public User updateUsersPassword(Long id, String password) {
         this.userRepository.updateUsersPassword(id, password);
-        return this.userRepository.findById(id);
+        return this.userRepository.findById(id).isPresent() ?
+                this.userRepository.findById(id).get() : null;
     }
 
     @Override
-    public Optional<User> updateUsersEmail(Long id, String email) {
+    public User updateUsersEmail(Long id, String email) {
         this.userRepository.updateUsersEmail(id, email);
-        return this.userRepository.findById(id);
+        return this.userRepository.findById(id).isPresent() ?
+                this.userRepository.findById(id).get() : null;
     }
 
     @Override

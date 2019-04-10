@@ -33,8 +33,9 @@ public class SubscriptServiceImplement implements SubscriptService {
     }
 
     @Override
-    public Optional<Subscript> getSubscriptById(Long id) {
-        return this.subscriptRepository.findById(id);
+    public Subscript getSubscriptById(Long id) {
+        return this.subscriptRepository.findById(id).isPresent() ?
+                this.subscriptRepository.findById(id).get() : null;
     }
 
     @Override

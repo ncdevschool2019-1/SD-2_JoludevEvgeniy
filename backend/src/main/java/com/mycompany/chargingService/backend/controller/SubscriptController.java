@@ -30,28 +30,19 @@ public class SubscriptController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Iterable<Subscript>> getAllSubscripts() {
-        Iterable<Subscript> subscripts = this.subscriptService.getAllSubscripts();
-        if (subscripts.iterator().hasNext()) {
-            return ResponseEntity.ok(subscripts);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.subscriptService.getAllSubscripts());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Subscript> getSubscriptById(@PathVariable(name = "id") Long id) {
-        Optional<Subscript> subscript = this.subscriptService.getSubscriptById(id);
-        if (subscript.isPresent()) {
-            return ResponseEntity.ok(subscript.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.subscriptService.getSubscriptById(id));
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteSubscript(@PathVariable(name = "id") Long id) {
-        if(this.subscriptService.getSubscriptById(id).isPresent()){
-            this.subscriptService.deleteImage(this.subscriptService.getSubscriptById(id).get().getImagePath());
+        if (this.subscriptService.getSubscriptById(id) != null) {
+            this.subscriptService.deleteImage(this.subscriptService.getSubscriptById(id).getImagePath());
             this.subscriptService.deleteSubscript(id);
         }
     }
@@ -59,12 +50,7 @@ public class SubscriptController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Subscript> saveSubscript(@RequestBody Subscript subscript) {
         Long id = this.subscriptService.saveSubscript(subscript).getId();
-        Optional<Subscript> savedSubscript = this.subscriptService.getSubscriptById(id);
-        if (savedSubscript.isPresent()) {
-            return ResponseEntity.ok(savedSubscript.get());
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        return ResponseEntity.ok(this.subscriptService.getSubscriptById(id));
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
@@ -72,8 +58,8 @@ public class SubscriptController {
 
         Iterator<String> itr = request.getFileNames();
         if (this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id) &&
-                this.subscriptService.getSubscriptById(id).isPresent()) {
-            return ResponseEntity.ok(this.subscriptService.getSubscriptById(id).get());
+                this.subscriptService.getSubscriptById(id) != null) {
+            return ResponseEntity.ok(this.subscriptService.getSubscriptById(id));
         } else {
             return ResponseEntity.notFound().build();
         }

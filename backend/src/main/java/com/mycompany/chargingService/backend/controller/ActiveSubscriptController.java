@@ -19,15 +19,20 @@ public class ActiveSubscriptController {
         this.activeSubscriptService = activeSubscriptService;
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Iterable<ActiveSubscript>> getAllActiveSubscripts() {
+        return ResponseEntity.ok(this.activeSubscriptService.getAllActiveSubscripts());
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<ActiveSubscript> getActiveSubscriptById(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(this.activeSubscriptService.getActiveSubscriptById(id));
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ActiveSubscript> saveActiveSubscript(@RequestBody ActiveSubscript activeSubscript) {
         Long id = this.activeSubscriptService.saveActiveSubscript(activeSubscript).getId();
-        Optional<ActiveSubscript> savedActiveSubscript = this.activeSubscriptService.getActiveSubscriptById(id);
-        if (savedActiveSubscript.isPresent()) {
-            return ResponseEntity.ok(savedActiveSubscript.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.activeSubscriptService.getActiveSubscriptById(id));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

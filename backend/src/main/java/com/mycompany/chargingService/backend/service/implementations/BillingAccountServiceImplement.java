@@ -25,8 +25,9 @@ public class BillingAccountServiceImplement implements BillingAccountService {
     }
 
     @Override
-    public Optional<BillingAccount> getBillingAccountById(Long id) {
-        return this.billingAccountRepository.findById(id);
+    public BillingAccount getBillingAccountById(Long id) {
+        return this.billingAccountRepository.findById(id).isPresent() ?
+                this.billingAccountRepository.findById(id).get() : null;
     }
 
     @Override

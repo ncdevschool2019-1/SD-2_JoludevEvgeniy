@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ActiveSubscriptService {
 
-    List<ActiveSubscript> getAllActiveSubscript();
+    List<ActiveSubscript> getAllActiveSubscripts();
 
     ActiveSubscript getActiveSubscriptById(Long id);
 
