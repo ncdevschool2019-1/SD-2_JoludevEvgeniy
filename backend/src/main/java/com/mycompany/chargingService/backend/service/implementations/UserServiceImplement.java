@@ -1,7 +1,7 @@
 package com.mycompany.chargingService.backend.service.implementations;
 
+import com.mycompany.chargingService.backend.entity.Role;
 import com.mycompany.chargingService.backend.entity.User;
-import com.mycompany.chargingService.backend.repository.RoleRepository;
 import com.mycompany.chargingService.backend.repository.UserRepository;
 import com.mycompany.chargingService.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +16,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 @Service
 public class UserServiceImplement implements UserService {
 
     private UserRepository userRepository;
-    private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImplement(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImplement(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Override
     public User saveUser(User user) {
-        user.setRole(this.roleRepository.findById(1l).get());
+        Role role = new Role();
+        role.setId(1L);
+        user.setRole(role);
         return this.userRepository.save(user);
     }
 

@@ -37,11 +37,8 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
   addBillingAccount(billingAccount: BillingAccount) {
     billingAccount.userId = this.authService.authorizedUser.id;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(billingAccount).subscribe(data => {
-      this.subscriptions.push(this.billingAccountService.getBillingAccountById(data.id).subscribe(value => {
-        this.authService.authorizedUser.billingAccounts.push(value);
-        console.log(value);
+        this.authService.authorizedUser.billingAccounts.push(data);
         this.onChanged.emit();
-      }));
       this.closeModal();
       this.toastr.success('Вам удалось создать биллинг аккаунт!', billingAccount.name);
     }, error => {

@@ -6,6 +6,7 @@ import {User} from '../models/user';
 import {UserService} from '../../services/user.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
+import {ChangePasswordUser} from '../models/ChangePasswordUser';
 
 @Component({
   selector: 'app-profile',
@@ -28,6 +29,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   ngOnInit() {
     this.getAuthUser();
   }
@@ -36,7 +39,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(value => value.unsubscribe());
   }
 
-  getAuthUser(){
+  getAuthUser() {
     this.authorizedUser = this.authService.authorizedUser;
   }
 
@@ -46,7 +49,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.userService.saveUsersImage(this.fileList[0], this.authorizedUser.id).subscribe(value => {
         this.authService.authorizedUser = value;
         this.getAuthUser();
-        this.toastr.success('Фото успешно сохранено','Успех!');
+        this.toastr.success('Фото успешно сохранено', 'Успех!');
       }, error => {
         this.toastr.error('Загрузить фото не удалось', 'Ошибка');
       }));
@@ -54,43 +57,49 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   changeLogin() {
-    this.authorizedUser.login = this.newLogin;
-    this.subscriptions.push(this.userService.updateUsersLogin(this.authorizedUser).subscribe(data => {
-      this.toastr.success('Ваш логин изменен!', 'Операция выполнена успешно');
+    let user = User.cloneUser(this.authorizedUser);
+    user.login = this.newLogin;
+    this.subscriptions.push(this.userService.updateUsersLogin(user).subscribe(data => {
       this.authService.authorizedUser = data;
       this.getAuthUser();
+      this.newLogin = '';
+      this.toastr.success('Ваш логин изменен!', 'Операция выполнена успешно');
     }, error => {
       this.toastr.error('Изменение логина не удалось', 'Операция не выполнена');
     }));
-    this.newLogin = '';
   }
 
   changePassword() {
-    this.authorizedUser.password = this.newPassword;
-    this.subscriptions.push(this.userService.updateUsersPassword(this.authorizedUser).subscribe(data => {
-      this.toastr.success('Ваш пароль изменен!', 'Операция выполнена успешно');
+    let changePasswordUser: ChangePasswordUser = new ChangePasswordUser();
+    changePasswordUser.userId = this.authorizedUser.id;
+    changePasswordUser.newPassword = this.newPassword;
+    changePasswordUser.oldPassword = this.oldPassword;
+    this.subscriptions.push(this.userService.updateUsersPassword(changePasswordUser).subscribe(data => {
       this.authService.authorizedUser = data;
       this.getAuthUser();
+      this.newPassword = '';
+      this.oldPassword = '';
+      this.toastr.success('Ваш пароль изменен!', 'Операция выполнена успешно');
     }, error => {
       this.toastr.error('Изменение пароля не удалось', 'Операция не выполнена');
     }));
 
-    this.newPassword = '';
-    this.oldPassword = '';
+
   }
 
   changeEmail() {
-    this.authorizedUser.email = this.newEmail;
-    this.subscriptions.push(this.userService.updateUsersEmail(this.authorizedUser).subscribe(data => {
-
-      this.toastr.success('Ваш email изменен!', 'Операция выполнена успешно');
+    let user = User.cloneUser(this.authorizedUser);
+    user.login = this.newEmail;
+    this.subscriptions.push(this.userService.updateUsersEmail(user).subscribe(data => {
       this.authService.authorizedUser = data;
       this.getAuthUser();
+      this.newEmail = '';
+      this.toastr.success('Ваш email изменен!', 'Операция выполнена успешно');
     }, error => {
       this.toastr.error('Изменение email(а) не удалось', 'Операция не выполнена');
     }));
 
-    this.newEmail = '';
+
   }
 
 

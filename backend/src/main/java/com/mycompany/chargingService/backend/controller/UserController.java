@@ -50,32 +50,28 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.PUT)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<User> updateUsersLogin(@RequestBody User user) {
 
         return ResponseEntity.ok(this.userService.updateUsersLogin(user.getId(), user.getLogin()));
 
     }
 
-    @RequestMapping(value = "/password", method = RequestMethod.PUT)
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ResponseEntity<User> updateUsersPassword(@RequestBody User user) {
         return ResponseEntity.ok(this.userService.updateUsersPassword(user.getId(), user.getPassword()));
 
     }
 
-    @RequestMapping(value = "/email", method = RequestMethod.PUT)
+    @RequestMapping(value = "/email", method = RequestMethod.POST)
     public ResponseEntity<User> updateUsersEmail(@RequestBody User user) {
         return ResponseEntity.ok(this.userService.updateUsersEmail(user.getId(), user.getEmail()));
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
     public ResponseEntity<User> getUserById(@RequestBody User user) {
-        User authUser = this.userService.getLoginUser(user.getLogin(), user.getPassword());
-        if (authUser != null) {
-            return ResponseEntity.ok(authUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.userService.getLoginUser(user.getLogin(), user.getPassword()));
+
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
