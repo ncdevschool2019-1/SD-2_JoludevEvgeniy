@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {User} from '../modules/models/user';
-import {Subscript} from '../modules/models/subscript';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {
   }
+
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.path);
