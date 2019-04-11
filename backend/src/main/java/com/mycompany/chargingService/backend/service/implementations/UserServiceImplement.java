@@ -78,7 +78,7 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public boolean uploadUsersImage(MultipartFile image, Long id) throws IOException {
+    public User uploadUsersImage(MultipartFile image, Long id) throws IOException {
         String imageName = image.getOriginalFilename();
         if (this.userRepository.findById(id).isPresent()) {
             User user = this.userRepository.findById(id).get();
@@ -89,10 +89,9 @@ public class UserServiceImplement implements UserService {
             stream.write(image.getBytes());
             stream.close();
             user.setImagePath(imageNewName);
-            this.userRepository.save(user);
-            return true;
+            return this.userRepository.save(user);
         }
-        return false;
+        return null;
     }
 
     @Override

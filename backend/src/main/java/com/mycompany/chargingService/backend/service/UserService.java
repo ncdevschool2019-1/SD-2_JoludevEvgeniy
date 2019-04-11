@@ -17,7 +17,7 @@ public interface UserService {
     User updateUsersPassword(Long id, String password);
     User updateUsersEmail(Long id, String email);
     User getLoginUser(String login, String password);
-    boolean uploadUsersImage(MultipartFile image, Long id) throws IOException;
+    User uploadUsersImage(MultipartFile image, Long id) throws IOException;
     Resource getImage(String imageName);
     void deleteImage(String imageName);
 

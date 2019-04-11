@@ -4,9 +4,12 @@ import com.mycompany.chargingService.fapi.models.User;
 import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
 import com.mycompany.chargingService.fapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -89,5 +92,31 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
+    public ResponseEntity<User> uploadImage(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) {
+        Iterator<String> itr = request.getFileNames();
+        User user = this.userService.uploadImage(request.getFile(itr.next()), id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+
+        try {
+            Resource image = this.userService.getImage(imageName);
+            if (image.exists() || image.isReadable()) {
+                return ResponseEntity.ok(image);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

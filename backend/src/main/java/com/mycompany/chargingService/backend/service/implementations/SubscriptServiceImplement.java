@@ -49,7 +49,7 @@ public class SubscriptServiceImplement implements SubscriptService {
     }
 
     @Override
-    public boolean uploadSubscriptsImage(MultipartFile image, Long id) throws IOException {
+    public Subscript uploadSubscriptsImage(MultipartFile image, Long id) throws IOException {
         String imageName = image.getOriginalFilename();
         if (this.subscriptRepository.findById(id).isPresent()) {
             Subscript subscript = this.subscriptRepository.findById(id).get();
@@ -60,10 +60,9 @@ public class SubscriptServiceImplement implements SubscriptService {
             stream.write(image.getBytes());
             stream.close();
             subscript.setImagePath(imageNewName);
-            this.subscriptRepository.save(subscript);
-            return true;
+            return this.subscriptRepository.save(subscript);
         }
-        return false;
+        return null;
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface SubscriptService {
     Subscript getSubscriptById(Long id);
     Iterable<Subscript> getAllSubscripts();
     void deleteSubscript(Long id);
-    boolean uploadSubscriptsImage(MultipartFile image, Long id) throws IOException;
+    Subscript uploadSubscriptsImage(MultipartFile image, Long id) throws IOException;
     Resource getImage(String imageName);
     void deleteImage(String imageName);
 

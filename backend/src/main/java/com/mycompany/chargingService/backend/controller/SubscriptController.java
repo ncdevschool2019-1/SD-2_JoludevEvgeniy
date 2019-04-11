@@ -57,25 +57,22 @@ public class SubscriptController {
     public ResponseEntity<Subscript> uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
 
         Iterator<String> itr = request.getFileNames();
-        if (this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id) &&
-                this.subscriptService.getSubscriptById(id) != null) {
-            return ResponseEntity.ok(this.subscriptService.getSubscriptById(id));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id));
+
     }
 
     @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        Resource image = null;
         try {
-            Resource image = this.subscriptService.getImage(imageName);
-            if (image.exists() || image.isReadable()) {
-                return ResponseEntity.ok(image);
+            image = this.subscriptService.getImage(imageName);
+            if (!image.isReadable()) {
+                image = null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(image);
     }
 }

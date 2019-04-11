@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
@@ -75,28 +76,22 @@ public class UserController {
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
-    public ResponseEntity<User> uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
-
-        Iterator<String> itr = request.getFileNames();
-        if (this.userService.uploadUsersImage(request.getFile(itr.next()), id) &&
-                this.userService.getUserById(id) != null) {
-            return ResponseEntity.ok(this.userService.getUserById(id));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<User> uploadFile(@RequestParam("image")MultipartFile image, @PathVariable(name = "id") Long id) throws IOException {
+        return ResponseEntity.ok(this.userService.uploadUsersImage(image, id));
     }
 
     @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        Resource image = null;
         try {
-            Resource image = this.userService.getImage(imageName);
-            if (image.exists() || image.isReadable()) {
-                return ResponseEntity.ok(image);
+            image = this.userService.getImage(imageName);
+            if(!image.isReadable()){
+                image = null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(image);
     }
 }
