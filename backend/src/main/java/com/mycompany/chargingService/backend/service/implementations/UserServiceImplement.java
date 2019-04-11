@@ -85,6 +85,9 @@ public class UserServiceImplement implements UserService {
             String imageNewName = user.getId().toString() + "_" + user.getLogin() +
                     imageName.substring(imageName.lastIndexOf('.'));
             File serverFile = new File("backend/src/images/usersImages/", imageNewName);
+            if (serverFile.exists()) {
+                deleteImage(serverFile.getName());
+            }
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
             stream.write(image.getBytes());
             stream.close();
@@ -99,8 +102,7 @@ public class UserServiceImplement implements UserService {
         try {
             Path file = Paths.get("backend/src/images/usersImages/" + imageName);
             return new UrlResource(file.toUri());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -109,10 +111,9 @@ public class UserServiceImplement implements UserService {
     @Override
     public void deleteImage(String imageName) {
         File image = new File("backend/src/images/usersImages/" + imageName);
-        try{
+        try {
             image.delete();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

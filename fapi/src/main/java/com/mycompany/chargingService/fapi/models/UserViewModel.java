@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class UserViewModel {
 
     private Long id;
     private String login;
     private String password;
     private String email;
     private String imagePath;
-    private Role role;
+    private String role;
     private List<BillingAccount> billingAccounts;
 
-    public User() {
+    public UserViewModel() {
     }
 
-    public User(Long id, String login, String password, String email, String imagePath, Role role, List<BillingAccount> billingAccounts) {
+    public UserViewModel(Long id, String login, String password, String email, String imagePath, String role, List<BillingAccount> billingAccounts) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -68,11 +68,11 @@ public class User {
         this.imagePath = imagePath;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

@@ -54,10 +54,9 @@ public class SubscriptController {
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Subscript> uploadFile(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) throws IOException {
+    public ResponseEntity<Subscript> uploadFile(@RequestParam("image") MultipartFile image, @PathVariable(name = "id") Long id) throws IOException {
 
-        Iterator<String> itr = request.getFileNames();
-        return ResponseEntity.ok(this.subscriptService.uploadSubscriptsImage(request.getFile(itr.next()), id));
+        return ResponseEntity.ok(this.subscriptService.uploadSubscriptsImage(image, id));
 
     }
 

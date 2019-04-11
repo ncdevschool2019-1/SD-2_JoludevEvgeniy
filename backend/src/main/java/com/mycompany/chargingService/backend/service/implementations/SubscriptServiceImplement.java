@@ -56,6 +56,9 @@ public class SubscriptServiceImplement implements SubscriptService {
             String imageNewName = subscript.getId().toString() + "_" + subscript.getName() +
                     imageName.substring(imageName.lastIndexOf('.'));
             File serverFile = new File("backend/src/images/subscriptsImages/", imageNewName);
+            if (serverFile.exists()) {
+                deleteImage(serverFile.getName());
+            }
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
             stream.write(image.getBytes());
             stream.close();

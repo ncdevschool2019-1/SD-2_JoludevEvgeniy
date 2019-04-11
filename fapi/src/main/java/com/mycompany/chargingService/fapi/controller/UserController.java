@@ -1,8 +1,9 @@
 package com.mycompany.chargingService.fapi.controller;
 
-import com.mycompany.chargingService.fapi.models.User;
+import com.mycompany.chargingService.fapi.models.UserViewModel;
 import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
 import com.mycompany.chargingService.fapi.service.UserService;
+import com.mycompany.chargingService.fapi.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -18,35 +19,39 @@ public class UserController {
 
 
     private UserService userService;
+    private ValidationService validationService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ValidationService validationService) {
         this.userService = userService;
+        this.validationService = validationService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserViewModel>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserById(@PathVariable(name = "id") Long id) {
-        User user = this.userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+    public ResponseEntity<UserViewModel> getUserById(@PathVariable(name = "id") Long id) {
+        UserViewModel userViewModel = this.userService.getUserById(id);
+        if (userViewModel != null) {
+            return ResponseEntity.ok(userViewModel);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        User savedUser = this.userService.saveUser(user);
-        if (savedUser != null) {
-            return ResponseEntity.ok(savedUser);
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserViewModel> saveUser(@RequestBody UserViewModel userViewModel) {
+        String answer = this.validationService.registrationValidation(userViewModel, this.userService.getAllUsers());
+        if (answer.equals("Ok")) {
+            UserViewModel savedUserViewModel = this.userService.saveUser(userViewModel);
+            if (savedUserViewModel != null) {
+                return ResponseEntity.ok(savedUserViewModel);
+            }
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -55,51 +60,53 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUsersLogin(@RequestBody User user) {
-        User updatableUser = this.userService.updateUsersLogin(user.getId(), user.getLogin());
-        if (updatableUser != null) {
-            return ResponseEntity.ok(updatableUser);
+    public ResponseEntity<UserViewModel> updateUsersLogin(@RequestBody UserViewModel userViewModel) {
+        UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel.getId(), userViewModel.getLogin());
+        if (updatableUserViewModel != null) {
+            return ResponseEntity.ok(updatableUserViewModel);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @RequestMapping(value = "/email", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUsersEmail(@RequestBody User user) {
-        User updatableUser = this.userService.updateUsersEmail(user.getId(), user.getEmail());
-        if (updatableUser != null) {
-            return ResponseEntity.ok(updatableUser);
+    public ResponseEntity<UserViewModel> updateUsersEmail(@RequestBody UserViewModel userViewModel) {
+        UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel.getId(), userViewModel.getEmail());
+        if (updatableUserViewModel != null) {
+            return ResponseEntity.ok(updatableUserViewModel);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ResponseEntity<User> updateUsersPassword(@RequestBody UserChangePasswordModel userChangePasswordModel) {
-        User updatableUser = this.userService.updateUsersPassword(userChangePasswordModel);
-        if (updatableUser != null) {
-            return ResponseEntity.ok(updatableUser);
+    public ResponseEntity<UserViewModel> updateUsersPassword(@RequestBody UserChangePasswordModel userChangePasswordModel) {
+        UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangePasswordModel);
+        if (updatableUserViewModel != null) {
+            return ResponseEntity.ok(updatableUserViewModel);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public ResponseEntity<User> getLoginUser(@RequestBody User user) {
-        User loginUser = this.userService.getLoginUser(user.getLogin(), user.getPassword());
-        if (loginUser != null) {
-            return ResponseEntity.ok(loginUser);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<UserViewModel> getLoginUser(@RequestBody UserViewModel userViewModel) {
+        String answer = this.validationService.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
+        if (answer.equals("Ok")) {
+            UserViewModel loginUserViewModel = this.userService.getLoginUser(userViewModel.getLogin(), userViewModel.getPassword());
+            if (loginUserViewModel != null) {
+                return ResponseEntity.ok(loginUserViewModel);
+            }
         }
+        return ResponseEntity.notFound().build();
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
-    public ResponseEntity<User> uploadImage(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) {
+    public ResponseEntity<UserViewModel> uploadImage(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) {
         Iterator<String> itr = request.getFileNames();
-        User user = this.userService.uploadImage(request.getFile(itr.next()), id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+        UserViewModel userViewModel = this.userService.uploadImage(request.getFile(itr.next()), id);
+        if (userViewModel != null) {
+            return ResponseEntity.ok(userViewModel);
         } else {
             return ResponseEntity.badRequest().build();
         }

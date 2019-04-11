@@ -52,7 +52,7 @@ export class EditSubscriptComponent implements OnInit, OnDestroy {
       }, error => {
         this.toastr.error('Изображение изменить не удалось', 'Ошибка');
       }, () => {
-        this.fileList = undefined;
+        this.fileList = null;
         this.onChanged.emit();
         this.closeModal();
       }));

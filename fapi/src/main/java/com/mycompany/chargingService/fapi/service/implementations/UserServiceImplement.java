@@ -1,6 +1,6 @@
 package com.mycompany.chargingService.fapi.service.implementations;
 
-import com.mycompany.chargingService.fapi.models.User;
+import com.mycompany.chargingService.fapi.models.UserViewModel;
 import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
 import com.mycompany.chargingService.fapi.service.ImageService;
 import com.mycompany.chargingService.fapi.service.UserService;
@@ -30,27 +30,27 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        User[] users = restTemplate.getForEntity(backendServerUrl, User[].class).getBody();
-        return users == null ? Collections.emptyList() : Arrays.asList(users);
+    public List<UserViewModel> getAllUsers() {
+        UserViewModel[] userViewModels = restTemplate.getForEntity(backendServerUrl, UserViewModel[].class).getBody();
+        return userViewModels == null ? Collections.emptyList() : Arrays.asList(userViewModels);
     }
 
     @Override
-    public User getUserById(Long id) {
-        return restTemplate.getForEntity(backendServerUrl + "/" + id, User.class).getBody();
+    public UserViewModel getUserById(Long id) {
+        return restTemplate.getForEntity(backendServerUrl + "/" + id, UserViewModel.class).getBody();
     }
 
     @Override
-    public User saveUser(User user) {
-        User[] users = restTemplate.getForEntity(backendServerUrl, User[].class).getBody();
-        if (users != null) {
-            for (User value : users) {
-                if (value.getLogin().equals(user.getLogin())) {
+    public UserViewModel saveUser(UserViewModel userViewModel) {
+        UserViewModel[] userViewModels = restTemplate.getForEntity(backendServerUrl, UserViewModel[].class).getBody();
+        if (userViewModels != null) {
+            for (UserViewModel value : userViewModels) {
+                if (value.getLogin().equals(userViewModel.getLogin())) {
                     return null;
                 }
             }
         }
-        return restTemplate.postForEntity(backendServerUrl, user, User.class).getBody();
+        return restTemplate.postForEntity(backendServerUrl, userViewModel, UserViewModel.class).getBody();
     }
 
     @Override
@@ -59,38 +59,38 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public User updateUsersLogin(Long id, String login) {
-        User[] users = restTemplate.getForEntity(backendServerUrl, User[].class).getBody();
-        User user = restTemplate.getForEntity(backendServerUrl + "/" + id, User.class).getBody();
-        if (user == null) {
+    public UserViewModel updateUsersLogin(Long id, String login) {
+        UserViewModel[] userViewModels = restTemplate.getForEntity(backendServerUrl, UserViewModel[].class).getBody();
+        UserViewModel userViewModel = restTemplate.getForEntity(backendServerUrl + "/" + id, UserViewModel.class).getBody();
+        if (userViewModel == null) {
             return null;
         }
-        if (users != null) {
-            for (User value : users) {
+        if (userViewModels != null) {
+            for (UserViewModel value : userViewModels) {
                 if (value.getLogin().equals(login)) {
                     return null;
                 }
             }
         }
-        user.setLogin(login);
-        return restTemplate.postForEntity(backendServerUrl + "/login", user, User.class).getBody();
+        userViewModel.setLogin(login);
+        return restTemplate.postForEntity(backendServerUrl + "/login", userViewModel, UserViewModel.class).getBody();
     }
 
     @Override
-    public User updateUsersEmail(Long id, String email) {
-        User user = restTemplate.getForEntity(backendServerUrl + "/" + id, User.class).getBody();
-        if (user != null) {
-            user.setEmail(email);
+    public UserViewModel updateUsersEmail(Long id, String email) {
+        UserViewModel userViewModel = restTemplate.getForEntity(backendServerUrl + "/" + id, UserViewModel.class).getBody();
+        if (userViewModel != null) {
+            userViewModel.setEmail(email);
         }
-        return restTemplate.postForEntity(backendServerUrl + "/email", user, User.class).getBody();
+        return restTemplate.postForEntity(backendServerUrl + "/email", userViewModel, UserViewModel.class).getBody();
     }
 
     @Override
-    public User updateUsersPassword(UserChangePasswordModel userChangePasswordModel) {
-        User user = restTemplate.getForEntity(backendServerUrl + "/" + userChangePasswordModel.getUserId(), User.class).getBody();
-        if (user != null && userChangePasswordModel.getOldPassword().equals(user.getPassword())) {
-            user.setPassword(userChangePasswordModel.getNewPassword());
-            return restTemplate.postForEntity(backendServerUrl + "/password", user, User.class).getBody();
+    public UserViewModel updateUsersPassword(UserChangePasswordModel userChangePasswordModel) {
+        UserViewModel userViewModel = restTemplate.getForEntity(backendServerUrl + "/" + userChangePasswordModel.getUserId(), UserViewModel.class).getBody();
+        if (userViewModel != null && userChangePasswordModel.getOldPassword().equals(userViewModel.getPassword())) {
+            userViewModel.setPassword(userChangePasswordModel.getNewPassword());
+            return restTemplate.postForEntity(backendServerUrl + "/password", userViewModel, UserViewModel.class).getBody();
         } else {
             return null;
         }
@@ -98,17 +98,17 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public User getLoginUser(String login, String password) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        return restTemplate.postForEntity(backendServerUrl + "/authorization", user, User.class).getBody();
+    public UserViewModel getLoginUser(String login, String password) {
+        UserViewModel userViewModel = new UserViewModel();
+        userViewModel.setLogin(login);
+        userViewModel.setPassword(password);
+        return restTemplate.postForEntity(backendServerUrl + "/authorization", userViewModel, UserViewModel.class).getBody();
     }
 
     @Override
-    public User uploadImage(MultipartFile image, Long id) {
+    public UserViewModel uploadImage(MultipartFile image, Long id) {
         return restTemplate.postForEntity(backendServerUrl + "/image/" + id,
-                imageService.uploadImage(image), User.class).getBody();
+                imageService.uploadImage(image), UserViewModel.class).getBody();
     }
 
     @Override

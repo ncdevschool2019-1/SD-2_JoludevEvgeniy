@@ -38,11 +38,11 @@ public class User {
     public User() {
     }
 
-    public String getRole() {
-        return role.getRole();
+    public Role getRole() {
+        return role;
     }
 
-    public void setRole(Role role){
+    public void setRole(Role role) {
         this.role = role;
     }
 
