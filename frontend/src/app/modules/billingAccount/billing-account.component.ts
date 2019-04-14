@@ -16,7 +16,7 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
 
 
   selectedBillingAccount: BillingAccount = new BillingAccount();
-  authorizedUser: User;
+  authorizedUser: User = new User();
   private subscriptions: Subscription[] = [];
 
 
@@ -28,12 +28,11 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
     this.getAuthUser();
   }
 
-  getAuthUser(){
-    this.authorizedUser = this.authService.authorizedUser;
-  }
-
-  onChanged(){
-    this.getAuthUser();
+  getAuthUser() {
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
   }
 
   ngOnDestroy(): void {
@@ -47,15 +46,15 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
 
   deleteBillingAccount(billingAccount: BillingAccount) {
     this.subscriptions.push(this.billingAccountService.deleteBillingAccount(billingAccount.id).subscribe(data => {
-      this.authService.authorizedUser.billingAccounts.splice(this.authService.authorizedUser.billingAccounts.indexOf(billingAccount), 1);
-      this.getAuthUser();
+      this.authorizedUser.billingAccounts.splice(this.authorizedUser.billingAccounts.indexOf(billingAccount), 1);
+      this.authService.setAuthUser(this.authorizedUser);
       this.toastr.success('Ваш биллинг аккаунт успешно удален!', 'Успех');
     }, error => {
       this.toastr.error('Удалить биллинг аккаунт не удалось', 'Ошибка');
     }));
   }
 
-  getSelectedBASubscriptsLength(billingAccount: BillingAccount): string{
+  getSelectedBASubscriptsLength(billingAccount: BillingAccount): string {
     return this.billingAccountService.getSelectedBASubscriptsLength(billingAccount);
   }
 

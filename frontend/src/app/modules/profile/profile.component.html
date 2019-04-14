@@ -34,7 +34,7 @@
                     <label for="form1" class="mt-1">Введите новый логин:</label>
                     <input type="text" id="form1" class="form-control w-25 mt-1" name="login" [(ngModel)]="newLogin"
                            #login="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="login.untouched || login.valid" class="alert alert-danger w-25">
+                    <div [hidden]="login.valid || login.pristine || newLogin == ''" class="alert alert-danger w-25">
                       Вы ввели неверный логин
                     </div>
                     <div [hidden]="newLogin != authorizedUser.login" class="alert alert-danger w-25">
@@ -49,18 +49,22 @@
                     <input type="password" id="form2" class="form-control w-25 mt-1" name="oPassword"
                            [(ngModel)]="oldPassword"
                            #oPassword="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="oPassword.untouched || oPassword.valid" class="alert alert-danger w-25">
+                    <div [hidden]="oPassword.pristine || oPassword.valid || oldPassword == ''"
+                         class="alert alert-danger w-25">
                       Вы ввели неверный пароль
                     </div>
                     <label for="form3" class="mt-1">Введите новый пароль:</label>
                     <input type="password" id="form3" class="form-control w-25 mt-1" name="nPassword"
                            [(ngModel)]="newPassword"
                            #nPassword="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="nPassword.untouched || nPassword.valid" class="alert alert-danger w-25">
+                    <div [hidden]="nPassword.pristine || nPassword.valid || newPassword == ''"
+                         class="alert alert-danger w-25">
                       Вы ввели неверный пароль
                     </div>
-                    <div [hidden]="newPassword != oldPassword || oPassword.untouched || nPassword.untouched"
-                         class="alert alert-danger w-25">
+                    <div
+                      [hidden]="newPassword != oldPassword || oPassword.pristine ||
+                       nPassword.untouched || oldPassword =='' || newPassword == ''"
+                      class="alert alert-danger w-25">
                       Вы ввели одинаковые пароли, чего в принципе быть не может
                     </div>
                     <button class="btn btn-primary mt-3"
@@ -74,7 +78,7 @@
                     <input type="text" id="form4" class="form-control w-25 mt-1" name="email"
                            [(ngModel)]="newEmail"
                            #email="ngModel" required pattern="[a-zA-Z0-9_.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,4}">
-                    <div [hidden]="email.untouched || email.valid" class="alert alert-danger w-25">
+                    <div [hidden]="email.pristine || email.valid || newEmail == ''" class="alert alert-danger w-25">
                       Вы ввели неверный email
                     </div>
                     <div [hidden]="newEmail != authorizedUser.email" class="alert alert-danger w-25">

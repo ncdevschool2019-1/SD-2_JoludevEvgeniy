@@ -5,6 +5,7 @@ import {BillingAccount} from '../../../models/billing-account';
 import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
+import {User} from '../../../models/user';
 
 
 @Component({
@@ -17,12 +18,21 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
 
   public inputSum: number;
   private subscriptions: Subscription[] = [];
+  authorizedUser: User = new User();
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
               private authService: AuthorizationService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
+    this.getAuthUser();
+  }
+
+  getAuthUser() {
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
   }
 
   ngOnDestroy(): void {
@@ -39,7 +49,8 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
     let updatableBillingAccount = BillingAccount.cloneBillingAccount(billingAccount);
     updatableBillingAccount.balance += this.inputSum;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(updatableBillingAccount).subscribe(data => {
-      this.authService.authorizedUser.billingAccounts.find(value => value.id == data.id).balance = data.balance;
+      this.authorizedUser.billingAccounts.find(value => value.id == data.id).balance = data.balance;
+      this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
       this.toastr.success('Баланс вашего биллинг аккаунта успешно пополнен!', billingAccount.name);
     }, error => {

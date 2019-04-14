@@ -14,7 +14,7 @@ import {Subscription} from 'rxjs';
 export class UserComponent implements OnInit, OnDestroy {
 
 
-  public users: User[];
+  public users: User[] = [];
   selectedUser: User;
   private subscriptions: Subscription[] = [];
 

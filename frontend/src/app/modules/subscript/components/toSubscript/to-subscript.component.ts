@@ -21,7 +21,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
 
   @Input() selectedSubscript: Subscript;
   selectedBillingAccount: BillingAccount = new BillingAccount();
-  @Input() authorizedUser: User;
+  authorizedUser: User = new User();
   private subscriptions: Subscription[] = [];
 
   constructor(private billingAccountService: BillingAccountService, private authService: AuthorizationService,
@@ -31,10 +31,18 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getAuthUser();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(value => value.unsubscribe());
+  }
+
+  getAuthUser() {
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
   }
 
   saveActiveSubscript(subscript: Subscript, billingAccount: BillingAccount): void {
@@ -42,8 +50,9 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
     activeSubscript.subscript = subscript;
     activeSubscript.billingAccountId = billingAccount.id;
     this.subscriptions.push(this.activeSubscriptService.saveActiveSubscript(activeSubscript).subscribe(data => {
-      this.authService.authorizedUser.billingAccounts.find(
+      this.authorizedUser.billingAccounts.find(
         searchable => searchable.id == billingAccount.id).activeSubscripts.push(data);
+      this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
       this.toastr.success('Вы успешно подписались на данный ресурс!', data.subscript.name);
     }, error => {

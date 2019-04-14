@@ -18,7 +18,7 @@
            routerLinkActive="myActive">Профиль</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="authorizedUser.role == 'Admin'" routerLink="userViewModels"
+        <a class="nav-link" *ngIf="authorizedUser.role == 'Admin'" routerLink="users"
            routerLinkActive="myActive">Пользователи</a>
       </li>
       <li class="nav-item">
@@ -45,7 +45,7 @@
 
       <li class="nav-item">
         <a class="nav-link" routerLink="profile">
-          <img [src]="authorizedUser.imagePath ? 'http://localhost:4200/api/userViewModels/image/' + authorizedUser.imagePath :'http://placehold.it/35x35'" class="rounded-circle">
+          <img [src]="authorizedUser.imagePath ? 'http://localhost:4200/api/users/image/' + authorizedUser.imagePath :'http://placehold.it/35x35'" class="rounded-circle">
         </a>
       </li>
 
@@ -59,9 +59,9 @@
 </nav>
 
 <ng-template #auth_template>
-  <app-authorization (onChanged)="onChanged()"></app-authorization>
+  <app-authorization></app-authorization>
 </ng-template>
 
 <ng-template #reg_template>
-  <app-registration (onChanged)="onChanged()"></app-registration>
+  <app-registration></app-registration>
 </ng-template>

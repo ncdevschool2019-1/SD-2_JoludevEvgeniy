@@ -22,7 +22,7 @@
         <button *ngIf="authorizedUser.role == 'Admin'"
                 (click)="openModalSubscript(editSubscript, subscript)" class="btn btn-primary btn-hide">Редактировать
         </button>
-        <button *ngIf="authorizedUser.role == 'Admin'"
+        <button *ngIf="authorizedUser.role == 'Admin'" onClick = "this.disabled = true"
                 (click)="deleteSubscript(subscript)" class="btn btn-danger btn-hide">Удалить
         </button>
         <p class="card-text mt-1">{{subscript.price}} RUB / {{subscript.period}} д.</p>
@@ -32,7 +32,7 @@
 </div>
 
 <ng-template #toSubscript>
-  <app-to-subscript [authorizedUser]="authorizedUser" [selectedSubscript]="selectedSubscript"></app-to-subscript>
+  <app-to-subscript [selectedSubscript]="selectedSubscript"></app-to-subscript>
 </ng-template>
 
 <ng-template #editSubscript>

@@ -20,7 +20,6 @@ public class BillingAccountServiceImplement implements BillingAccountService {
 
     @Override
     public BillingAccount saveBillingAccount(BillingAccount billingAccount) {
-        billingAccount.setActive(true);
         return this.billingAccountRepository.save(billingAccount);
     }
 

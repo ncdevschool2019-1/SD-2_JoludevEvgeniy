@@ -10,6 +10,8 @@ public interface ActiveSubscriptService {
     ActiveSubscript getActiveSubscriptById(Long id);
     ActiveSubscript saveActiveSubscript(ActiveSubscript activeSubscript);
     void deleteActiveSubscript (Long id);
+    ActiveSubscript setTimeNow(Long id);
+    int getTimesDifference(Long id);
 
 
 }

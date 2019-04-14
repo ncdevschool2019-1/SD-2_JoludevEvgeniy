@@ -17,7 +17,7 @@ public class BillingAccount {
 
     private int balance;
 
-    private boolean active;
+    private boolean active = true;
 
     private long userId;
     @OneToMany(mappedBy = "billingAccountId", cascade = CascadeType.ALL)

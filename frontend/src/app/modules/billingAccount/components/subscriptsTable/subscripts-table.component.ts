@@ -7,6 +7,7 @@ import {ToastrService} from 'ngx-toastr';
 import {BillingAccount} from '../../../models/billing-account';
 import {ActiveSubscript} from '../../../models/active-subscript';
 import {Subscription} from 'rxjs';
+import {User} from '../../../models/user';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
 
   @Input() selectedBillingAccount: BillingAccount;
   private subscriptions: Subscription[] = [];
+  authorizedUser: User = new User();
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
               private activeSubscriptService: ActiveSubscriptService, private authService: AuthorizationService,
@@ -24,6 +26,14 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getAuthUser();
+  }
+
+  getAuthUser() {
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
   }
 
   ngOnDestroy(): void {
@@ -37,9 +47,10 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
 
   deleteActiveSubscript(activeSubscript: ActiveSubscript) {
     this.subscriptions.push(this.activeSubscriptService.deleteActiveSubscript(activeSubscript.id).subscribe(data => {
-      this.authService.authorizedUser.billingAccounts.find(value =>
+      this.authorizedUser.billingAccounts.find(value =>
         value.id == this.selectedBillingAccount.id).activeSubscripts.splice(
         this.selectedBillingAccount.activeSubscripts.indexOf(activeSubscript), 1);
+      this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
       this.toastr.success('Вы успешно отписались!', 'Операция удалась');
     }, error => {

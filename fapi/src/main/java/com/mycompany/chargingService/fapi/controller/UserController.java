@@ -6,6 +6,7 @@ import com.mycompany.chargingService.fapi.service.UserService;
 import com.mycompany.chargingService.fapi.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -61,32 +62,40 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<UserViewModel> updateUsersLogin(@RequestBody UserViewModel userViewModel) {
-        UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel.getId(), userViewModel.getLogin());
-        if (updatableUserViewModel != null) {
-            return ResponseEntity.ok(updatableUserViewModel);
-        } else {
-            return ResponseEntity.badRequest().build();
+        String answer = this.validationService.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
+        if (answer.equals("Ok")) {
+            UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel.getId(), userViewModel.getLogin());
+            if (updatableUserViewModel != null) {
+                return ResponseEntity.ok(updatableUserViewModel);
+            }
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @RequestMapping(value = "/email", method = RequestMethod.POST)
     public ResponseEntity<UserViewModel> updateUsersEmail(@RequestBody UserViewModel userViewModel) {
-        UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel.getId(), userViewModel.getEmail());
-        if (updatableUserViewModel != null) {
-            return ResponseEntity.ok(updatableUserViewModel);
-        } else {
-            return ResponseEntity.badRequest().build();
+        String answer = this.validationService.updateUsersEmailValidation(userViewModel);
+        if (answer.equals("Ok")) {
+            UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel.getId(), userViewModel.getEmail());
+            if (updatableUserViewModel != null) {
+                return ResponseEntity.ok(updatableUserViewModel);
+            }
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> updateUsersPassword(@RequestBody UserChangePasswordModel userChangePasswordModel) {
-        UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangePasswordModel);
-        if (updatableUserViewModel != null) {
-            return ResponseEntity.ok(updatableUserViewModel);
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserViewModel> updateUsersPassword(@RequestBody UserChangePasswordModel
+                                                                     userChangePasswordModel) {
+        String answer = this.validationService.updateUsersPasswordValidation(userChangePasswordModel,
+                this.userService.getUserById(userChangePasswordModel.getUserId()));
+        if (answer.equals("Ok")) {
+            UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangePasswordModel);
+            if (updatableUserViewModel != null) {
+                return ResponseEntity.ok(updatableUserViewModel);
+            }
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
@@ -102,7 +111,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> uploadImage(MultipartHttpServletRequest request, @PathVariable(name = "id") Long id) {
+    public ResponseEntity<UserViewModel> uploadImage(MultipartHttpServletRequest
+                                                             request, @PathVariable(name = "id") Long id) {
         Iterator<String> itr = request.getFileNames();
         UserViewModel userViewModel = this.userService.uploadImage(request.getFile(itr.next()), id);
         if (userViewModel != null) {

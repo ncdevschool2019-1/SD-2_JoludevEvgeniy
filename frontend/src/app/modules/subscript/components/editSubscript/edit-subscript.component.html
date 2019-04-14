@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title pull-left">Добавить новую подписку</h4>
+  <h4 class="modal-title pull-left">Редактировать подписку</h4>
   <button type="button" class="close pull-right"
           aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
@@ -11,34 +11,37 @@
     <input type="text" id="form1" class="form-control mt-1" name="name"
            [(ngModel)]="selectedSubscript.name"
            #name="ngModel" required>
-    <div [hidden]="name.untouched || name.valid" class="alert alert-danger">
+    <div [hidden]="name.pristine || name.valid || selectedSubscript.name == ''" class="alert alert-danger">
       Вы ввели неверное название
     </div>
     <label for="form2" class="mt-1">Описание:</label>
     <textarea class="form-control mt-1" id="form2" rows="3" name="description"
               [(ngModel)]="selectedSubscript.description"
               #description="ngModel" required></textarea>
-    <div [hidden]="description.untouched || description.valid" class="alert alert-danger">
+    <div [hidden]="description.pristine || description.valid || selectedSubscript.description == ''"
+         class="alert alert-danger">
       Вы ввели неверное описание
     </div>
     <label for="form3" class="mt-1">Плата:</label>
     <input type="number" id="form3" class="form-control mt-1" name="price"
            [(ngModel)]="selectedSubscript.price"
            #price="ngModel" required pattern="[1-9]{1}[0-9]{0,6}">
-    <div [hidden]="price.untouched || price.valid" class="alert alert-danger">
+    <div [hidden]="price.pristine || price.valid" class="alert alert-danger">
       Вы ввели неверное число или вовсе не число
     </div>
     <label for="form4" class="mt-1">Период:</label>
     <input type="number" id="form4" class="form-control mt-1" name="period"
            [(ngModel)]="selectedSubscript.period"
            #period="ngModel" required pattern="[1-9]{1}[0-9]{0,3}">
-    <div [hidden]="period.untouched || period.valid" class="alert alert-danger">
+    <div [hidden]="period.pristine || period.valid" class="alert alert-danger">
       Вы ввели неверное число или вовсе не число
     </div>
     <label for="form5" class="mt-1">Изображение</label>
     <input type="file" id="form5" name="file" class="form-control mt-1" (change)="uploadImages($event)"/>
-    <button class="btn btn-primary mt-3" [disabled]="name.invalid || description.invalid || price.invalid || period.invalid"
-    (click)="updateSubscript(selectedSubscript)">
+    <button class="btn btn-primary mt-3"
+            [disabled]="name.invalid || description.invalid || price.invalid || period.invalid"
+            onClick="this.disabled = true"
+            (click)="updateSubscript(selectedSubscript)">
       Изменить
     </button>
   </div>

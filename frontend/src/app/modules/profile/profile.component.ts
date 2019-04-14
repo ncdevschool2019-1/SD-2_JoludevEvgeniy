@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public newEmail: string;
   public oldPassword: string;
   public newPassword: string;
-  authorizedUser: User;
+  authorizedUser: User = new User();
   private subscriptions: Subscription[] = [];
   fileList: FileList;
 
@@ -40,15 +40,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getAuthUser() {
-    this.authorizedUser = this.authService.authorizedUser;
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
   }
 
   uploadImage(event) {
     this.fileList = event.target.files;
     if (this.fileList && this.fileList.length > 0) {
       this.subscriptions.push(this.userService.saveUsersImage(this.fileList[0], this.authorizedUser.id).subscribe(value => {
-        this.authService.authorizedUser = value;
-        this.getAuthUser();
+        this.authorizedUser = value;
+        this.authService.setAuthUser(this.authorizedUser);
         this.toastr.success('Фото успешно сохранено', 'Успех!');
       }, error => {
         this.toastr.error('Загрузить фото не удалось', 'Ошибка');
@@ -60,8 +63,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     let user = User.cloneUser(this.authorizedUser);
     user.login = this.newLogin;
     this.subscriptions.push(this.userService.updateUsersLogin(user).subscribe(data => {
-      this.authService.authorizedUser = data;
-      this.getAuthUser();
+      this.authorizedUser = data;
+      this.authService.setAuthUser(this.authorizedUser);
       this.newLogin = '';
       this.toastr.success('Ваш логин изменен!', 'Операция выполнена успешно');
     }, error => {
@@ -75,8 +78,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     changePasswordUser.newPassword = this.newPassword;
     changePasswordUser.oldPassword = this.oldPassword;
     this.subscriptions.push(this.userService.updateUsersPassword(changePasswordUser).subscribe(data => {
-      this.authService.authorizedUser = data;
-      this.getAuthUser();
+      this.authorizedUser = data;
+      this.authService.setAuthUser(this.authorizedUser);
       this.newPassword = '';
       this.oldPassword = '';
       this.toastr.success('Ваш пароль изменен!', 'Операция выполнена успешно');
@@ -89,10 +92,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   changeEmail() {
     let user = User.cloneUser(this.authorizedUser);
-    user.login = this.newEmail;
+    user.email = this.newEmail;
     this.subscriptions.push(this.userService.updateUsersEmail(user).subscribe(data => {
-      this.authService.authorizedUser = data;
-      this.getAuthUser();
+      this.authorizedUser = data;
+      this.authService.setAuthUser(this.authorizedUser);
       this.newEmail = '';
       this.toastr.success('Ваш email изменен!', 'Операция выполнена успешно');
     }, error => {

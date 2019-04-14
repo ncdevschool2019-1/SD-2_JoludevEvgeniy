@@ -16,7 +16,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   private user: User = new User;
   private subscriptions: Subscription[] = [];
-  @Output() onChanged = new EventEmitter();
 
   constructor(private modalService: ModalService, private userService: UserService,
               private authService: AuthorizationService, private toastr: ToastrService) {
@@ -37,10 +36,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   createUser() {
     this.subscriptions.push(this.userService.saveUser(this.user).subscribe(data => {
-      this.subscriptions.push(this.userService.getLoginUser(data).subscribe( value => {
-        this.authService.authorizedUser = value;
-        this.onChanged.emit();
-      }));
+      this.authService.setAuthUser(data);
       this.closeModal();
       this.toastr.success('Аккаунт успешно создан!', 'Поздравляем');
     }, error => {

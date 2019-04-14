@@ -29,6 +29,18 @@ public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
     }
 
     @Override
+    public ActiveSubscript setTimeNow(Long id) {
+        this.activeSubscriptRepository.setTimeNow(id);
+        return this.activeSubscriptRepository.findById(id).isPresent() ?
+                this.activeSubscriptRepository.findById(id).get() : null;
+    }
+
+    @Override
+    public int getTimesDifference(Long id) {
+        return this.activeSubscriptRepository.getTimesDifference(id);
+    }
+
+    @Override
     public Iterable<ActiveSubscript> getAllActiveSubscripts() {
         return this.activeSubscriptRepository.findAll();
     }

@@ -10,10 +10,11 @@
     <label for="form1" class="mt-1">Название подписки:</label>
     <input type="text" id="form1" class="form-control mt-1" name="name" [(ngModel)]="selectedBillingAccount.name"
            #name="ngModel" required>
-    <div [hidden]="name.untouched || name.valid" class="alert alert-danger">
+    <div [hidden]="name.pristine || name.valid || selectedBillingAccount.name == ''" class="alert alert-danger">
       Вы ввели неверное название
     </div>
     <button class="btn btn-primary mt-3" [disabled]="name.invalid"
+            onClick="this.disabled = true"
             (click)="addBillingAccount(selectedBillingAccount)">
       Добавить
     </button>

@@ -21,6 +21,7 @@
         <td>{{billingAccount.active ? "Активно" : "Заблокировано"}}</td>
         <td>
           <button type="button" class="btn btn-primary" [disabled]="!billingAccount.active"
+                  onClick = "this.disabled = true"
                   (click)="deleteBillingAccount(billingAccount)">
             Удалить
           </button>
@@ -46,5 +47,5 @@
 </ng-template>
 
 <ng-template #addBillingAccount>
-  <app-add-billing-account (onChanged)="onChanged()"></app-add-billing-account>
+  <app-add-billing-account></app-add-billing-account>
 </ng-template>

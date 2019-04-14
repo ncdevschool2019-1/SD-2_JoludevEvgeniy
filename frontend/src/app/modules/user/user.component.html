@@ -11,15 +11,15 @@
       </tr>
       </thead>
       <tbody class="table-light">
-      <tr *ngFor="let user of userViewModels">
-        <td scope="row">{{userViewModels.indexOf(user) + 1}}</td>
+      <tr *ngFor="let user of users">
+        <td scope="row">{{users.indexOf(user) + 1}}</td>
         <td>{{user.login}}</td>
         <td>{{user.email}}</td>
         <td>{{user.billingAccounts.length}}<a class="btn text-primary"
                                               (click)="openModal(usersBillingAccount, user)">
           (Показать)</a></td>
         <td>
-          <button type="button" class="btn btn-primary" (click)="deleteUser(user.id)">
+          <button type="button" class="btn btn-primary" onClick = "this.disabled = true" (click)="deleteUser(user.id)">
             Удалить
           </button>
         </td>
@@ -30,6 +30,6 @@
 </div>
 
 <ng-template #usersBillingAccount>
-  <app-userViewModels-billing-accounts [selectedUser]="selectedUser" (onChanged)="onChanged()"></app-userViewModels-billing-accounts>
+  <app-users-billing-accounts [selectedUser]="selectedUser" (onChanged)="onChanged()"></app-users-billing-accounts>
 </ng-template>
 

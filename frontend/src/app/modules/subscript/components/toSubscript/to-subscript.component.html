@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title pull-left">Добавить новую подписку</h4>
+  <h4 class="modal-title pull-left">Подписаться</h4>
   <button type="button" class="close pull-right"
           aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
@@ -28,7 +28,7 @@
   <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2 mb-3"
           [disabled]="isSelectedBAIdUndefined(selectedBillingAccount) ||
            !selectedBillingAccount.active ||
-            !isBalanceMoreThanSubscribePrice(selectedSubscript, selectedBillingAccount)"
+            !isBalanceMoreThanSubscribePrice(selectedSubscript, selectedBillingAccount)" onClick="this.disabled = true"
           (click)="saveActiveSubscript(selectedSubscript, selectedBillingAccount)">
     Добавить подписку в выбранный
     аккаунт

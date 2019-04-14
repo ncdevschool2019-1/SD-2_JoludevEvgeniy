@@ -5,6 +5,7 @@ import {BillingAccount} from '../../../models/billing-account';
 import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
+import {User} from '../../../models/user';
 
 @Component({
   selector: 'app-add-billing-account',
@@ -15,7 +16,7 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
 
   selectedBillingAccount: BillingAccount = new BillingAccount();
   private subscriptions: Subscription[] = [];
-  @Output() onChanged = new EventEmitter();
+  authorizedUser: User = new User();
 
   constructor(private modalService: ModalService, private billingAccountService: BillingAccountService,
               private authService: AuthorizationService, private toastr: ToastrService) {
@@ -23,6 +24,15 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getAuthUser();
+  }
+
+  getAuthUser() {
+    this.subscriptions.push(this.authService.subscribeToAuthUser().subscribe(value => {
+      this.authorizedUser = value;
+    }));
+    this.authService.getAuthUser();
+
   }
 
   ngOnDestroy(): void {
@@ -35,10 +45,10 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
   }
 
   addBillingAccount(billingAccount: BillingAccount) {
-    billingAccount.userId = this.authService.authorizedUser.id;
+    billingAccount.userId = this.authorizedUser.id;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(billingAccount).subscribe(data => {
-        this.authService.authorizedUser.billingAccounts.push(data);
-        this.onChanged.emit();
+      this.authorizedUser.billingAccounts.push(data);
+      this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
       this.toastr.success('Вам удалось создать биллинг аккаунт!', billingAccount.name);
     }, error => {

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,10 @@ public class BillingAccountServiceImplement implements BillingAccountService {
 
     @Override
     public BillingAccount saveBillingAccount(BillingAccount billingAccount) {
+        if(billingAccount.getId() == null){
+            billingAccount.setActive(true);
+            billingAccount.setActiveSubscripts(new ArrayList<>());
+        }
         return restTemplate.postForEntity(backendServerUrl, billingAccount, BillingAccount.class).getBody();
     }
 
