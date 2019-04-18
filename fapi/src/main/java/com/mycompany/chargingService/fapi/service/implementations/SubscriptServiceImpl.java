@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class SubscriptServiceImplement implements SubscriptService {
+public class SubscriptServiceImpl implements SubscriptService {
 
     @Value("${backend.server.url}api/subscripts")
     private String backendServerUrl;
@@ -24,7 +24,7 @@ public class SubscriptServiceImplement implements SubscriptService {
     private ImageService imageService;
 
     @Autowired
-    public SubscriptServiceImplement(ImageService imageService) {
+    public SubscriptServiceImpl(ImageService imageService) {
         this.imageService = imageService;
     }
 

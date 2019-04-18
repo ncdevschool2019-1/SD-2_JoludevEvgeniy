@@ -18,12 +18,12 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
-public class SubscriptServiceImplement implements SubscriptService {
+public class SubscriptServiceImpl implements SubscriptService {
 
     private SubscriptRepository subscriptRepository;
 
     @Autowired
-    public SubscriptServiceImplement(SubscriptRepository subscriptRepository) {
+    public SubscriptServiceImpl(SubscriptRepository subscriptRepository) {
         this.subscriptRepository = subscriptRepository;
     }
 

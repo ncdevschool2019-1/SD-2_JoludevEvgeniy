@@ -18,12 +18,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class UserServiceImplement implements UserService {
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
     @Autowired
-    public UserServiceImplement(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

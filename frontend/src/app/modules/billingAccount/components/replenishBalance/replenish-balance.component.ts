@@ -45,7 +45,7 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
     this.inputSum = 0;
   }
 
-  replenishBalance(billingAccount: BillingAccount) {
+  replenishBalance(billingAccount: BillingAccount, event) {
     let updatableBillingAccount = BillingAccount.cloneBillingAccount(billingAccount);
     updatableBillingAccount.balance += this.inputSum;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(updatableBillingAccount).subscribe(data => {
@@ -54,6 +54,7 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.toastr.success('Баланс вашего биллинг аккаунта успешно пополнен!', billingAccount.name);
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Пополнить баланс не удалось', 'Операция не удалась');
     }));
   }

@@ -45,7 +45,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
     this.authService.getAuthUser();
   }
 
-  saveActiveSubscript(subscript: Subscript, billingAccount: BillingAccount): void {
+  saveActiveSubscript(subscript: Subscript, billingAccount: BillingAccount, event): void {
     let activeSubscript: ActiveSubscript = new ActiveSubscript();
     activeSubscript.subscript = subscript;
     activeSubscript.billingAccountId = billingAccount.id;
@@ -56,6 +56,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.toastr.success('Вы успешно подписались на данный ресурс!', data.subscript.name);
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
     }));
 

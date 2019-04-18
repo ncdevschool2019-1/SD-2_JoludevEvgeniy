@@ -28,14 +28,14 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(value => value.unsubscribe());
   }
 
-  authorization() {
+  authorization(event) {
     this.subscriptions.push(this.userService.getLoginUser(this.inputUser).subscribe(data => {
       this.authService.setAuthUser(data);
-      this.toastr.success('Вы успешно вошли!', data.login);
-    }, error => {
-      this.toastr.error('Войти не удалось', 'Ошибка');
-    }, () => {
       this.closeModal();
+      this.toastr.success('You have entered successfully!', data.login);
+    }, error => {
+      event.target.disabled = false;
+      this.toastr.error(error.error, 'Error');
     }));
 
   }

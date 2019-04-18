@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
+public class ActiveSubscriptServiceImpl implements ActiveSubscriptService {
 
     private ActiveSubscriptRepository activeSubscriptRepository;
 
     @Autowired
-    public ActiveSubscriptServiceImplement(ActiveSubscriptRepository activeSubscriptRepository) {
+    public ActiveSubscriptServiceImpl(ActiveSubscriptRepository activeSubscriptRepository) {
         this.activeSubscriptRepository = activeSubscriptRepository;
     }
 

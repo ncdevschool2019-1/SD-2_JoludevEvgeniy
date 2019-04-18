@@ -44,7 +44,7 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
     this.selectedBillingAccount = new BillingAccount();
   }
 
-  addBillingAccount(billingAccount: BillingAccount) {
+  addBillingAccount(billingAccount: BillingAccount, event) {
     billingAccount.userId = this.authorizedUser.id;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(billingAccount).subscribe(data => {
       this.authorizedUser.billingAccounts.push(data);
@@ -52,6 +52,7 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.toastr.success('Вам удалось создать биллинг аккаунт!', billingAccount.name);
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Создание биллинг аккаунта не удалось', 'Ошибка');
     }));
   }

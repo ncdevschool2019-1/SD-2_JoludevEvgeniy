@@ -33,8 +33,11 @@
                   <tab heading="Сменить логин">
                     <label for="form1" class="mt-1">Введите новый логин:</label>
                     <input type="text" id="form1" class="form-control w-25 mt-1" name="login" [(ngModel)]="newLogin"
-                           #login="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="login.valid || login.pristine || newLogin == ''" class="alert alert-danger w-25">
+                           (focus)="isLoginFocused = true" (blur)="isLoginFocused = false" #login="ngModel" required
+                           pattern="[a-zA-Z0-9_]{3,30}">
+                    <div
+                      [hidden]="login.valid || login.pristine || login.untouched || isLoginFocused || login.model == ''"
+                      class="alert alert-danger w-25">
                       Вы ввели неверный логин
                     </div>
                     <div [hidden]="newLogin != authorizedUser.login" class="alert alert-danger w-25">
@@ -48,27 +51,38 @@
                     <label for="form2" class="mt-1">Введите старый пароль:</label>
                     <input type="password" id="form2" class="form-control w-25 mt-1" name="oPassword"
                            [(ngModel)]="oldPassword"
+                           (focus)="isOldPasswordFocused = true" (blur)="isOldPasswordFocused = false"
                            #oPassword="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="oPassword.pristine || oPassword.valid || oldPassword == ''"
-                         class="alert alert-danger w-25">
+                    <div
+                      [hidden]="oPassword.pristine || oPassword.valid || oPassword.untouched || isOldPasswordFocused || oPassword.model == ''"
+                      class="alert alert-danger w-25">
                       Вы ввели неверный пароль
                     </div>
                     <label for="form3" class="mt-1">Введите новый пароль:</label>
                     <input type="password" id="form3" class="form-control w-25 mt-1" name="nPassword"
                            [(ngModel)]="newPassword"
+                           (focus)="isNewPasswordFocused = true" (blur)="isNewPasswordFocused = false"
                            #nPassword="ngModel" required pattern="[a-zA-Z0-9_]{3,30}">
-                    <div [hidden]="nPassword.pristine || nPassword.valid || newPassword == ''"
-                         class="alert alert-danger w-25">
+                    <div
+                      [hidden]="nPassword.pristine || nPassword.valid || nPassword.untouched || isNewPasswordFocused || nPassword.model == ''"
+                      class="alert alert-danger w-25">
                       Вы ввели неверный пароль
                     </div>
                     <div
-                      [hidden]="newPassword != oldPassword || oPassword.pristine ||
-                       nPassword.untouched || oldPassword =='' || newPassword == ''"
+                      [hidden]="nPassword.model != oPassword.model || oPassword.pristine ||
+                       nPassword.untouched || oPassword.model =='' || nPassword.model == ''"
                       class="alert alert-danger w-25">
                       Вы ввели одинаковые пароли, чего в принципе быть не может
                     </div>
+                    <div
+                      [hidden]="nPassword.model == authorizedUser.password || oPassword.model == '' ||
+                       nPassword.model == '' || oPassword.untouched || nPassword.untouched ||
+                        oPassword.pristine || nPassword.pristine"
+                      class="alert alert-danger w-25">
+                      Вы ввели неверный нынешний пароль
+                    </div>
                     <button class="btn btn-primary mt-3"
-                            [disabled]="oPassword.invalid ||  nPassword.invalid || newPassword == oldPassword"
+                            [disabled]="oPassword.invalid ||  nPassword.invalid || newPassword == oldPassword || oldPassword != authorizedUser.password"
                             (click)="changePassword()">Сменить
                       пароль
                     </button>
@@ -77,8 +91,11 @@
                     <label for="form4" class="mt-1">Введите новый email:</label>
                     <input type="text" id="form4" class="form-control w-25 mt-1" name="email"
                            [(ngModel)]="newEmail"
+                           (focus)="isEmailFocused = true" (blur)="isEmailFocused = false"
                            #email="ngModel" required pattern="[a-zA-Z0-9_.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,4}">
-                    <div [hidden]="email.pristine || email.valid || newEmail == ''" class="alert alert-danger w-25">
+                    <div
+                      [hidden]="email.pristine || email.valid || email.untouched || isEmailFocused || email.model == ''"
+                      class="alert alert-danger w-25">
                       Вы ввели неверный email
                     </div>
                     <div [hidden]="newEmail != authorizedUser.email" class="alert alert-danger w-25">

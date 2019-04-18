@@ -14,15 +14,17 @@
     <div class="form-group">
       <label for="exampleForm2">Введите сумму:</label>
       <input type="number" id="exampleForm2" name="sum" [(ngModel)]="inputSum" #sum="ngModel"
-             class="form-control w-50" required pattern="[1-9]{1}[0-9]{0,6}">
-      <div [hidden]="sum.pristine || sum.valid || inputSum == 0" class="alert alert-danger w-50">
+             (focus)="isSumFocused = true" (blur)="isSumFocused = false" class="form-control w-50" required
+             pattern="[1-9]{1}[0-9]{0,6}">
+      <div [hidden]="sum.pristine || sum.valid || sum.untouched || isSumFocused || sum.model == ''"
+           class="alert alert-danger w-50">
         Вы ввели неверное число или вовсе не число
       </div>
     </div>
 
     <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2" [disabled]="sum.invalid"
-            onClick = "this.disabled = true"
-            (click)="replenishBalance(selectedBillingAccount)">Пополнить
+            onClick="this.disabled = true"
+            (click)="replenishBalance(selectedBillingAccount, $event)">Пополнить
     </button>
   </div>
 </div>

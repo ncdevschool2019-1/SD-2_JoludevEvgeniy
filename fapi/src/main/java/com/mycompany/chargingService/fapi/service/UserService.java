@@ -17,9 +17,9 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    UserViewModel updateUsersLogin(Long id, String login);
+    UserViewModel updateUsersLogin(UserViewModel userViewModel);
 
-    UserViewModel updateUsersEmail(Long id, String email);
+    UserViewModel updateUsersEmail(UserViewModel userViewModel);
 
     UserViewModel updateUsersPassword(UserChangePasswordModel userChangePasswordModel);
 

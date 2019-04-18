@@ -45,7 +45,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
     this.selectedBillingAccount = new BillingAccount();
   }
 
-  deleteActiveSubscript(activeSubscript: ActiveSubscript) {
+  deleteActiveSubscript(activeSubscript: ActiveSubscript, event) {
     this.subscriptions.push(this.activeSubscriptService.deleteActiveSubscript(activeSubscript.id).subscribe(data => {
       this.authorizedUser.billingAccounts.find(value =>
         value.id == this.selectedBillingAccount.id).activeSubscripts.splice(
@@ -54,6 +54,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
       this.closeModal();
       this.toastr.success('Вы успешно отписались!', 'Операция удалась');
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Отписаться не удалось', 'Ошибка');
     }));
 

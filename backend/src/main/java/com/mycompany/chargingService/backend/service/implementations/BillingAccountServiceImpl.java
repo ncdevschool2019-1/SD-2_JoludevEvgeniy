@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class BillingAccountServiceImplement implements BillingAccountService {
+public class BillingAccountServiceImpl implements BillingAccountService {
 
     private BillingAccountRepository billingAccountRepository;
 
     @Autowired
-    public BillingAccountServiceImplement(BillingAccountRepository billingAccountRepository) {
+    public BillingAccountServiceImpl(BillingAccountRepository billingAccountRepository) {
         this.billingAccountRepository = billingAccountRepository;
     }
 

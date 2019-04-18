@@ -8,7 +8,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class ImageServiceImplement implements ImageService {
+public class ImageServiceImpl implements ImageService {
 
     @Override
     public MultiValueMap<String, Object> uploadImage(MultipartFile image) {

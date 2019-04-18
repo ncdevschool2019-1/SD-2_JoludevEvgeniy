@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ActiveSubscriptServiceImplement implements ActiveSubscriptService {
+public class ActiveSubscriptServiceImpl implements ActiveSubscriptService {
 
     @Value("${backend.server.url}api/active-subscripts")
     private String backendServerUrl;

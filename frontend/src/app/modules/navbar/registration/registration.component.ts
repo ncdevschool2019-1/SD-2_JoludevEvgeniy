@@ -34,13 +34,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.user = new User;
   }
 
-  createUser() {
+  createUser(event) {
     this.subscriptions.push(this.userService.saveUser(this.user).subscribe(data => {
       this.authService.setAuthUser(data);
       this.closeModal();
-      this.toastr.success('Аккаунт успешно создан!', 'Поздравляем');
+      this.toastr.success('Account created successfully!', data.login);
     }, error => {
-      this.toastr.error('Создание аккаунта не удалось', 'Ошибка');
+      event.target.disabled = false;
+      this.toastr.error(error.error, 'Error');
     }));
   }
 

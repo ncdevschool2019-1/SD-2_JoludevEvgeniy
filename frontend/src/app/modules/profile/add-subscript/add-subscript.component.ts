@@ -38,7 +38,7 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
   }
 
 
-  createSubscript(subscript: Subscript) {
+  createSubscript(subscript: Subscript, event) {
 
     this.subscriptions.push(this.subscriptService.saveSubscript(subscript).subscribe(data => {
       subscript.id = data.id;
@@ -50,11 +50,11 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
         }));
         this.fileList = undefined;
       }
+      this.closeModal();
       this.toastr.success('Подписка успешно создана!', data.name);
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Создать подписку не удалось', 'Ошибка');
-    }, () => {
-      this.closeModal();
     }));
 
 

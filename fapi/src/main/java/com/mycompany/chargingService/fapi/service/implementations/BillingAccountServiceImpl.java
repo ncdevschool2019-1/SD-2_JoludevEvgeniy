@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class BillingAccountServiceImplement implements BillingAccountService {
+public class BillingAccountServiceImpl implements BillingAccountService {
 
     @Value("${backend.server.url}api/billing-accounts")
     private String backendServerUrl;

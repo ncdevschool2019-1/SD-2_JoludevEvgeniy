@@ -29,7 +29,7 @@
           [disabled]="isSelectedBAIdUndefined(selectedBillingAccount) ||
            !selectedBillingAccount.active ||
             !isBalanceMoreThanSubscribePrice(selectedSubscript, selectedBillingAccount)" onClick="this.disabled = true"
-          (click)="saveActiveSubscript(selectedSubscript, selectedBillingAccount)">
+          (click)="saveActiveSubscript(selectedSubscript, selectedBillingAccount, $event)">
     Добавить подписку в выбранный
     аккаунт
   </button>

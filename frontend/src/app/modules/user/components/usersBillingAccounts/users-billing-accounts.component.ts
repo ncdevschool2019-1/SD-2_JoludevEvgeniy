@@ -36,13 +36,14 @@ export class UsersBillingAccountsComponent implements OnInit, OnDestroy {
     this.selectedUser = new User();
   }
 
-  changeStatus(): void {
+  changeStatus(event): void {
     this.selectedBillingAccount.active ? this.selectedBillingAccount.active = false : this.selectedBillingAccount.active = true;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(this.selectedBillingAccount).subscribe(data => {
       this.closeModal();
       this.onChanged.emit();
       this.toastr.success('Статус успешно изменён!', data.name);
     }, error => {
+      event.target.disabled = false;
       this.toastr.error('Статус изменить не удалось', 'Ошибка')
     }));
   }

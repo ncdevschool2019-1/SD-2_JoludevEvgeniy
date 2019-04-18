@@ -6,7 +6,6 @@ import com.mycompany.chargingService.fapi.service.UserService;
 import com.mycompany.chargingService.fapi.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> saveUser(@RequestBody UserViewModel userViewModel) {
+    public ResponseEntity saveUser(@RequestBody UserViewModel userViewModel) {
         String answer = this.validationService.registrationValidation(userViewModel, this.userService.getAllUsers());
         if (answer.equals("Ok")) {
             UserViewModel savedUserViewModel = this.userService.saveUser(userViewModel);
@@ -52,7 +51,7 @@ public class UserController {
                 return ResponseEntity.ok(savedUserViewModel);
             }
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -61,32 +60,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> updateUsersLogin(@RequestBody UserViewModel userViewModel) {
+    public ResponseEntity updateUsersLogin(@RequestBody UserViewModel userViewModel) {
         String answer = this.validationService.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
         if (answer.equals("Ok")) {
-            UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel.getId(), userViewModel.getLogin());
+            UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel);
             if (updatableUserViewModel != null) {
                 return ResponseEntity.ok(updatableUserViewModel);
             }
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/email", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> updateUsersEmail(@RequestBody UserViewModel userViewModel) {
+    public ResponseEntity updateUsersEmail(@RequestBody UserViewModel userViewModel) {
         String answer = this.validationService.updateUsersEmailValidation(userViewModel);
         if (answer.equals("Ok")) {
-            UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel.getId(), userViewModel.getEmail());
+            UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel);
             if (updatableUserViewModel != null) {
                 return ResponseEntity.ok(updatableUserViewModel);
             }
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> updateUsersPassword(@RequestBody UserChangePasswordModel
-                                                                     userChangePasswordModel) {
+    public ResponseEntity updateUsersPassword(@RequestBody UserChangePasswordModel
+                                                      userChangePasswordModel) {
         String answer = this.validationService.updateUsersPasswordValidation(userChangePasswordModel,
                 this.userService.getUserById(userChangePasswordModel.getUserId()));
         if (answer.equals("Ok")) {
@@ -95,19 +94,20 @@ public class UserController {
                 return ResponseEntity.ok(updatableUserViewModel);
             }
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public ResponseEntity<UserViewModel> getLoginUser(@RequestBody UserViewModel userViewModel) {
+    public ResponseEntity getLoginUser(@RequestBody UserViewModel userViewModel) {
         String answer = this.validationService.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
         if (answer.equals("Ok")) {
             UserViewModel loginUserViewModel = this.userService.getLoginUser(userViewModel.getLogin(), userViewModel.getPassword());
             if (loginUserViewModel != null) {
                 return ResponseEntity.ok(loginUserViewModel);
             }
+            answer = "Your login or password are incorrect";
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)

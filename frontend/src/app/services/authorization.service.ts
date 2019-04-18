@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {User} from '../modules/models/user';
 import {Subscript} from '../modules/models/subscript';
 import {Observable, Subject} from 'rxjs';
-import {filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

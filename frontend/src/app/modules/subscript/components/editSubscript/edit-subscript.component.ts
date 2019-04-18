@@ -40,23 +40,23 @@ export class EditSubscriptComponent implements OnInit, OnDestroy {
     this.fileList = event.target.files;
   }
 
-  updateSubscript(subscript: Subscript): void {
+  updateSubscript(subscript: Subscript, event): void {
     this.subscriptions.push(this.subscriptService.saveSubscript(subscript).subscribe(data => {
-      this.toastr.success('Вы успешно изменили подписку!', subscript.name);
-    }, error => {
-      this.toastr.error('К сожалению, подписку изменить не удалось', 'Ошибка');
-    }));
-    if (this.fileList && this.fileList.length > 0) {
-      this.subscriptions.push(this.subscriptService.saveSubscriptsImage(this.fileList[0], subscript.id).subscribe(data => {
-        this.toastr.success('Изображение успешно изменено', subscript.name);
-      }, error => {
-        this.toastr.error('Изображение изменить не удалось', 'Ошибка');
-      }, () => {
-        this.fileList = null;
+      if (this.fileList && this.fileList.length > 0) {
+        this.subscriptions.push(this.subscriptService.saveSubscriptsImage(this.fileList[0], subscript.id).subscribe(value => {
+          this.fileList = null;
+          this.toastr.success('Изображение успешно изменено', subscript.name);
+        }, error => {
+          this.toastr.error('Изображение изменить не удалось', 'Ошибка');
+        }));
         this.onChanged.emit();
         this.closeModal();
-      }));
-    }
-
+        this.toastr.success('Вы успешно изменили подписку!', subscript.name);
+      }
+    }, error => {
+      event.target.disabled = false;
+      this.toastr.error('К сожалению, подписку изменить не удалось', 'Ошибка');
+    }));
   }
 }
+

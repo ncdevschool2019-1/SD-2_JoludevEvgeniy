@@ -29,7 +29,7 @@
           <button type="button" class="btn btn-primary d-none d-lg-inline-block mt-2"
                   [disabled]="!selectedBillingAccount.active"
                   onClick = "this.disabled = true"
-                  (click)="deleteActiveSubscript(activeSubscript)">Отписаться
+                  (click)="deleteActiveSubscript(activeSubscript, $event)">Отписаться
           </button>
         </td>
       </tr>
