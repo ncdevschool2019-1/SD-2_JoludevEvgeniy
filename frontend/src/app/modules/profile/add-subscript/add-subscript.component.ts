@@ -4,6 +4,7 @@ import {ModalService} from '../../../services/modal.service';
 import {SubscriptService} from '../../../services/subscript.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-add-subscript',
@@ -18,7 +19,7 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
 
 
   constructor(public modalService: ModalService, public subscriptService: SubscriptService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService, private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
 
 
   createSubscript(subscript: Subscript, event) {
-
+    this.loadingService.show();
     this.subscriptions.push(this.subscriptService.saveSubscript(subscript).subscribe(data => {
       subscript.id = data.id;
       if (this.fileList && this.fileList.length > 0) {
@@ -48,16 +49,14 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
         }, error => {
           this.toastr.error('Изображение загрузить не удалось', 'Ошибка');
         }));
-        this.fileList = undefined;
+        this.fileList = null;
       }
       this.closeModal();
       this.toastr.success('Подписка успешно создана!', data.name);
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Создать подписку не удалось', 'Ошибка');
-    }));
-
-
+    }, () => this.loadingService.hide()));
 
   }
 

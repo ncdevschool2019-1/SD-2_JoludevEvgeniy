@@ -55,10 +55,14 @@ public class SubscriptServiceImpl implements SubscriptService {
             Subscript subscript = this.subscriptRepository.findById(id).get();
             String imageNewName = subscript.getId().toString() + "_" + subscript.getName() +
                     imageName.substring(imageName.lastIndexOf('.'));
-            File serverFile = new File("backend/src/images/subscriptsImages/", imageNewName);
+            File serverFile = new File("backend/src/images/subscriptsImages/", subscript.getId().toString());
             if (serverFile.exists()) {
-                deleteImage(serverFile.getName());
+                deleteImage(imageNewName);
             }
+            if (!serverFile.exists()) {
+                serverFile.mkdir();
+            }
+            serverFile = new File(serverFile.getPath() + "/", imageNewName);
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
             stream.write(image.getBytes());
             stream.close();
@@ -71,10 +75,10 @@ public class SubscriptServiceImpl implements SubscriptService {
     @Override
     public Resource getImage(String imageName) {
         try {
-            Path file = Paths.get("backend/src/images/subscriptsImages/" + imageName);
+            String imageDir = imageName.substring(0, imageName.indexOf('_')) + "/" + imageName;
+            Path file = Paths.get("backend/src/images/subscriptsImages/" + imageDir);
             return new UrlResource(file.toUri());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -82,11 +86,15 @@ public class SubscriptServiceImpl implements SubscriptService {
 
     @Override
     public void deleteImage(String imageName) {
-        File image = new File("backend/src/images/subscriptsImages/" + imageName);
-        try{
+        String imageDir = imageName.substring(0, imageName.indexOf('_'));
+        String path = "backend/src/images/subscriptsImages/";
+        File image = new File(path, imageDir + "/" + imageName);
+        try {
             image.delete();
-        }
-        catch (Exception e){
+            if (!image.exists()) {
+                new File(path, imageDir).delete();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -10,6 +10,7 @@ import {ToastrService} from 'ngx-toastr';
 import {BillingAccount} from '../../../models/billing-account';
 import {User} from '../../../models/user';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-to-subscript',
@@ -26,7 +27,8 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
 
   constructor(private billingAccountService: BillingAccountService, private authService: AuthorizationService,
               private modalService: ModalService, private subscriptService: SubscriptService,
-              private activeSubscriptService: ActiveSubscriptService, private toastr: ToastrService) {
+              private activeSubscriptService: ActiveSubscriptService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
 
   }
 
@@ -46,6 +48,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
   }
 
   saveActiveSubscript(subscript: Subscript, billingAccount: BillingAccount, event): void {
+    this.loadingService.show();
     let activeSubscript: ActiveSubscript = new ActiveSubscript();
     activeSubscript.subscript = subscript;
     activeSubscript.billingAccountId = billingAccount.id;
@@ -58,7 +61,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
-    }));
+    }, () => this.loadingService.hide()));
 
 
   }

@@ -3,7 +3,7 @@ package com.mycompany.chargingService.fapi.controller;
 import com.mycompany.chargingService.fapi.models.UserViewModel;
 import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
 import com.mycompany.chargingService.fapi.service.UserService;
-import com.mycompany.chargingService.fapi.service.ValidationService;
+import com.mycompany.chargingService.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ public class UserController {
 
 
     private UserService userService;
-    private ValidationService validationService;
+    private UserValidator userValidator;
 
     @Autowired
-    public UserController(UserService userService, ValidationService validationService) {
+    public UserController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
-        this.validationService = validationService;
+        this.userValidator = userValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -44,7 +44,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity saveUser(@RequestBody UserViewModel userViewModel) {
-        String answer = this.validationService.registrationValidation(userViewModel, this.userService.getAllUsers());
+        String answer = this.userValidator.registrationValidation(userViewModel, this.userService.getAllUsers());
         if (answer.equals("Ok")) {
             UserViewModel savedUserViewModel = this.userService.saveUser(userViewModel);
             if (savedUserViewModel != null) {
@@ -61,7 +61,7 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity updateUsersLogin(@RequestBody UserViewModel userViewModel) {
-        String answer = this.validationService.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
+        String answer = this.userValidator.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
         if (answer.equals("Ok")) {
             UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel);
             if (updatableUserViewModel != null) {
@@ -73,7 +73,7 @@ public class UserController {
 
     @RequestMapping(value = "/email", method = RequestMethod.POST)
     public ResponseEntity updateUsersEmail(@RequestBody UserViewModel userViewModel) {
-        String answer = this.validationService.updateUsersEmailValidation(userViewModel);
+        String answer = this.userValidator.updateUsersEmailValidation(userViewModel);
         if (answer.equals("Ok")) {
             UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel);
             if (updatableUserViewModel != null) {
@@ -86,7 +86,7 @@ public class UserController {
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ResponseEntity updateUsersPassword(@RequestBody UserChangePasswordModel
                                                       userChangePasswordModel) {
-        String answer = this.validationService.updateUsersPasswordValidation(userChangePasswordModel,
+        String answer = this.userValidator.updateUsersPasswordValidation(userChangePasswordModel,
                 this.userService.getUserById(userChangePasswordModel.getUserId()));
         if (answer.equals("Ok")) {
             UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangePasswordModel);
@@ -99,7 +99,7 @@ public class UserController {
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
     public ResponseEntity getLoginUser(@RequestBody UserViewModel userViewModel) {
-        String answer = this.validationService.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
+        String answer = this.userValidator.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
         if (answer.equals("Ok")) {
             UserViewModel loginUserViewModel = this.userService.getLoginUser(userViewModel.getLogin(), userViewModel.getPassword());
             if (loginUserViewModel != null) {

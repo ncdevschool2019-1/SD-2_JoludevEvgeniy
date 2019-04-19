@@ -6,6 +6,7 @@ import {UserService} from '../../../services/user.service';
 import {AuthorizationService} from '../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private modalService: ModalService, private userService: UserService,
-              private authService: AuthorizationService, private toastr: ToastrService) {
+              private authService: AuthorizationService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -35,6 +37,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   createUser(event) {
+    this.loadingService.show();
     this.subscriptions.push(this.userService.saveUser(this.user).subscribe(data => {
       this.authService.setAuthUser(data);
       this.closeModal();
@@ -42,7 +45,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error(error.error, 'Error');
-    }));
+    }, () => this.loadingService.hide()));
   }
 
 }

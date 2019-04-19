@@ -32,10 +32,10 @@ import {UsersBillingAccountsComponent} from './modules/user/components/usersBill
 import {AddBillingAccountComponent} from './modules/billingAccount/components/addBillingAccount/add-billing-account.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthorizationService} from './services/authorization.service';
 import {FooterComponent} from './modules/footer/footer.component';
 import {AboutComponent} from './modules/about/about.component';
 import {AboutPageComponent} from './modules/layout/components/aboutPage/about-page.component';
+import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
 
 const routes: Routes = [
   {path: '', redirectTo: 'jumbotron', pathMatch: 'full'},
@@ -87,6 +87,7 @@ const routes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forRoot(routes),
     TabsModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot(),
     PaginationModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 4000,

@@ -1,14 +1,14 @@
-package com.mycompany.chargingService.fapi.service.implementations;
+package com.mycompany.chargingService.fapi.validators.impl;
 
 import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
 import com.mycompany.chargingService.fapi.models.UserViewModel;
-import com.mycompany.chargingService.fapi.service.ValidationService;
+import com.mycompany.chargingService.fapi.validators.UserValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ValidationServiceImpl implements ValidationService {
+public class UserValidatorImpl implements UserValidator {
 
     @Override
     public String authorizationValidation(String login, String password) {

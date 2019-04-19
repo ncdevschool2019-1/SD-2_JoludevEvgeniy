@@ -5,6 +5,7 @@ import {UserService} from '../../../services/user.service';
 import {ToastrService} from 'ngx-toastr';
 import {User} from '../../models/user';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-authorization',
@@ -18,7 +19,8 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private modalService: ModalService, private authService: AuthorizationService,
-              private userService: UserService, private toastr: ToastrService) {
+              private userService: UserService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -29,6 +31,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   }
 
   authorization(event) {
+    this.loadingService.show();
     this.subscriptions.push(this.userService.getLoginUser(this.inputUser).subscribe(data => {
       this.authService.setAuthUser(data);
       this.closeModal();
@@ -36,7 +39,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error(error.error, 'Error');
-    }));
+    }, () => this.loadingService.hide()));
 
   }
 

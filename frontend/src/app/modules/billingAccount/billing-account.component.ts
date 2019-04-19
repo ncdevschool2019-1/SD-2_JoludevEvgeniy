@@ -6,6 +6,7 @@ import {ModalService} from '../../services/modal.service';
 import {ToastrService} from 'ngx-toastr';
 import {User} from '../models/user';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-billing-account',
@@ -20,8 +21,9 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
 
-  constructor(public authService: AuthorizationService, public billingAccountService: BillingAccountService,
-              public modalService: ModalService, private toastr: ToastrService) {
+  constructor(private authService: AuthorizationService, private billingAccountService: BillingAccountService,
+              private modalService: ModalService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -45,13 +47,14 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
   }
 
   deleteBillingAccount(billingAccount: BillingAccount) {
+    this.loadingService.show();
     this.subscriptions.push(this.billingAccountService.deleteBillingAccount(billingAccount.id).subscribe(data => {
       this.authorizedUser.billingAccounts.splice(this.authorizedUser.billingAccounts.indexOf(billingAccount), 1);
       this.authService.setAuthUser(this.authorizedUser);
       this.toastr.success('Ваш биллинг аккаунт успешно удален!', 'Успех');
     }, error => {
       this.toastr.error('Удалить биллинг аккаунт не удалось', 'Ошибка');
-    }));
+    }, () => this.loadingService.hide()));
   }
 
   getSelectedBASubscriptsLength(billingAccount: BillingAccount): string {

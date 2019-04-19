@@ -2,6 +2,7 @@ package com.mycompany.chargingService.fapi.controller;
 
 import com.mycompany.chargingService.fapi.models.Subscript;
 import com.mycompany.chargingService.fapi.service.SubscriptService;
+import com.mycompany.chargingService.fapi.validators.SubscriptValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,12 @@ public class SubscriptController {
 
     private SubscriptService subscriptService;
 
+    private SubscriptValidator subscriptValidator;
+
     @Autowired
-    public SubscriptController(SubscriptService subscriptService) {
+    public SubscriptController(SubscriptService subscriptService, SubscriptValidator subscriptValidator) {
         this.subscriptService = subscriptService;
+        this.subscriptValidator = subscriptValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -38,13 +42,15 @@ public class SubscriptController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Subscript> saveSubscript(@RequestBody Subscript subscript) {
-        Subscript savedSubscript = this.subscriptService.saveSubscript(subscript);
-        if (savedSubscript != null) {
-            return ResponseEntity.ok(savedSubscript);
-        } else {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity saveSubscript(@RequestBody Subscript subscript) {
+        String answer = this.subscriptValidator.subscriptsValidation(subscript, this.subscriptService.getAllSubscripts());
+        if(answer.equals("Ok")){
+            Subscript savedSubscript = this.subscriptService.saveSubscript(subscript);
+            if (savedSubscript != null) {
+                return ResponseEntity.ok(savedSubscript);
+            }
         }
+        return ResponseEntity.badRequest().body(answer);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

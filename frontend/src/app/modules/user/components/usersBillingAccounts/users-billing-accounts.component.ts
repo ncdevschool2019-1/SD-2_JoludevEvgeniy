@@ -5,6 +5,7 @@ import {BillingAccount} from '../../../models/billing-account';
 import {User} from '../../../models/user';
 import {Subscription} from 'rxjs';
 import {ToastrService} from 'ngx-toastr';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class UsersBillingAccountsComponent implements OnInit, OnDestroy {
   @Output() onChanged = new EventEmitter();
 
   constructor(private modalService: ModalService, private billingAccountService: BillingAccountService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService, private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -37,6 +38,7 @@ export class UsersBillingAccountsComponent implements OnInit, OnDestroy {
   }
 
   changeStatus(event): void {
+    this.loadingService.show();
     this.selectedBillingAccount.active ? this.selectedBillingAccount.active = false : this.selectedBillingAccount.active = true;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(this.selectedBillingAccount).subscribe(data => {
       this.closeModal();
@@ -45,7 +47,7 @@ export class UsersBillingAccountsComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Статус изменить не удалось', 'Ошибка')
-    }));
+    }, () => this.loadingService.hide()));
   }
 
   getSelectedBASubscriptsLength(): string {

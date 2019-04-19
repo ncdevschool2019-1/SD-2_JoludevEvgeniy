@@ -6,6 +6,7 @@ import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
 import {User} from '../../../models/user';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-add-billing-account',
@@ -19,7 +20,8 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
   authorizedUser: User = new User();
 
   constructor(private modalService: ModalService, private billingAccountService: BillingAccountService,
-              private authService: AuthorizationService, private toastr: ToastrService) {
+              private authService: AuthorizationService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
 
   }
 
@@ -45,6 +47,7 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
   }
 
   addBillingAccount(billingAccount: BillingAccount, event) {
+    this.loadingService.show();
     billingAccount.userId = this.authorizedUser.id;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(billingAccount).subscribe(data => {
       this.authorizedUser.billingAccounts.push(data);
@@ -54,7 +57,7 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Создание биллинг аккаунта не удалось', 'Ошибка');
-    }));
+    }, () => this.loadingService.hide()));
   }
 
 }

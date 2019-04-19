@@ -6,6 +6,7 @@ import {AuthorizationService} from '../../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
 import {User} from '../../../models/user';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
   authorizedUser: User = new User();
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
-              private authService: AuthorizationService, private toastr: ToastrService) {
+              private authService: AuthorizationService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
   }
 
   replenishBalance(billingAccount: BillingAccount, event) {
+    this.loadingService.show();
     let updatableBillingAccount = BillingAccount.cloneBillingAccount(billingAccount);
     updatableBillingAccount.balance += this.inputSum;
     this.subscriptions.push(this.billingAccountService.saveBillingAccount(updatableBillingAccount).subscribe(data => {
@@ -56,6 +59,6 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Пополнить баланс не удалось', 'Операция не удалась');
-    }));
+    }, () => this.loadingService.hide()));
   }
 }

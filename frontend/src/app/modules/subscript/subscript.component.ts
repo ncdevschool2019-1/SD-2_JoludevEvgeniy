@@ -3,10 +3,10 @@ import {Subscript} from '../models/subscript';
 import {SubscriptService} from '../../services/subscript.service';
 import {ModalService} from '../../services/modal.service';
 import {AuthorizationService} from '../../services/authorization.service';
-import {BillingAccountService} from '../../services/billingAccount.service';
 import {ToastrService} from 'ngx-toastr';
 import {User} from '../models/user';
 import {Subscription} from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-subscript',
@@ -20,8 +20,9 @@ export class SubscriptComponent implements OnInit, OnDestroy {
   selectedSubscript: Subscript;
   private subscriptions: Subscription[] = [];
 
-  constructor(private subscriptService: SubscriptService, public modalService: ModalService,
-              public authService: AuthorizationService, private toastr: ToastrService) {
+  constructor(private subscriptService: SubscriptService, private modalService: ModalService,
+              private authService: AuthorizationService, private toastr: ToastrService,
+              private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -45,20 +46,23 @@ export class SubscriptComponent implements OnInit, OnDestroy {
   }
 
   deleteSubscript(subscript: Subscript) {
+    this.loadingService.show();
     this.subscriptions.push(this.subscriptService.deleteSubscript(subscript.id).subscribe(value => {
       this.loadSubscripts();
       this.toastr.success('Подписка успешно удалена!', 'Успех!');
     }, error => {
       this.toastr.error('Удалить подписку не удалось', 'Ошибка!');
-    }));
+    }, () => this.loadingService.hide()));
   }
 
   private loadSubscripts(): void {
+    this.loadingService.show();
     this.subscriptions.push(this.subscriptService.getSubscripts().subscribe(data => {
       this.subscripts = data;
     }, error => {
       this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
-    }));
+    }, () => this.loadingService.hide()));
+
   }
 
   public openModalSubscript(template: TemplateRef<any>, subscript: Subscript): void {

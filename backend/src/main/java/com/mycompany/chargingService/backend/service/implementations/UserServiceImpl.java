@@ -81,10 +81,14 @@ public class UserServiceImpl implements UserService {
             User user = this.userRepository.findById(id).get();
             String imageNewName = user.getId().toString() + "_" + user.getLogin() +
                     imageName.substring(imageName.lastIndexOf('.'));
-            File serverFile = new File("backend/src/images/usersImages/", imageNewName);
-            if (serverFile.exists()) {
-                deleteImage(serverFile.getName());
+            File serverFile = new File("backend/src/images/usersImages/", user.getId().toString());
+            if(serverFile.exists()){
+                deleteImage(imageNewName);
             }
+            if(!serverFile.exists()){
+                serverFile.mkdir();
+            }
+            serverFile = new File(serverFile.getPath() + "/", imageNewName);
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
             stream.write(image.getBytes());
             stream.close();
@@ -97,7 +101,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource getImage(String imageName) {
         try {
-            Path file = Paths.get("backend/src/images/usersImages/" + imageName);
+            String imageDir = imageName.substring(0, imageName.indexOf('_')) + "/" + imageName;
+            Path file = Paths.get("backend/src/images/usersImages/" + imageDir);
             return new UrlResource(file.toUri());
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,9 +112,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteImage(String imageName) {
-        File image = new File("backend/src/images/usersImages/" + imageName);
+        String imageDir = imageName.substring(0, imageName.indexOf('_'));
+        String path = "backend/src/images/usersImages/";
+        File image = new File(path, imageDir + "/" + imageName);
         try {
             image.delete();
+            if(!image.exists()){
+                new File(path, imageDir).delete();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

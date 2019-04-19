@@ -8,6 +8,7 @@ import {BillingAccount} from '../../../models/billing-account';
 import {ActiveSubscript} from '../../../models/active-subscript';
 import {Subscription} from 'rxjs';
 import {User} from '../../../models/user';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
 
   constructor(private billingAccountService: BillingAccountService, private modalService: ModalService,
               private activeSubscriptService: ActiveSubscriptService, private authService: AuthorizationService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService, private loadingService: Ng4LoadingSpinnerService) {
   }
 
   ngOnInit() {
@@ -46,6 +47,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
   }
 
   deleteActiveSubscript(activeSubscript: ActiveSubscript, event) {
+    this.loadingService.show();
     this.subscriptions.push(this.activeSubscriptService.deleteActiveSubscript(activeSubscript.id).subscribe(data => {
       this.authorizedUser.billingAccounts.find(value =>
         value.id == this.selectedBillingAccount.id).activeSubscripts.splice(
@@ -56,7 +58,7 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Отписаться не удалось', 'Ошибка');
-    }));
+    }, () => this.loadingService.hide()));
 
   }
 }
