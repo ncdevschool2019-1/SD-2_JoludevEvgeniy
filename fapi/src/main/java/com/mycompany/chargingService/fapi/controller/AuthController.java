@@ -31,7 +31,7 @@ public class AuthController {
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody UserViewModel userViewModel){
         String answer = this.userValidator.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
-        if(answer != "Ok"){
+        if(!answer.equals("Ok")){
             return ResponseEntity.badRequest().body(answer);
         }
         Authentication authentication = authenticationManager.authenticate(

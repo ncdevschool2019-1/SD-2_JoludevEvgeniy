@@ -35,6 +35,12 @@ public class BillingAccountServiceImpl implements BillingAccountService {
             billingAccount.setActive(true);
             billingAccount.setActiveSubscripts(new ArrayList<>());
         }
+        if(billingAccount.getBalance() < 0){
+            billingAccount.setActive(false);
+        }
+        if(!billingAccount.isActive() && billingAccount.getBalance() > 0){
+            billingAccount.setActive(true);
+        }
         return restTemplate.postForEntity(backendServerUrl, billingAccount, BillingAccount.class).getBody();
     }
 

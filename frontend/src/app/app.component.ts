@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {User} from './modules/models/user';
 import {AuthorizationService} from './services/authorization.service';
 import {LocalizationService} from './services/localization.service';
+import {TokenStorageService} from './services/token-storage.service';
+import {UserService} from './services/user.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -11,11 +14,16 @@ import {LocalizationService} from './services/localization.service';
 })
 export class AppComponent implements OnInit {
 
+  subscriptions: Subscription[] = [];
 
-  constructor(private localization: LocalizationService) {
+  constructor(private tokenService: TokenStorageService, private authService: AuthorizationService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
+    if(this.tokenService.getToken()){
+      this.subscriptions.p
+    }
   }
 
 

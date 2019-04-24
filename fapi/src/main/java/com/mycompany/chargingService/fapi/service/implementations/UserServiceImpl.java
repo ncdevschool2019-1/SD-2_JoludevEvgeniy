@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserViewModel saveUser(UserViewModel userViewModel) {
         if (userViewModel != null) {
             userViewModel.setBillingAccounts(new ArrayList<>());
+            userViewModel.setPassword(bCryptPasswordEncoder.encode(userViewModel.getPassword()));
             User user = restTemplate.postForEntity(backendServerUrl,
                     this.converterService.convertUserViewModelToUser(userViewModel), User.class).getBody();
             if (user != null) {
@@ -108,6 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 User.class).getBody();
         if (user != null) {
             user.setPassword(userChangePasswordModel.getNewPassword());
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             User updatableUser = this.restTemplate.postForEntity(this.backendServerUrl + "/password",
                     user, User.class).getBody();
             if (updatableUser != null) {
@@ -124,7 +126,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = restTemplate.postForEntity(backendServerUrl + "/authorization",
                 this.converterService.convertUserViewModelToUser(userViewModel), User.class).getBody();
         if (user != null) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             return this.converterService.convertUserToUserViewModel(user);
         }
         return null;

@@ -45,8 +45,11 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUserById(@PathVariable(name = "id") Long id) {
-        if (this.userService.getUserById(id) != null) {
-            this.userService.deleteImage(this.userService.getUserById(id).getImagePath());
+        User user = this.userService.getUserById(id);
+        if (user != null) {
+            if(user.getImagePath() != null) {
+                this.userService.deleteImage(this.userService.getUserById(id).getImagePath());
+            }
             this.userService.deleteUser(id);
         }
     }

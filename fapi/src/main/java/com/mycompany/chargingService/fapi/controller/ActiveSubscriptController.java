@@ -1,7 +1,9 @@
 package com.mycompany.chargingService.fapi.controller;
 
 import com.mycompany.chargingService.fapi.models.ActiveSubscript;
+import com.mycompany.chargingService.fapi.models.BillingAccount;
 import com.mycompany.chargingService.fapi.service.ActiveSubscriptService;
+import com.mycompany.chargingService.fapi.service.BillingAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +16,9 @@ import java.util.List;
 public class ActiveSubscriptController {
 
     private ActiveSubscriptService activeSubscriptService;
+
+    @Autowired
+    private BillingAccountService billingAccountService;
 
     @Autowired
     public ActiveSubscriptController(ActiveSubscriptService activeSubscriptService) {
@@ -43,6 +48,9 @@ public class ActiveSubscriptController {
     public ResponseEntity<ActiveSubscript> saveActiveSubscript(@RequestBody ActiveSubscript activeSubscript){
         ActiveSubscript savedActiveSubscript = this.activeSubscriptService.saveActiveSubscript(activeSubscript);
         if(savedActiveSubscript != null){
+            BillingAccount billingAccount = this.billingAccountService.getBillingAccountById(activeSubscript.getBillingAccountId());
+            billingAccount.setBalance(billingAccount.getBalance() - activeSubscript.getSubscript().getPrice());
+            this.billingAccountService.saveBillingAccount(billingAccount);
             return ResponseEntity.ok(savedActiveSubscript);
         }
         else {

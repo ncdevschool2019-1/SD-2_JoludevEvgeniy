@@ -41,8 +41,11 @@ public class SubscriptController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteSubscript(@PathVariable(name = "id") Long id) {
-        if (this.subscriptService.getSubscriptById(id) != null) {
-            this.subscriptService.deleteImage(this.subscriptService.getSubscriptById(id).getImagePath());
+        Subscript subscript = this.subscriptService.getSubscriptById(id);
+        if (subscript != null) {
+            if(subscript.getImagePath() != null) {
+                this.subscriptService.deleteImage(this.subscriptService.getSubscriptById(id).getImagePath());
+            }
             this.subscriptService.deleteSubscript(id);
         }
     }

@@ -41,10 +41,9 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.loadingService.hide();
-      this.toastr.error(error.error, 'Error');
+      this.toastr.error('You input incorrect login or password', 'Error');
     }, () => {
       this.subscriptions.push(this.userService.getLoggedUser(this.tokenService.getLogin()).subscribe(data => {
-        console.log(data);
         this.authService.setAuthUser(data);
         this.closeModal();
         this.loadingService.hide();
