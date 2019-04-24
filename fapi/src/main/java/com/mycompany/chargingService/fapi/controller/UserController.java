@@ -7,12 +7,14 @@ import com.mycompany.chargingService.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.Iterator;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -27,11 +29,13 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<UserViewModel>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserViewModel> getUserById(@PathVariable(name = "id") Long id) {
         UserViewModel userViewModel = this.userService.getUserById(id);
@@ -40,6 +44,16 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
+    @RequestMapping(value = "/logged", method = RequestMethod.POST)
+    public ResponseEntity getLoggedUser(@RequestBody String login){
+        UserViewModel userViewModel = this.userService.getLoginUser(login);
+        if(userViewModel != null){
+            return ResponseEntity.ok(userViewModel);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -54,11 +68,13 @@ public class UserController {
         return ResponseEntity.badRequest().body(answer);
     }
 
+    @PreAuthorize("hasRole('Admin')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable(name = "id") Long id) {
         this.userService.deleteUser(id);
     }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity updateUsersLogin(@RequestBody UserViewModel userViewModel) {
         String answer = this.userValidator.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
@@ -71,6 +87,7 @@ public class UserController {
         return ResponseEntity.badRequest().body(answer);
     }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/email", method = RequestMethod.POST)
     public ResponseEntity updateUsersEmail(@RequestBody UserViewModel userViewModel) {
         String answer = this.userValidator.updateUsersEmailValidation(userViewModel);
@@ -83,6 +100,7 @@ public class UserController {
         return ResponseEntity.badRequest().body(answer);
     }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ResponseEntity updateUsersPassword(@RequestBody UserChangePasswordModel
                                                       userChangePasswordModel) {
@@ -97,19 +115,8 @@ public class UserController {
         return ResponseEntity.badRequest().body(answer);
     }
 
-    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public ResponseEntity getLoginUser(@RequestBody UserViewModel userViewModel) {
-        String answer = this.userValidator.authorizationValidation(userViewModel.getLogin(), userViewModel.getPassword());
-        if (answer.equals("Ok")) {
-            UserViewModel loginUserViewModel = this.userService.getLoginUser(userViewModel.getLogin(), userViewModel.getPassword());
-            if (loginUserViewModel != null) {
-                return ResponseEntity.ok(loginUserViewModel);
-            }
-            answer = "Your login or password are incorrect";
-        }
-        return ResponseEntity.badRequest().body(answer);
-    }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/image/{id}", method = RequestMethod.POST)
     public ResponseEntity<UserViewModel> uploadImage(MultipartHttpServletRequest
                                                              request, @PathVariable(name = "id") Long id) {
@@ -122,6 +129,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 

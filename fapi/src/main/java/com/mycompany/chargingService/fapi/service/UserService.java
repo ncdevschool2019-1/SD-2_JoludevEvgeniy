@@ -23,7 +23,7 @@ public interface UserService {
 
     UserViewModel updateUsersPassword(UserChangePasswordModel userChangePasswordModel);
 
-    UserViewModel getLoginUser(String login, String password);
+    UserViewModel getLoginUser(String login);
 
     UserViewModel uploadImage(MultipartFile image, Long id);
 

@@ -4,6 +4,7 @@ import com.mycompany.chargingService.fapi.models.ActiveSubscript;
 import com.mycompany.chargingService.fapi.service.ActiveSubscriptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class ActiveSubscriptController {
         this.activeSubscriptService = activeSubscriptService;
     }
 
+    @PreAuthorize("hasRole('User')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ActiveSubscript>> getAllActiveSubscripts(){
         return ResponseEntity.ok(this.activeSubscriptService.getAllActiveSubscripts());
     }
 
+    @PreAuthorize("hasRole('User')")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ActiveSubscript> getActiveSubscriptById(@PathVariable(name = "id") Long id){
         ActiveSubscript activeSubscript = this.activeSubscriptService.getActiveSubscriptById(id);
@@ -35,6 +38,7 @@ public class ActiveSubscriptController {
         }
     }
 
+    @PreAuthorize("hasRole('User')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ActiveSubscript> saveActiveSubscript(@RequestBody ActiveSubscript activeSubscript){
         ActiveSubscript savedActiveSubscript = this.activeSubscriptService.saveActiveSubscript(activeSubscript);
@@ -46,6 +50,7 @@ public class ActiveSubscriptController {
         }
     }
 
+    @PreAuthorize("hasRole('User')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteActiveSubscript(@PathVariable(name = "id") Long id){
         this.activeSubscriptService.deleteActiveSubscript(id);

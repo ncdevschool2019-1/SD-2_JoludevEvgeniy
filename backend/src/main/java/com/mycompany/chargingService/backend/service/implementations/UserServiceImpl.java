@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getLoginUser(String login, String password) {
-        return this.userRepository.getLoginUser(login, password);
+    public User getLoginUser(String login) {
+        return this.userRepository.getLoginUser(login);
     }
 
     @Override

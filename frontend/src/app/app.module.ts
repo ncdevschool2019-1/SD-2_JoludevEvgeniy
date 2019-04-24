@@ -36,6 +36,7 @@ import {FooterComponent} from './modules/footer/footer.component';
 import {AboutComponent} from './modules/about/about.component';
 import {AboutPageComponent} from './modules/layout/components/aboutPage/about-page.component';
 import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
+import {httpInterceptorProviders} from './services/auth-interceptor';
 
 const routes: Routes = [
   {path: '', redirectTo: 'jumbotron', pathMatch: 'full'},
@@ -94,7 +95,7 @@ const routes: Routes = [
       positionClass: 'toast-top-left'
     })
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {

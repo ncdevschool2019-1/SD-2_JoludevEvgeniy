@@ -9,17 +9,19 @@ import com.mycompany.chargingService.fapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-@Service
-public class UserServiceImpl implements UserService {
+@Service("customUserDetailsService")
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Value("${backend.server.url}api/users")
     private String backendServerUrl;
@@ -27,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     private ImageService imageService;
     private ConverterService converterService;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserServiceImpl(ImageService imageService, ConverterService converterService) {
@@ -113,13 +118,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserViewModel getLoginUser(String login, String password) {
+    public UserViewModel getLoginUser(String login) {
         UserViewModel userViewModel = new UserViewModel();
         userViewModel.setLogin(login);
-        userViewModel.setPassword(password);
         User user = restTemplate.postForEntity(backendServerUrl + "/authorization",
                 this.converterService.convertUserViewModelToUser(userViewModel), User.class).getBody();
         if (user != null) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             return this.converterService.convertUserToUserViewModel(user);
         }
         return null;
@@ -138,6 +143,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource getImage(String imageName) {
         return restTemplate.getForEntity(backendServerUrl + "/image/" + imageName, Resource.class).getBody();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserViewModel user = getLoginUser(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getAuthority(user));
+    }
+
+    private Set<SimpleGrantedAuthority> getAuthority(UserViewModel user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        return authorities;
     }
 
 }

@@ -71,7 +71,7 @@ public class UserController {
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
     public ResponseEntity<User> getUserById(@RequestBody User user) {
-        return ResponseEntity.ok(this.userService.getLoginUser(user.getLogin(), user.getPassword()));
+        return ResponseEntity.ok(this.userService.getLoginUser(user.getLogin()));
 
     }
 

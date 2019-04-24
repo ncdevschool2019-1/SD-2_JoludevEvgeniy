@@ -39,14 +39,14 @@ export class UserService {
     return this.http.post<User>(this.path + '/email', user);
   }
 
-  public getLoginUser(user: User): Observable<User>{
-    return this.http.post<User>(this.path + '/authorization', user);
-  }
-
   public saveUsersImage(image: File, userId: number): Observable<User> {
     const formData = new FormData();
     formData.append('userImage', image, image.name);
     return this.http.post<User>(this.path + '/image/' + userId, formData);
+  }
+
+  public getLoggedUser(login: string): Observable<User>{
+    return this.http.post<User>(this.path + "/logged", login);
   }
 
 }

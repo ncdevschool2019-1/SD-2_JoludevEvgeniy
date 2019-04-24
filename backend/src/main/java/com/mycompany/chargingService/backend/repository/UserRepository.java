@@ -27,6 +27,6 @@ public interface UserRepository extends CrudRepository<User, Long>{
     @Query(value = "update users set email = :email where id = :id", nativeQuery = true)
     void updateUsersEmail(@Param(value = "id") Long id, @Param(value = "email") String email);
 
-    @Query(value = "select * from users where login = :login and password = :password", nativeQuery = true)
-    User getLoginUser(@Param(value = "login")String login, @Param(value = "password")String password);
+    @Query(value = "select * from users where login = :login", nativeQuery = true)
+    User getLoginUser(@Param(value = "login")String login);
 }

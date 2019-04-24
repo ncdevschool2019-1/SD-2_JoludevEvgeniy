@@ -49,9 +49,9 @@ export class SubscriptComponent implements OnInit, OnDestroy {
     this.loadingService.show();
     this.subscriptions.push(this.subscriptService.deleteSubscript(subscript.id).subscribe(value => {
       this.loadSubscripts();
-      this.toastr.success('Подписка успешно удалена!', 'Успех!');
+      this.toastr.success('Subscript was deleted', 'Success');
     }, error => {
-      this.toastr.error('Удалить подписку не удалось', 'Ошибка!');
+      this.toastr.error('Subscript deleted is failed', 'Error');
     }, () => this.loadingService.hide()));
   }
 
@@ -60,7 +60,7 @@ export class SubscriptComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.subscriptService.getSubscripts().subscribe(data => {
       this.subscripts = data;
     }, error => {
-      this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
+      this.toastr.error('We are sorry for inconvenience', 'Server error');
     }, () => this.loadingService.hide()));
 
   }

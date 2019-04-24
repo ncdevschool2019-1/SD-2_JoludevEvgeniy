@@ -50,12 +50,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   uploadImage(event) {
     this.loadingService.show();
-    this.fileList = event.target.files;
-    if (this.fileList && this.fileList.length > 0) {
+    this.fileList = event.target.files;    if (this.fileList && this.fileList.length > 0) {
+
       this.subscriptions.push(this.userService.saveUsersImage(this.fileList[0], this.authorizedUser.id).subscribe(value => {
         this.authorizedUser = value;
         this.authService.setAuthUser(this.authorizedUser);
-        this.toastr.success('Фото успешно сохранено', 'Успех!');
+        this.toastr.success('Image was saved', 'Success');
       }, error => {
         this.toastr.error('Загрузить фото не удалось', 'Ошибка');
       }, () => this.loadingService.hide()));

@@ -57,10 +57,10 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
         searchable => searchable.id == billingAccount.id).activeSubscripts.push(data);
       this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
-      this.toastr.success('Вы успешно подписались на данный ресурс!', data.subscript.name);
+      this.toastr.success('You successfully subscribe', data.subscript.name);
     }, error => {
       event.target.disabled = false;
-      this.toastr.error('Приносим извинения за неудобства', 'Ошибка сервера');
+      this.toastr.error('We are sorry for inconvenience', 'Server error');
     }, () => this.loadingService.hide()));
 
 

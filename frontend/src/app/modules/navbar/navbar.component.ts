@@ -3,6 +3,7 @@ import {ModalService} from '../../services/modal.service';
 import {AuthorizationService} from '../../services/authorization.service';
 import {User} from '../models/user';
 import {Subscription} from 'rxjs';
+import {TokenStorageService} from '../../services/token-storage.service';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-  constructor(private modalService: ModalService, private authService: AuthorizationService) {
+  constructor(private modalService: ModalService, private authService: AuthorizationService,
+              private tokenService: TokenStorageService) {
   }
 
 
@@ -37,6 +39,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   outFromAccount() {
+    this.tokenService.signOut();
     this.authService.outFromAccount();
     this.getAuthUser();
   }

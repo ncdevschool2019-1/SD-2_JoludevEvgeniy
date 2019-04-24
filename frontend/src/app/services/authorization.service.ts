@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {User} from '../modules/models/user';
 import {Subscript} from '../modules/models/subscript';
 import {Observable, Subject} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {AuthToken} from '../modules/models/auth-token';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,10 @@ export class AuthorizationService {
   private authorizedUser: User = new User();
 
   private subject = new Subject<User>();
+
+  private path = '/api/auth';
+
+  constructor(private http: HttpClient){}
 
   public setAuthUser(user: User) {
     this.authorizedUser = user;
@@ -23,6 +29,10 @@ export class AuthorizationService {
 
   public subscribeToAuthUser(): Observable<User> {
     return this.subject.asObservable();
+  }
+
+  attemptAuth(user: User): Observable<AuthToken>{
+    return this.http.post<AuthToken>(this.path + '/signin', user);
   }
 
   public outFromAccount() {
