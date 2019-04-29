@@ -17,6 +17,9 @@ public interface UserRepository extends CrudRepository<User, Long>{
     @Query(value = "update users set login = :login where id = :id", nativeQuery = true)
     void updateUsersLogin(@Param(value = "id") Long id, @Param(value = "login") String login);
 
+    @Query(value = "select * from users limit :offset, :count", nativeQuery = true)
+    Iterable<User> getUsersOnPage(@Param(value = "offset") Integer offset, @Param(value = "count") Integer count);
+
     @Transactional
     @Modifying
     @Query(value = "update users set password = :password where id = :id", nativeQuery = true)
@@ -29,4 +32,7 @@ public interface UserRepository extends CrudRepository<User, Long>{
 
     @Query(value = "select * from users where login = :login", nativeQuery = true)
     User getLoginUser(@Param(value = "login")String login);
+
+    @Query(value = "select count(*) from users", nativeQuery = true)
+    Integer getUsersCount();
 }

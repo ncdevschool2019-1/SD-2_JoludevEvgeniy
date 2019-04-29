@@ -14,7 +14,8 @@ public class BillingAccountValidatorImpl implements BillingAccountValidator {
             return "Lengths of your billing account name should be between 3 and 30 symbols";
         }
         for (BillingAccount value : billingAccounts) {
-            if (billingAccount.getUserId().equals(value.getUserId()) && value.getName().equals(billingAccount.getName())) {
+            if (billingAccount.getUserId().equals(value.getUserId()) && value.getName().equals(billingAccount.getName()) &&
+                    !billingAccount.getId().equals(value.getId())) {
                 return "Billing account with the same name you already have";
             }
         }

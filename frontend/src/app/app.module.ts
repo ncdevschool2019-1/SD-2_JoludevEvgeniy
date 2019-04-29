@@ -15,7 +15,7 @@ import {NavbarComponent} from './modules/navbar/navbar.component';
 import {RouterModule, Routes} from '@angular/router';
 import {JumbotronComponent} from './modules/jumbotron/jumbotron.component';
 import {ProfileComponent} from './modules/profile/profile.component';
-import {PaginationModule, TabsModule} from 'ngx-bootstrap';
+import {PaginationModule, PopoverModule, TabsModule} from 'ngx-bootstrap';
 import {BillingAccountComponent} from './modules/billingAccount/billing-account.component';
 import {RegistrationComponent} from './modules/navbar/registration/registration.component';
 import {AddSubscriptComponent} from './modules/profile/add-subscript/add-subscript.component';
@@ -89,6 +89,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     TabsModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
+    PopoverModule.forRoot(),
     PaginationModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 4000,

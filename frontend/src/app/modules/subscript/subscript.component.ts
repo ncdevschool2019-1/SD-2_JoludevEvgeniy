@@ -52,6 +52,7 @@ export class SubscriptComponent implements OnInit, OnDestroy {
       this.toastr.success('Subscript was deleted', 'Success');
     }, error => {
       this.toastr.error('Subscript deleted is failed', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 
@@ -61,6 +62,7 @@ export class SubscriptComponent implements OnInit, OnDestroy {
       this.subscripts = data;
     }, error => {
       this.toastr.error('We are sorry for inconvenience', 'Server error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
 
   }

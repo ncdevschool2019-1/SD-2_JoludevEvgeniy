@@ -11,6 +11,7 @@ import {BillingAccount} from '../../../models/billing-account';
 import {User} from '../../../models/user';
 import {Subscription} from 'rxjs';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
+import {UserService} from '../../../../services/user.service';
 
 @Component({
   selector: 'app-to-subscript',
@@ -28,7 +29,7 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
   constructor(private billingAccountService: BillingAccountService, private authService: AuthorizationService,
               private modalService: ModalService, private subscriptService: SubscriptService,
               private activeSubscriptService: ActiveSubscriptService, private toastr: ToastrService,
-              private loadingService: Ng4LoadingSpinnerService) {
+              private loadingService: Ng4LoadingSpinnerService, private userService: UserService) {
 
   }
 
@@ -53,15 +54,18 @@ export class ToSubscriptComponent implements OnInit, OnDestroy {
     activeSubscript.subscript = subscript;
     activeSubscript.billingAccountId = billingAccount.id;
     this.subscriptions.push(this.activeSubscriptService.saveActiveSubscript(activeSubscript).subscribe(data => {
-      this.authorizedUser.billingAccounts.find(
-        searchable => searchable.id == billingAccount.id).activeSubscripts.push(data);
-      this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
       this.toastr.success('You successfully subscribe', data.subscript.name);
     }, error => {
       event.target.disabled = false;
       this.toastr.error('We are sorry for inconvenience', 'Server error');
-    }, () => this.loadingService.hide()));
+      this.loadingService.hide();
+    }, () => {
+      this.subscriptions.push(this.userService.getLoggedUser(this.authorizedUser.login).subscribe( data => {
+        this.authService.setAuthUser(data);
+      }));
+      this.loadingService.hide();
+    }));
 
 
   }

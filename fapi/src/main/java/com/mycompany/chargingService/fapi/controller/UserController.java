@@ -1,7 +1,10 @@
 package com.mycompany.chargingService.fapi.controller;
 
+
 import com.mycompany.chargingService.fapi.models.UserViewModel;
-import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
+import com.mycompany.chargingService.fapi.models.UserChangeModel;
+
+import com.mycompany.chargingService.fapi.service.AuthTokenService;
 import com.mycompany.chargingService.fapi.service.UserService;
 import com.mycompany.chargingService.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class UserController {
     private UserValidator userValidator;
 
     @Autowired
+    private AuthTokenService authTokenService;
+
+    @Autowired
     public UserController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
         this.userValidator = userValidator;
@@ -33,6 +39,18 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<UserViewModel>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
+    public ResponseEntity<List<UserViewModel>> getUsersOnPage(@PathVariable(name = "pageNumber") Integer pageNumber) {
+        return ResponseEntity.ok(this.userService.getUsersOnPage(pageNumber));
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    @RequestMapping(value = "/maxPage", method = RequestMethod.GET)
+    public ResponseEntity getMaxPage() {
+        return ResponseEntity.ok(this.userService.getMaxPage());
     }
 
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
@@ -48,9 +66,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/logged", method = RequestMethod.POST)
-    public ResponseEntity getLoggedUser(@RequestBody String login){
+    public ResponseEntity getLoggedUser(@RequestBody String login) {
         UserViewModel userViewModel = this.userService.getLoginUser(login);
-        if(userViewModel != null){
+        if (userViewModel != null) {
             return ResponseEntity.ok(userViewModel);
         }
         return ResponseEntity.notFound().build();
@@ -74,14 +92,16 @@ public class UserController {
         this.userService.deleteUser(id);
     }
 
+
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity updateUsersLogin(@RequestBody UserViewModel userViewModel) {
-        String answer = this.userValidator.updateUsersLoginValidation(userViewModel, this.userService.getAllUsers());
+    public ResponseEntity updateUsersLogin(@RequestBody UserChangeModel userChangeModel) {
+        String answer = this.userValidator.updateUsersLoginValidation(userChangeModel, this.userService.getAllUsers(),
+                this.userService.getUserById(userChangeModel.getUserId()));
         if (answer.equals("Ok")) {
-            UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userViewModel);
+            UserViewModel updatableUserViewModel = this.userService.updateUsersLogin(userChangeModel);
             if (updatableUserViewModel != null) {
-                return ResponseEntity.ok(updatableUserViewModel);
+                return ResponseEntity.ok(this.authTokenService.generateAuthToken(updatableUserViewModel));
             }
         }
         return ResponseEntity.badRequest().body(answer);
@@ -89,12 +109,13 @@ public class UserController {
 
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/email", method = RequestMethod.POST)
-    public ResponseEntity updateUsersEmail(@RequestBody UserViewModel userViewModel) {
-        String answer = this.userValidator.updateUsersEmailValidation(userViewModel);
+    public ResponseEntity updateUsersEmail(@RequestBody UserChangeModel userChangeModel) {
+        String answer = this.userValidator.updateUsersEmailValidation(userChangeModel,
+                this.userService.getUserById(userChangeModel.getUserId()));
         if (answer.equals("Ok")) {
-            UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userViewModel);
+            UserViewModel updatableUserViewModel = this.userService.updateUsersEmail(userChangeModel);
             if (updatableUserViewModel != null) {
-                return ResponseEntity.ok(updatableUserViewModel);
+                return ResponseEntity.ok(this.authTokenService.generateAuthToken(updatableUserViewModel));
             }
         }
         return ResponseEntity.badRequest().body(answer);
@@ -102,14 +123,14 @@ public class UserController {
 
     @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ResponseEntity updateUsersPassword(@RequestBody UserChangePasswordModel
-                                                      userChangePasswordModel) {
-        String answer = this.userValidator.updateUsersPasswordValidation(userChangePasswordModel,
-                this.userService.getUserById(userChangePasswordModel.getUserId()));
+    public ResponseEntity updateUsersPassword(@RequestBody UserChangeModel
+                                                      userChangeModel) {
+        String answer = this.userValidator.updateUsersPasswordValidation(userChangeModel,
+                this.userService.getUserById(userChangeModel.getUserId()));
         if (answer.equals("Ok")) {
-            UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangePasswordModel);
+            UserViewModel updatableUserViewModel = this.userService.updateUsersPassword(userChangeModel);
             if (updatableUserViewModel != null) {
-                return ResponseEntity.ok(updatableUserViewModel);
+                return ResponseEntity.ok(this.authTokenService.generateAuthToken(updatableUserViewModel));
             }
         }
         return ResponseEntity.badRequest().body(answer);
@@ -129,7 +150,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('User') or hasRole('Admin')")
     @RequestMapping(value = "/image/{imageName:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 

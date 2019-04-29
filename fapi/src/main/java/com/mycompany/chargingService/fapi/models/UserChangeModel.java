@@ -3,19 +3,39 @@ package com.mycompany.chargingService.fapi.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserChangePasswordModel {
+public class UserChangeModel {
 
     private Long userId;
+    private String newLogin;
     private String oldPassword;
     private String newPassword;
+    private String newEmail;
 
-    public UserChangePasswordModel() {
+    public UserChangeModel() {
     }
 
-    public UserChangePasswordModel(Long userId, String oldPassword, String newPassword) {
+    public UserChangeModel(Long userId, String newLogin, String oldPassword, String newPassword, String newEmail) {
         this.userId = userId;
+        this.newLogin = newLogin;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
+        this.newEmail = newEmail;
+    }
+
+    public String getNewLogin() {
+        return newLogin;
+    }
+
+    public void setNewLogin(String newLogin) {
+        this.newLogin = newLogin;
+    }
+
+    public String getNewEmail() {
+        return newEmail;
+    }
+
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
     }
 
     public Long getUserId() {

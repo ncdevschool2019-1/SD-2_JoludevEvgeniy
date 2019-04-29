@@ -23,7 +23,7 @@ public class SubscriptValidatorImpl implements SubscriptValidator {
             return "Period of your subscript should be more then 0";
         }
         for(Subscript value : subscripts){
-            if(value.getName().equals(subscript.getName())){
+            if(value.getName().equals(subscript.getName()) && !value.getId().equals(subscript.getId())){
                 return "Subscript with the same name already exists";
             }
         }

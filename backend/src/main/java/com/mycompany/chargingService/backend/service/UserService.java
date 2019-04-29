@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Long getMaxPage();
+    Iterable<User> getUsersOnPage(Integer pageNumber);
     User saveUser(User user);
     User getUserById(Long id);
     Iterable<User> getAllUsers();

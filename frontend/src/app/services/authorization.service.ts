@@ -4,6 +4,7 @@ import {Subscript} from '../modules/models/subscript';
 import {Observable, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {AuthToken} from '../modules/models/auth-token';
+import {AuthRegUser} from '../modules/models/auth-reg-user';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class AuthorizationService {
     return this.subject.asObservable();
   }
 
-  attemptAuth(user: User): Observable<AuthToken>{
+  attemptAuth(user: AuthRegUser): Observable<AuthToken>{
     return this.http.post<AuthToken>(this.path + '/signin', user);
   }
 

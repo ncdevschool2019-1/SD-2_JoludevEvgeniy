@@ -45,17 +45,18 @@ export class AddSubscriptComponent implements OnInit, OnDestroy {
       subscript.id = data.id;
       if (this.fileList && this.fileList.length > 0) {
         this.subscriptions.push(this.subscriptService.saveSubscriptsImage(this.fileList[0], subscript.id).subscribe(value => {
-          this.toastr.success('Изображение успешно загружено', subscript.name);
+          this.toastr.success('Image successfully uploaded', subscript.name);
         }, error => {
-          this.toastr.error('Изображение загрузить не удалось', 'Ошибка');
+          this.toastr.error('Image upload failed', 'Error');
         }));
         this.fileList = null;
       }
       this.closeModal();
-      this.toastr.success('Подписка успешно создана!', data.name);
+      this.toastr.success('Subscript successfully created', data.name);
     }, error => {
       event.target.disabled = false;
-      this.toastr.error('Создать подписку не удалось', 'Ошибка');
+      this.toastr.error('Subscript create failed', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
 
   }

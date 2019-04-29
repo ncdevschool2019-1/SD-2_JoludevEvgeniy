@@ -43,6 +43,16 @@ public class UserController {
 
     }
 
+    @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<User>> getUsersOnPage(@PathVariable(name = "pageNumber") Integer pageNumber){
+        return ResponseEntity.ok(this.userService.getUsersOnPage(pageNumber));
+    }
+
+    @RequestMapping(value = "/maxPage", method = RequestMethod.GET)
+    public ResponseEntity<Long> getMaxPage(){
+        return ResponseEntity.ok(this.userService.getMaxPage());
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteUserById(@PathVariable(name = "id") Long id) {
         User user = this.userService.getUserById(id);

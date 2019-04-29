@@ -1,14 +1,19 @@
 package com.mycompany.chargingService.fapi.validators.impl;
 
-import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
+import com.mycompany.chargingService.fapi.models.UserChangeModel;
 import com.mycompany.chargingService.fapi.models.UserViewModel;
 import com.mycompany.chargingService.fapi.validators.UserValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserValidatorImpl implements UserValidator {
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public String authorizationValidation(String login, String password) {
@@ -41,12 +46,15 @@ public class UserValidatorImpl implements UserValidator {
     }
 
     @Override
-    public String updateUsersLoginValidation(UserViewModel userViewModel, List<UserViewModel> userViewModels) {
-        if(userViewModel.getLogin().length() < 3 || userViewModel.getLogin().length() > 30){
+    public String updateUsersLoginValidation(UserChangeModel userChangeModel, List<UserViewModel> userViewModels, UserViewModel userViewModel) {
+        if(!bCryptPasswordEncoder.matches(userChangeModel.getOldPassword(), userViewModel.getPassword())){
+            return "You input incorrect password";
+        }
+        if(userChangeModel.getNewLogin().length() < 3 || userChangeModel.getNewLogin().length() > 30){
             return "Length of your login should be between 3 and 30 symbols";
         }
         for(UserViewModel value: userViewModels){
-            if(value.getLogin().equals(userViewModel.getLogin())){
+            if(value.getLogin().equals(userChangeModel.getNewLogin())){
                 return "User with the same login already exists";
             }
         }
@@ -54,23 +62,26 @@ public class UserValidatorImpl implements UserValidator {
     }
 
     @Override
-    public String updateUsersPasswordValidation(UserChangePasswordModel userChangePasswordModel, UserViewModel userViewModel) {
-        if(userChangePasswordModel.getOldPassword().length() < 3 || userChangePasswordModel.getOldPassword().length() > 30 ||
-                userChangePasswordModel.getNewPassword().length() < 3 || userChangePasswordModel.getNewPassword().length() > 30){
+    public String updateUsersPasswordValidation(UserChangeModel userChangeModel, UserViewModel userViewModel) {
+        if(userChangeModel.getOldPassword().length() < 3 || userChangeModel.getOldPassword().length() > 30 ||
+                userChangeModel.getNewPassword().length() < 3 || userChangeModel.getNewPassword().length() > 30){
             return "Length of your password should be between 3 and 30 symbols";
         }
-        if(userChangePasswordModel.getOldPassword().equals(userChangePasswordModel.getNewPassword())){
+        if(userChangeModel.getOldPassword().equals(userChangeModel.getNewPassword())){
             return "Your new password should be different";
         }
-        if(!userChangePasswordModel.getOldPassword().equals(userViewModel.getPassword())){
+        if(!bCryptPasswordEncoder.matches(userChangeModel.getOldPassword(), userViewModel.getPassword())){
             return "You input incorrect password";
         }
         return "Ok";
     }
 
     @Override
-    public String updateUsersEmailValidation(UserViewModel userViewModel) {
-        if(userViewModel.getEmail().length() < 5 || userViewModel.getEmail().length() > 50){
+    public String updateUsersEmailValidation(UserChangeModel userChangeModel, UserViewModel userViewModel) {
+        if(!bCryptPasswordEncoder.matches(userChangeModel.getOldPassword(), userViewModel.getPassword())){
+            return "You input incorrect password";
+        }
+        if(userChangeModel.getNewEmail().length() < 5 || userChangeModel.getNewEmail().length() > 50){
             return "Length of your e-mail should between 5 and 50 symbols";
         }
         return "Ok";

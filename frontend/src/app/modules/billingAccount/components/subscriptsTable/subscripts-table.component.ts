@@ -54,10 +54,11 @@ export class SubscriptsTableComponent implements OnInit, OnDestroy {
         this.selectedBillingAccount.activeSubscripts.indexOf(activeSubscript), 1);
       this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
-      this.toastr.success('Вы успешно отписались!', 'Операция удалась');
+      this.toastr.success('You unsubscribed', 'Success');
     }, error => {
       event.target.disabled = false;
-      this.toastr.error('Отписаться не удалось', 'Ошибка');
+      this.toastr.error('Unsubscribe failed', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
 
   }

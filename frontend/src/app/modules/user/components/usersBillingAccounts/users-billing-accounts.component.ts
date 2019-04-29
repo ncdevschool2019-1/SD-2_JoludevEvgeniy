@@ -47,6 +47,7 @@ export class UsersBillingAccountsComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error('Status change failed', 'Error')
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 

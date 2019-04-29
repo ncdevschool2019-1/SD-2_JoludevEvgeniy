@@ -1,6 +1,6 @@
 package com.mycompany.chargingService.backend.service.implementations;
 
-import com.mycompany.chargingService.backend.entity.Role;
+
 import com.mycompany.chargingService.backend.entity.User;
 import com.mycompany.chargingService.backend.repository.UserRepository;
 import com.mycompany.chargingService.backend.service.UserService;
@@ -22,9 +22,22 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
+    private final int usersOnPage = 1;
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public Long getMaxPage() {
+        return Math.round(Math.ceil(this.userRepository.getUsersCount() / this.usersOnPage));
+
+    }
+
+    @Override
+    public Iterable<User> getUsersOnPage(Integer pageNumber) {
+        return (this.userRepository.getUsersOnPage((pageNumber - 1) * this.usersOnPage, this.usersOnPage));
     }
 
     @Override
@@ -82,10 +95,10 @@ public class UserServiceImpl implements UserService {
             String imageNewName = user.getId().toString() + "_" + user.getLogin() +
                     imageName.substring(imageName.lastIndexOf('.'));
             File serverFile = new File("backend/src/images/usersImages/", user.getId().toString());
-            if(serverFile.exists()){
+            if (serverFile.exists()) {
                 deleteImage(imageNewName);
             }
-            if(!serverFile.exists()){
+            if (!serverFile.exists()) {
                 serverFile.mkdir();
             }
             serverFile = new File(serverFile.getPath() + "/", imageNewName);
@@ -117,7 +130,7 @@ public class UserServiceImpl implements UserService {
         File image = new File(path, imageDir + "/" + imageName);
         try {
             image.delete();
-            if(!image.exists()){
+            if (!image.exists()) {
                 new File(path, imageDir).delete();
             }
         } catch (Exception e) {

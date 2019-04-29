@@ -55,10 +55,11 @@ export class ReplenishBalanceComponent implements OnInit, OnDestroy {
       this.authorizedUser.billingAccounts.find(value => value.id == data.id).balance = data.balance;
       this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
-      this.toastr.success('Баланс вашего биллинг аккаунта успешно пополнен!', billingAccount.name);
+      this.toastr.success('Your billing account balance successfully replenished!', billingAccount.name);
     }, error => {
       event.target.disabled = false;
-      this.toastr.error('Пополнить баланс не удалось', 'Операция не удалась');
+      this.toastr.error(error.error, 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 }

@@ -51,9 +51,10 @@ export class BillingAccountComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.billingAccountService.deleteBillingAccount(billingAccount.id).subscribe(data => {
       this.authorizedUser.billingAccounts.splice(this.authorizedUser.billingAccounts.indexOf(billingAccount), 1);
       this.authService.setAuthUser(this.authorizedUser);
-      this.toastr.success('Ваш биллинг аккаунт успешно удален!', 'Успех');
+      this.toastr.success('Your billing account was deleted', 'Success');
     }, error => {
-      this.toastr.error('Удалить биллинг аккаунт не удалось', 'Ошибка');
+      this.toastr.error('Billing account delete failed', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 

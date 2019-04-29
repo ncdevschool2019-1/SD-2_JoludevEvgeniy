@@ -7,6 +7,7 @@ import {AuthorizationService} from '../../../services/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subscription} from 'rxjs';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
+import {AuthRegUser} from '../../models/auth-reg-user';
 
 @Component({
   selector: 'app-registration',
@@ -15,7 +16,7 @@ import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
 
-  private user: User = new User;
+  private user: AuthRegUser = new AuthRegUser();
   private subscriptions: Subscription[] = [];
 
   constructor(private modalService: ModalService, private userService: UserService,
@@ -33,18 +34,18 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this.modalService.closeModal();
-    this.user = new User;
+    this.user = new AuthRegUser();
   }
 
   createUser(event) {
     this.loadingService.show();
     this.subscriptions.push(this.userService.saveUser(this.user).subscribe(data => {
-      this.authService.setAuthUser(data);
       this.closeModal();
-      this.toastr.success('Account created successfully!', data.login);
+      this.toastr.success('Account created successfully! Now you should entrance to account', data.login);
     }, error => {
       event.target.disabled = false;
       this.toastr.error(error.error, 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 

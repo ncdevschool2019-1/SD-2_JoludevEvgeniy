@@ -53,10 +53,11 @@ export class AddBillingAccountComponent implements OnInit, OnDestroy {
       this.authorizedUser.billingAccounts.push(data);
       this.authService.setAuthUser(this.authorizedUser);
       this.closeModal();
-      this.toastr.success('Вам удалось создать биллинг аккаунт!', billingAccount.name);
+      this.toastr.success('Your billing account has been created', billingAccount.name);
     }, error => {
       event.target.disabled = false;
-      this.toastr.error('Создание биллинг аккаунта не удалось', 'Ошибка');
+      this.toastr.error('Your billing account creation failed', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 

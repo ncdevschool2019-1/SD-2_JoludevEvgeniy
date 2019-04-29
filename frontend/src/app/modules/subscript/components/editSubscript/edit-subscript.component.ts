@@ -59,6 +59,7 @@ export class EditSubscriptComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.toastr.error(error.error, 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 }

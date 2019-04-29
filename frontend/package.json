@@ -23,6 +23,7 @@
     "core-js": "^2.5.4",
     "ng4-loading-spinner": "latest",
     "ngx-bootstrap": "^4.0.0",
+    "ngx-popover": "0.0.16",
     "ngx-toastr": "^10.0.2",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",

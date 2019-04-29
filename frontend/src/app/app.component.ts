@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if(this.tokenService.getToken()){
-      this.subscriptions.p
+      this.subscriptions.push(this.userService.getLoggedUser(this.tokenService.getLogin()).subscribe((data => {
+        this.authService.setAuthUser(data);
+      })))
     }
   }
 

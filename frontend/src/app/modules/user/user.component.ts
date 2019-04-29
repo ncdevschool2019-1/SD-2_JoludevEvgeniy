@@ -15,6 +15,9 @@ import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 export class UserComponent implements OnInit, OnDestroy {
 
 
+  pages: number[];
+  currentPage: number = 1;
+
   public users: User[] = [];
   selectedUser: User;
   private subscriptions: Subscription[] = [];
@@ -25,23 +28,31 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadUsers();
+    let maxPage: number;
+    this.subscriptions.push(this.userService.getMaxPage().subscribe(data => {
+      maxPage = data;
+      this.pages = Array(maxPage).fill(null).map((x, i) => i + 1);
+      this.loadUsers(this.currentPage);
+    }));
+
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(value => value.unsubscribe());
   }
 
-  onChanged(){
-    this.loadUsers();
+  onChanged() {
+    this.loadUsers(this.currentPage);
   }
 
-  private loadUsers(): void {
+  private loadUsers(page: number): void {
     this.loadingService.show();
-    this.subscriptions.push(this.userService.getUsers().subscribe(data => {
+    this.currentPage = page;
+    this.subscriptions.push(this.userService.getUsers(this.currentPage).subscribe(data => {
       this.users = data;
     }, error => {
       this.toastr.error('We sorry for inconvenience', 'Server error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 
@@ -53,10 +64,11 @@ export class UserComponent implements OnInit, OnDestroy {
   deleteUser(userId: number) {
     this.loadingService.show();
     this.subscriptions.push(this.userService.deleteUser(userId).subscribe(data => {
-      this.loadUsers();
+      this.loadUsers(this.currentPage);
       this.toastr.success('User is deleted', 'Success');
     }, error => {
       this.toastr.error('User is not deleted', 'Error');
+      this.loadingService.hide();
     }, () => this.loadingService.hide()));
   }
 

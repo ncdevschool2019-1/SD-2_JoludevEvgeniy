@@ -1,7 +1,7 @@
 package com.mycompany.chargingService.fapi.service;
 
 import com.mycompany.chargingService.fapi.models.UserViewModel;
-import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
+import com.mycompany.chargingService.fapi.models.UserChangeModel;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +9,11 @@ import java.util.List;
 
 public interface UserService {
 
+    Long getMaxPage();
+
     List<UserViewModel> getAllUsers();
+
+    List<UserViewModel> getUsersOnPage(Integer pageNumber);
 
     UserViewModel getUserById(Long id);
 
@@ -17,11 +21,11 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    UserViewModel updateUsersLogin(UserViewModel userViewModel);
+    UserViewModel updateUsersLogin(UserChangeModel userChangeModel);
 
-    UserViewModel updateUsersEmail(UserViewModel userViewModel);
+    UserViewModel updateUsersEmail(UserChangeModel userChangeModel);
 
-    UserViewModel updateUsersPassword(UserChangePasswordModel userChangePasswordModel);
+    UserViewModel updateUsersPassword(UserChangeModel userChangeModel);
 
     UserViewModel getLoginUser(String login);
 

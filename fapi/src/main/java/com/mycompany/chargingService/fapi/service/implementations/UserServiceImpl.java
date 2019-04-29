@@ -2,7 +2,7 @@ package com.mycompany.chargingService.fapi.service.implementations;
 
 import com.mycompany.chargingService.fapi.models.User;
 import com.mycompany.chargingService.fapi.models.UserViewModel;
-import com.mycompany.chargingService.fapi.models.UserChangePasswordModel;
+import com.mycompany.chargingService.fapi.models.UserChangeModel;
 import com.mycompany.chargingService.fapi.service.ConverterService;
 import com.mycompany.chargingService.fapi.service.ImageService;
 import com.mycompany.chargingService.fapi.service.UserService;
@@ -40,8 +40,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public Long getMaxPage() {
+        return this.restTemplate.getForEntity(this.backendServerUrl + "/maxPage", Long.class).getBody();
+    }
+
+    @Override
     public List<UserViewModel> getAllUsers() {
         User[] users = restTemplate.getForEntity(backendServerUrl, User[].class).getBody();
+        if (users != null) {
+            UserViewModel[] userViewModels = this.converterService.convertUsersArrayToUserViewModelsArray(users);
+            return Arrays.asList(userViewModels);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserViewModel> getUsersOnPage(Integer pageNumber) {
+        User[] users = restTemplate.getForEntity(backendServerUrl + "/page/" + pageNumber, User[].class).getBody();
         if (users != null) {
             UserViewModel[] userViewModels = this.converterService.convertUsersArrayToUserViewModelsArray(users);
             return Arrays.asList(userViewModels);
@@ -78,12 +93,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserViewModel updateUsersLogin(UserViewModel userViewModel) {
-        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userViewModel.getId(), User.class).getBody();
+    public UserViewModel updateUsersLogin(UserChangeModel userChangeModel) {
+        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userChangeModel.getUserId(), User.class).getBody();
         if (user != null) {
-            user.setLogin(userViewModel.getLogin());
+            user.setLogin(userChangeModel.getNewLogin());
             User updatableUser = this.restTemplate.postForEntity(this.backendServerUrl + "/login", user, User.class).getBody();
             if (updatableUser != null) {
+                updatableUser.setPassword(userChangeModel.getOldPassword());
                 return this.converterService.convertUserToUserViewModel(updatableUser);
             }
         }
@@ -91,12 +107,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserViewModel updateUsersEmail(UserViewModel userViewModel) {
-        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userViewModel.getId(), User.class).getBody();
+    public UserViewModel updateUsersEmail(UserChangeModel userChangeModel) {
+        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userChangeModel.getUserId(), User.class).getBody();
         if (user != null) {
-            user.setEmail(userViewModel.getEmail());
+            user.setEmail(userChangeModel.getNewEmail());
             User updatableUser = this.restTemplate.postForEntity(this.backendServerUrl + "/email", user, User.class).getBody();
             if (updatableUser != null) {
+                updatableUser.setPassword(userChangeModel.getOldPassword());
                 return this.converterService.convertUserToUserViewModel(updatableUser);
             }
         }
@@ -104,15 +121,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserViewModel updateUsersPassword(UserChangePasswordModel userChangePasswordModel) {
-        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userChangePasswordModel.getUserId(),
+    public UserViewModel updateUsersPassword(UserChangeModel userChangeModel) {
+        User user = this.restTemplate.getForEntity(this.backendServerUrl + "/" + userChangeModel.getUserId(),
                 User.class).getBody();
         if (user != null) {
-            user.setPassword(userChangePasswordModel.getNewPassword());
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setPassword(bCryptPasswordEncoder.encode(userChangeModel.getNewPassword()));
             User updatableUser = this.restTemplate.postForEntity(this.backendServerUrl + "/password",
                     user, User.class).getBody();
             if (updatableUser != null) {
+                updatableUser.setPassword(userChangeModel.getNewPassword());
                 return this.converterService.convertUserToUserViewModel(updatableUser);
             }
         }
@@ -135,7 +152,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserViewModel uploadImage(MultipartFile image, Long id) {
         User user = restTemplate.postForEntity(backendServerUrl + "/image/" + id,
                 imageService.uploadImage(image), User.class).getBody();
-        if(user != null) {
+        if (user != null) {
             return this.converterService.convertUserToUserViewModel(user);
         }
         return null;

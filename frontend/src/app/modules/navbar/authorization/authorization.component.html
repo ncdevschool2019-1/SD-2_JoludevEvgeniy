@@ -7,20 +7,37 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="form-group">
+  <div class="input-group">
+
     <input class="form-control" name="login" type="text" [(ngModel)]="inputUser.login" #login="ngModel"
            (focus)="isLoginFocused = true" (blur)="isLoginFocused = false" placeholder="Логин" id="login" required
            pattern="[a-zA-Z0-9_]{3,30}"/>
+    <div class="input-group-prepend">
+      <button class="input-group-text"
+              [popover]="authPop"
+              popoverTitle="Правильность данных" triggers="mouseenter:mouseleave">
+        ?
+      </button>
+    </div>
+
     <div
       [hidden]="login.pristine || login.valid || login.untouched || isLoginFocused || login.model == ''"
       class="alert alert-danger">
       Вы ввели неверный логин
     </div>
   </div>
-  <div class="form-group">
+  <div class="input-group mt-3">
     <input class="form-control" name="password" type="password" [(ngModel)]="inputUser.password"
-           (focus)="isPasswordFocus = true" (blur)="isPasswordFocus = false" #password="ngModel" placeholder="Пароль" required
+           (focus)="isPasswordFocus = true" (blur)="isPasswordFocus = false" #password="ngModel" placeholder="Пароль"
+           required
            pattern="[a-zA-Z0-9_]{3,30}"/>
+    <div class="input-group-prepend">
+      <button class="input-group-text"
+              [popover]="authPop"
+      popoverTitle="Правильность данных" triggers="mouseenter:mouseleave">
+        ?
+      </button>
+    </div>
     <div [hidden]="password.pristine || password.valid || password.untouched || isPasswordFocus || password.model == ''"
          class="alert alert-danger">
       Вы ввели неверный пароль
@@ -32,3 +49,11 @@
           onClick="this.disabled = true" (click)="authorization($event)" id="authButton">Войти
   </button>
 </div>
+
+<ng-template #authPop>
+  <ul>
+    <li>Длина должна быть не меньше 3 и не больше 30 символов.</li>
+    <li>Допустима только латиница и числа.</li>
+    <li>Чувствителен к регистру.</li>
+  </ul>
+</ng-template>

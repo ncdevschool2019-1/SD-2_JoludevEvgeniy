@@ -7,6 +7,7 @@ import {User} from '../../models/user';
 import {Subscription} from 'rxjs';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {TokenStorageService} from '../../../services/token-storage.service';
+import {AuthRegUser} from '../../models/auth-reg-user';
 
 @Component({
   selector: 'app-authorization',
@@ -16,7 +17,7 @@ import {TokenStorageService} from '../../../services/token-storage.service';
 export class AuthorizationComponent implements OnInit, OnDestroy {
 
 
-  inputUser: User = new User();
+  inputUser: AuthRegUser = new AuthRegUser();
   private subscriptions: Subscription[] = [];
 
   constructor(private modalService: ModalService, private authService: AuthorizationService,
@@ -41,7 +42,8 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
     }, error => {
       event.target.disabled = false;
       this.loadingService.hide();
-      this.toastr.error('You input incorrect login or password', 'Error');
+      this.toastr.error(error.error.message, 'Error');
+      console.log(error);
     }, () => {
       this.subscriptions.push(this.userService.getLoggedUser(this.tokenService.getLogin()).subscribe(data => {
         this.authService.setAuthUser(data);
@@ -54,7 +56,7 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this.modalService.closeModal();
-    this.inputUser = new User();
+    this.inputUser = new AuthRegUser();
   }
 
 }
