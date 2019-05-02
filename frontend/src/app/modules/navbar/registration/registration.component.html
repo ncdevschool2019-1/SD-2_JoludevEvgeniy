@@ -18,10 +18,11 @@
         ?
       </button>
     </div>
-    <div [hidden]="login.pristine || login.valid || login.untouched || isLoginFocused || login.model == ''"
-         class="alert alert-danger">
-      Вы ввели неверный логин
-    </div>
+
+  </div>
+  <div [hidden]="login.pristine || login.valid || login.untouched || isLoginFocused || login.model == ''"
+       class="alert alert-danger">
+    Вы ввели неверный логин
   </div>
   <div class="input-group mt-3">
     <input class="form-control" name="password" type="password" [(ngModel)]="user.password"
@@ -34,11 +35,12 @@
         ?
       </button>
     </div>
-    <div
-      [hidden]="password.pristine || password.valid || password.untouched || isPasswordFocused || password.model == ''"
-      class="alert alert-danger">
-      Вы ввели неверный пароль
-    </div>
+
+  </div>
+  <div
+    [hidden]="password.pristine || password.valid || password.untouched || isPasswordFocused || password.model == ''"
+    class="alert alert-danger">
+    Вы ввели неверный пароль
   </div>
   <div class="input-group mt-3">
     <input class="form-control" name="email" type="email" [(ngModel)]="user.email"
@@ -51,10 +53,11 @@
         ?
       </button>
     </div>
-    <div [hidden]="email.pristine || email.valid || email.untouched || isEmailFocused || email.model == ''"
-         class="alert alert-danger">
-      Вы ввели неверный email
-    </div>
+
+  </div>
+  <div [hidden]="email.pristine || email.valid || email.untouched || isEmailFocused || email.model == ''"
+       class="alert alert-danger">
+    Вы ввели неверный email
   </div>
 </div>
 <div class="modal-footer justify-content-center">

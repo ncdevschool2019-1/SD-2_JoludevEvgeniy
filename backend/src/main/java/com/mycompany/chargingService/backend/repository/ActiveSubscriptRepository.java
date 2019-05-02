@@ -16,7 +16,6 @@ public interface ActiveSubscriptRepository extends CrudRepository<ActiveSubscrip
     @Query(value = "update active_subscripts set last_write_off = now() where id = :id", nativeQuery = true)
     void setTimeNow(@Param(value = "id") Long id);
 
-    @Transactional
     @Query(value = "select timestampdiff(minute, last_write_off, now()) from active_subscripts where id = :id", nativeQuery = true)
     int getTimesDifference(@Param(value = "id") Long id);
 

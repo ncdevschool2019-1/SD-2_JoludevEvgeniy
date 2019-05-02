@@ -28,7 +28,7 @@ public class WriteOff {
     public void checkActiveSubscripts() {
         this.activeSubscriptService.getAllActiveSubscripts().forEach(activeSubscript -> {
             if (Math.abs(this.activeSubscriptService.getTimesDifference(activeSubscript.getId())) >
-                    activeSubscript.getSubscript().getPeriod() * 24 * 60) {
+                    activeSubscript.getSubscript().getPeriod()) {
                 BillingAccount billingAccount = this.billingAccountService.getBillingAccountById(activeSubscript.getBillingAccountId());
                 billingAccount.setBalance(billingAccount.getBalance() - activeSubscript.getSubscript().getPrice());
                 if (billingAccount.isActive() && billingAccount.getBalance() < 0) {

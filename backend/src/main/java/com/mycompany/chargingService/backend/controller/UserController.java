@@ -38,6 +38,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         Long id = this.userService.saveUser(user).getId();
+
         return ResponseEntity.ok(this.userService.getUserById(id));
 
 

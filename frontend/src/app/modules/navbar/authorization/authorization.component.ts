@@ -3,7 +3,6 @@ import {ModalService} from '../../../services/modal.service';
 import {AuthorizationService} from '../../../services/authorization.service';
 import {UserService} from '../../../services/user.service';
 import {ToastrService} from 'ngx-toastr';
-import {User} from '../../models/user';
 import {Subscription} from 'rxjs';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {TokenStorageService} from '../../../services/token-storage.service';

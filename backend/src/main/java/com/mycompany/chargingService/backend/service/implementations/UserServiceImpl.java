@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private final int usersOnPage = 1;
+    private final float usersOnPage = 5;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Iterable<User> getUsersOnPage(Integer pageNumber) {
-        return (this.userRepository.getUsersOnPage((pageNumber - 1) * this.usersOnPage, this.usersOnPage));
+        return (this.userRepository.getUsersOnPage((pageNumber - 1) * (int)this.usersOnPage, (int)this.usersOnPage));
     }
 
     @Override

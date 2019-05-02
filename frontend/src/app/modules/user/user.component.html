@@ -30,7 +30,7 @@
   </div>
   <ul class="pagination">
     <li class="page-item" *ngFor="let page of pages">
-      <button class="page-link" [disabled]="page == currentPage" (click)="loadUsers(page)">{{page}}</button>
+      <button class="page-link" [disabled]="page === currentPage" (click)="loadUsers(page)">{{page}}</button>
     </li>
   </ul>
 </div>

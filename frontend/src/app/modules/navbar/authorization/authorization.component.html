@@ -20,11 +20,11 @@
       </button>
     </div>
 
-    <div
-      [hidden]="login.pristine || login.valid || login.untouched || isLoginFocused || login.model == ''"
-      class="alert alert-danger">
-      Вы ввели неверный логин
-    </div>
+  </div>
+  <div
+    [hidden]="login.pristine || login.valid || login.untouched || isLoginFocused || login.model == ''"
+    class="alert alert-danger">
+    Вы ввели неверный логин
   </div>
   <div class="input-group mt-3">
     <input class="form-control" name="password" type="password" [(ngModel)]="inputUser.password"
@@ -38,10 +38,11 @@
         ?
       </button>
     </div>
-    <div [hidden]="password.pristine || password.valid || password.untouched || isPasswordFocus || password.model == ''"
-         class="alert alert-danger">
-      Вы ввели неверный пароль
-    </div>
+
+  </div>
+  <div [hidden]="password.pristine || password.valid || password.untouched || isPasswordFocus || password.model == ''"
+       class="alert alert-danger">
+    Вы ввели неверный пароль
   </div>
 </div>
 <div class="modal-footer justify-content-center">
